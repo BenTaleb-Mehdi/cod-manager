@@ -13,6 +13,7 @@ import {
   BadgePercent,
   Building2,
   Settings,
+  BarChart3,
 } from "lucide-react";
 
 interface NavigationItem {
@@ -33,6 +34,11 @@ const navigationItems: NavigationItem[] = [
     name: "Commandes (COD)",
     href: "/orders",
     icon: ShoppingCart,
+  },
+  {
+    name: "Analyses (Meta & COD)",
+    href: "/analytics",
+    icon: BarChart3,
   },
   {
     name: "Inventaire & Marges",
@@ -79,6 +85,8 @@ function SidebarNav() {
 
         if (item.href === "/") {
           isActive = pathname === "/";
+        } else if (item.href === "/analytics") {
+          isActive = pathname.startsWith("/analytics");
         } else if (item.href === "/inventory") {
           isActive = pathname.startsWith("/inventory");
         } else if (item.href === "/suppliers") {

@@ -62,6 +62,12 @@ Elle centralise tout le cycle de vie d'une commande : de l'acquisition jusqu'à 
 - **Alertes de stock** : Notification visuelle dès qu'un produit passe sous le seuil critique (≤ 5 unités).
 - **Gestion des Fournisseurs** : Suivi des dettes fournisseurs (*Balance Due*), bons de commande d'approvisionnement et réassort.
 
+### 6. 📱 Intégration Dynamique Meta (Instagram & Ads)
+- **Configuration dynamique en base de données** : Gestion complète des credentials Meta (`appId`, `accessToken`, `instagramAccountId`, `adAccountId`) depuis l'interface `/settings` sans dépendance rigide aux variables `.env`.
+- **Validation en direct Meta Graph API (v19.0)** : Test automatique du Token et de l'accès au compte Instagram Business.
+- **Social Analytics & Top Reels** : Synchronisation des abonnés, reach, visites de profil et classement des Reels / publications par nombre de vues (`viewsCount`).
+
+
 ---
 
 ## 🛠️ Architecture & Technologies
