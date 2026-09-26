@@ -16,7 +16,6 @@ import {
 import { Order, OrderStatus } from "@/types";
 import { getOrderColumns } from "./columns";
 import { OrderBulkActionsBar } from "./OrderBulkActionsBar";
-import { CreateOrderDialog } from "./CreateOrderDialog";
 import {
   updateOrderStatusAction,
   bulkAssignOrdersAction,
@@ -68,6 +67,10 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
   // Filtres spécifiques COD synchronisés avec l'URL
   const [selectedStatus, setSelectedStatus] = useState<string>(urlStatus || "ALL");
   const [selectedCity, setSelectedCity] = useState<string>("ALL");
+
+  useEffect(() => {
+    setData(initialOrders);
+  }, [initialOrders]);
 
   useEffect(() => {
     if (urlStatus) {
@@ -327,10 +330,8 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
           )}
         </div>
 
-        {/* Actions : Nouvelle Commande & Rafraîchissement */}
+        {/* Action : Rafraîchissement */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <CreateOrderDialog onSuccess={handleRefresh} />
-
           <Button
             variant="outline"
             size="icon-sm"

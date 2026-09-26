@@ -188,7 +188,7 @@ function SidebarNavFallback() {
 
 export function Sidebar() {
   return (
-    <aside className="hidden h-screen w-64 flex-col border-r bg-card/60 backdrop-blur-sm lg:flex sticky top-0">
+    <aside className="hidden h-screen w-64 flex-col border-r bg-card/60 backdrop-blur-sm lg:flex sticky top-0 print:hidden">
       {/* Brand Header */}
       <div className="flex h-16 items-center gap-2.5 border-b px-6">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold shadow-md">
