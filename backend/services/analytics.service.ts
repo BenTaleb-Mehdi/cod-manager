@@ -20,7 +20,15 @@ export interface FinancialMetrics {
   deliveryRate: number;          // Taux de livraison (%)
   cancellationRate: number;      // Taux d'annulation (%)
   returnRate: number;            // Taux de retour (%)
+  countNew: number;
+  countNoAnswer: number;
+  countConfirmed: number;
+  countShipped: number;
+  countDelivered: number;
+  countReturned: number;
+  countCancelled: number;
 }
+
 
 export interface CityAnalytics {
   city: string;
@@ -86,8 +94,16 @@ export class AnalyticsService {
         deliveryRate: 0,
         cancellationRate: 0,
         returnRate: 0,
+        countNew: 0,
+        countNoAnswer: 0,
+        countConfirmed: 0,
+        countShipped: 0,
+        countDelivered: 0,
+        countReturned: 0,
+        countCancelled: 0,
       };
     }
+
 
     // Comptage par statut
     let countNew = 0;
@@ -182,8 +198,16 @@ export class AnalyticsService {
       deliveryRate,
       cancellationRate,
       returnRate,
+      countNew,
+      countNoAnswer,
+      countConfirmed,
+      countShipped,
+      countDelivered,
+      countReturned,
+      countCancelled,
     };
   }
+
 
   /**
    * Performance par Ville marocaine (Casablanca, Marrakech, Tanger, etc.)

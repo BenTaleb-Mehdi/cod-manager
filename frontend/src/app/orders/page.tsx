@@ -1,10 +1,14 @@
 import React, { Suspense } from "react";
 import { OrderDataTable } from "@/components/orders/OrderDataTable";
-import { MOCK_ORDERS } from "@/lib/moroccan-data";
+import { getOrdersAction } from "@/actions/orders";
+import { CreateOrderDialog } from "@/components/orders/CreateOrderDialog";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 
-export default function OrdersPage() {
+export default async function OrdersPage() {
+  const result = await getOrdersAction();
+  const orders = result.success && result.data ? result.data.orders : [];
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -19,6 +23,7 @@ export default function OrdersPage() {
         </div>
 
         <div className="flex items-center gap-2">
+          <CreateOrderDialog />
           <Button variant="outline" size="sm" className="gap-1.5 h-9">
             <Download className="h-4 w-4" />
             <span>Exporter CSV</span>
@@ -34,8 +39,9 @@ export default function OrdersPage() {
           </div>
         }
       >
-        <OrderDataTable initialOrders={MOCK_ORDERS} />
+        <OrderDataTable initialOrders={orders} />
       </Suspense>
     </div>
   );
 }
+

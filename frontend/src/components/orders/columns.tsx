@@ -6,8 +6,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { OrderStatusBadge } from "@/components/ui/badge";
 import { OrderQuickActions } from "./OrderQuickActions";
 import { formatPriceMAD, formatMoroccanPhone } from "@/lib/utils";
-import { ArrowUpDown, AlertCircle, PhoneCall, MapPin, Truck } from "lucide-react";
+import { ArrowUpDown, AlertCircle, PhoneCall, MapPin, Truck, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { OrderTrackingModal } from "./OrderTrackingModal";
+
 
 interface ColumnOptions {
   onStatusChange?: (orderId: string, newStatus: OrderStatus) => void;
@@ -211,28 +214,49 @@ export const getOrderColumns = ({
   },
   {
     id: "assignments",
-    size: 120,
-    header: "Livreur / Agent",
+    size: 130,
+    header: "Livreur & Suivi",
     cell: ({ row }) => {
       const order = row.original;
       return (
-        <div className="flex flex-col gap-0.5 text-[11px] whitespace-nowrap">
-          {order.courier ? (
-            <div className="flex items-center gap-1 text-sky-700 dark:text-sky-400 font-medium">
-              <Truck className="h-3 w-3 shrink-0" />
-              <span className="truncate max-w-[100px]">{order.courier.name}</span>
-            </div>
-          ) : (
-            <span className="text-muted-foreground italic text-[10px]">Non assigné</span>
-          )}
-          {order.assignedTo && (
-            <span className="text-muted-foreground truncate max-w-[100px] text-[10px]">
-              Agent: {order.assignedTo.name.split(" ")[0]}
-            </span>
-          )}
+        <div className="flex items-center justify-between gap-1 text-[11px] whitespace-nowrap">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            {order.courier ? (
+              <div className="flex items-center gap-1 text-sky-700 dark:text-sky-400 font-medium">
+                <Truck className="h-3 w-3 shrink-0" />
+                <span className="truncate max-w-[90px]">{order.courier.name}</span>
+              </div>
+            ) : (
+              <span className="text-muted-foreground italic text-[10px]">Non assigné</span>
+            )}
+            {order.trackingNumber ? (
+              <span className="font-mono text-[10px] text-muted-foreground truncate max-w-[90px]">
+                {order.trackingNumber}
+              </span>
+            ) : order.assignedTo ? (
+              <span className="text-muted-foreground truncate max-w-[90px] text-[10px]">
+                {order.assignedTo.name.split(" ")[0]}
+              </span>
+            ) : null}
+          </div>
+
+          <OrderTrackingModal
+            order={order}
+            trigger={
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                className="h-7 w-7 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 shrink-0"
+                title="Voir Carte GPS & Suivi en Direct"
+              >
+                <Navigation className="h-3.5 w-3.5" />
+              </Button>
+            }
+          />
         </div>
       );
     },
+
   },
   {
     id: "actions",

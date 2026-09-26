@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus, FolderPlus, Loader2 } from "lucide-react";
 import { Category } from "@/types";
+import { createCategoryAction } from "@/actions/inventory";
 
 const AddCategorySchema = z.object({
   name: z
@@ -76,9 +77,10 @@ export function AddCategoryDialog({ onCategoryCreated }: AddCategoryDialogProps)
   const onSubmit = async (values: AddCategoryFormValues) => {
     setIsSubmitting(true);
     try {
-      // Simuler l'enregistrement ou appeler la Server Action
+      const res = await createCategoryAction(values);
+
       const createdCategory: Category = {
-        id: `cat-${Date.now()}`,
+        id: res.success && res.data ? res.data.id : `cat-${Date.now()}`,
         name: values.name,
         slug: values.slug,
         description: values.description,
@@ -92,10 +94,13 @@ export function AddCategoryDialog({ onCategoryCreated }: AddCategoryDialogProps)
 
       reset();
       setOpen(false);
+    } catch (e) {
+      console.error("Error creating category:", e);
     } finally {
       setIsSubmitting(false);
     }
   };
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

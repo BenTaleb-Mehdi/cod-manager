@@ -19,12 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" className="h-full">
-      <body className={`${inter.className} h-full bg-muted/20 text-foreground`}>
-        <div className="flex min-h-screen">
+      <body className={`${inter.className} h-full bg-muted/20 text-foreground print:bg-white print:h-auto print:overflow-visible`}>
+        <div className="flex min-h-screen print:block print:min-h-0">
           <Sidebar />
-          <div className="flex flex-1 flex-col overflow-hidden">
+          <div className="flex flex-1 flex-col overflow-hidden print:block print:overflow-visible">
             <Navbar />
-            <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+            <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 print:p-0 print:m-0 print:overflow-visible">
               {children}
             </main>
           </div>
