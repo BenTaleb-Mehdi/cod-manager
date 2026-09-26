@@ -131,60 +131,79 @@ export function KpiOverview({ kpis }: KpiOverviewProps) {
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-          <div className="rounded-lg bg-blue-50/50 p-2.5 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30">
-            <span className="text-[11px] font-medium text-blue-700 dark:text-blue-300">
+          <Link
+            href="/orders?status=NEW"
+            className="group block rounded-lg bg-blue-50/50 p-2.5 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30 hover:border-blue-300 dark:hover:border-blue-800 transition-colors"
+          >
+            <span className="text-[11px] font-medium text-blue-700 dark:text-blue-300 group-hover:underline">
               Nouvelles
             </span>
             <div className="text-lg font-bold text-blue-900 dark:text-blue-100">
-              14
+              {kpis.newCount}
             </div>
-          </div>
+          </Link>
 
-          <div className="rounded-lg bg-amber-50/50 p-2.5 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30">
-            <span className="text-[11px] font-medium text-amber-700 dark:text-amber-300">
+          <Link
+            href="/orders?status=NO_ANSWER"
+            className="group block rounded-lg bg-amber-50/50 p-2.5 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 hover:border-amber-300 dark:hover:border-amber-800 transition-colors"
+          >
+            <span className="text-[11px] font-medium text-amber-700 dark:text-amber-300 group-hover:underline">
               Pas de réponse
             </span>
             <div className="text-lg font-bold text-amber-900 dark:text-amber-100">
-              9
+              {kpis.noAnswerCount}
             </div>
-          </div>
+          </Link>
 
-          <div className="rounded-lg bg-emerald-50/50 p-2.5 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30">
-            <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-300">
+          <Link
+            href="/orders?status=CONFIRMED"
+            className="group block rounded-lg bg-emerald-50/50 p-2.5 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 hover:border-emerald-300 dark:hover:border-emerald-800 transition-colors"
+          >
+            <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-300 group-hover:underline">
               Confirmées
             </span>
             <div className="text-lg font-bold text-emerald-900 dark:text-emerald-100">
-              35
+              {kpis.confirmedCount}
             </div>
-          </div>
+          </Link>
 
-          <div className="rounded-lg bg-sky-50/50 p-2.5 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/30">
-            <span className="text-[11px] font-medium text-sky-700 dark:text-sky-300">
+          <Link
+            href="/orders?status=SHIPPED"
+            className="group block rounded-lg bg-sky-50/50 p-2.5 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/30 hover:border-sky-300 dark:hover:border-sky-800 transition-colors"
+          >
+            <span className="text-[11px] font-medium text-sky-700 dark:text-sky-300 group-hover:underline">
               Expédiées
             </span>
             <div className="text-lg font-bold text-sky-900 dark:text-sky-100">
               {kpis.shippedCount}
             </div>
-          </div>
+          </Link>
 
-          <div className="rounded-lg bg-teal-50/50 p-2.5 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/30">
-            <span className="text-[11px] font-medium text-teal-700 dark:text-teal-300">
+          <Link
+            href="/orders?status=DELIVERED"
+            className="group block rounded-lg bg-teal-50/50 p-2.5 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/30 hover:border-teal-300 dark:hover:border-teal-800 transition-colors"
+          >
+            <span className="text-[11px] font-medium text-teal-700 dark:text-teal-300 group-hover:underline">
               Livrées
             </span>
             <div className="text-lg font-bold text-teal-900 dark:text-teal-100">
               {kpis.deliveredCount}
             </div>
-          </div>
+          </Link>
 
-          <div className="rounded-lg bg-red-50/50 p-2.5 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30">
-            <span className="text-[11px] font-medium text-red-700 dark:text-red-300">
+          <Link
+            href="/orders?status=RETURNED"
+            className="group block rounded-lg bg-red-50/50 p-2.5 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30 hover:border-red-300 dark:hover:border-red-800 transition-colors"
+          >
+            <span className="text-[11px] font-medium text-red-700 dark:text-red-300 group-hover:underline">
               Retours
             </span>
             <div className="text-lg font-bold text-red-900 dark:text-red-100">
               {kpis.returnedCount}
             </div>
-          </div>
+          </Link>
         </div>
+
       </div>
     </div>
   );

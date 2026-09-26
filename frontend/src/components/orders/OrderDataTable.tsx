@@ -16,6 +16,12 @@ import {
 import { Order, OrderStatus } from "@/types";
 import { getOrderColumns } from "./columns";
 import { OrderBulkActionsBar } from "./OrderBulkActionsBar";
+import { CreateOrderDialog } from "./CreateOrderDialog";
+import {
+  updateOrderStatusAction,
+  bulkAssignOrdersAction,
+  getOrdersAction,
+} from "@/actions/orders";
 import {
   Table,
   TableBody,
@@ -70,7 +76,8 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
   }, [urlStatus]);
 
   // Mutation d'état d'une commande
-  const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
+  const handleStatusChange = async (orderId: string, newStatus: OrderStatus) => {
+    // Optimistic UI update
     setData((prev) =>
       prev.map((order) =>
         order.id === orderId
@@ -82,10 +89,17 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
           : order
       )
     );
+
+    // Call backend API
+    try {
+      await updateOrderStatusAction({ orderId, status: newStatus });
+    } catch (e) {
+      console.error("Failed to update status on backend:", e);
+    }
   };
 
   // Incrémenter les tentatives d'appel ("Pas de réponse")
-  const handleIncrementAttempts = (orderId: string) => {
+  const handleIncrementAttempts = async (orderId: string) => {
     setData((prev) =>
       prev.map((order) =>
         order.id === orderId
@@ -98,10 +112,16 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
           : order
       )
     );
+
+    try {
+      await updateOrderStatusAction({ orderId, status: "NO_ANSWER" });
+    } catch (e) {
+      console.error("Failed to update NO_ANSWER on backend:", e);
+    }
   };
 
   // Actions groupées (Bulk)
-  const handleBulkAssignCourier = (orderIds: string[], courierId: string) => {
+  const handleBulkAssignCourier = async (orderIds: string[], courierId: string) => {
     setData((prev) =>
       prev.map((order) =>
         orderIds.includes(order.id)
@@ -113,9 +133,19 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
           : order
       )
     );
+
+    try {
+      await bulkAssignOrdersAction({
+        type: "courier",
+        targetId: courierId,
+        orderIds,
+      });
+    } catch (e) {
+      console.error("Failed to bulk assign courier on backend:", e);
+    }
   };
 
-  const handleBulkAssignAgent = (orderIds: string[], agentId: string) => {
+  const handleBulkAssignAgent = async (orderIds: string[], agentId: string) => {
     setData((prev) =>
       prev.map((order) =>
         orderIds.includes(order.id)
@@ -126,9 +156,19 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
           : order
       )
     );
+
+    try {
+      await bulkAssignOrdersAction({
+        type: "agent",
+        targetId: agentId,
+        orderIds,
+      });
+    } catch (e) {
+      console.error("Failed to bulk assign agent on backend:", e);
+    }
   };
 
-  const handleBulkStatusChange = (orderIds: string[], newStatus: OrderStatus) => {
+  const handleBulkStatusChange = async (orderIds: string[], newStatus: OrderStatus) => {
     setData((prev) =>
       prev.map((order) =>
         orderIds.includes(order.id)
@@ -140,6 +180,21 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
           : order
       )
     );
+
+    try {
+      await Promise.all(
+        orderIds.map((id) => updateOrderStatusAction({ orderId: id, status: newStatus }))
+      );
+    } catch (e) {
+      console.error("Failed to bulk update status on backend:", e);
+    }
+  };
+
+  const handleRefresh = async () => {
+    const res = await getOrdersAction();
+    if (res.success && res.data?.orders) {
+      setData(res.data.orders);
+    }
   };
 
   // Colonnes mémorisées
@@ -272,19 +327,18 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
           )}
         </div>
 
-        {/* Compteur et rafraîchissement */}
+        {/* Actions : Nouvelle Commande & Rafraîchissement */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>
-            <strong>{filteredData.length}</strong> commande(s) affichée(s)
-          </span>
+          <CreateOrderDialog onSuccess={handleRefresh} />
+
           <Button
             variant="outline"
             size="icon-sm"
-            onClick={() => setData(initialOrders)}
-            title="Rafraîchir"
-            className="h-8 w-8"
+            onClick={handleRefresh}
+            title="Rafraîchir depuis le backend"
+            className="h-9 w-9 shrink-0"
           >
-            <RotateCw className="h-3.5 w-3.5" />
+            <RotateCw className="h-4 w-4" />
           </Button>
         </div>
       </div>

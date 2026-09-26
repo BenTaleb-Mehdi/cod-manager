@@ -1,16 +1,28 @@
 import React from "react";
 import { KpiOverview } from "@/components/dashboard/KpiOverview";
 import { CityBreakdownCard } from "@/components/dashboard/CityBreakdownCard";
-import { INITIAL_KPIS, INITIAL_CITY_STATS, MOCK_ORDERS } from "@/lib/moroccan-data";
+import { INITIAL_KPIS, INITIAL_CITY_STATS } from "@/lib/moroccan-data";
+import { getDashboardKPIsAction } from "@/actions/analytics";
+import { getOrdersAction } from "@/actions/orders";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { OrderStatusBadge } from "@/components/ui/badge";
 import { formatPriceMAD } from "@/lib/utils";
+import { CreateOrderDialog } from "@/components/orders/CreateOrderDialog";
 import { ShoppingCart, PhoneCall, Plus, ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 
-export default function DashboardPage() {
-  const pendingOrders = MOCK_ORDERS.filter(
+export default async function DashboardPage() {
+  const [analyticsRes, ordersRes] = await Promise.all([
+    getDashboardKPIsAction(),
+    getOrdersAction({ limit: 10 }),
+  ]);
+
+  const kpis = analyticsRes.success && analyticsRes.data ? analyticsRes.data.kpis : INITIAL_KPIS;
+  const cities = analyticsRes.success && analyticsRes.data ? analyticsRes.data.cities : INITIAL_CITY_STATS;
+  const orders = ordersRes.success && ordersRes.data ? ordersRes.data.orders : [];
+
+  const pendingOrders = orders.filter(
     (o) => o.status === "NEW" || o.status === "NO_ANSWER"
   );
 
@@ -31,6 +43,8 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-2">
+          <CreateOrderDialog />
+
           <Button asChild variant="outline" size="sm" className="gap-1.5 h-9">
             <Link href="/orders?status=NEW">
               <PhoneCall className="h-4 w-4 text-amber-600" />
@@ -38,7 +52,7 @@ export default function DashboardPage() {
             </Link>
           </Button>
 
-          <Button asChild size="sm" className="gap-1.5 h-9">
+          <Button asChild variant="outline" size="sm" className="gap-1.5 h-9">
             <Link href="/orders">
               <ShoppingCart className="h-4 w-4" />
               <span>Toutes les commandes</span>
@@ -48,12 +62,13 @@ export default function DashboardPage() {
       </div>
 
       {/* KPI Overview (Cartes de stats, taux de confirmation et livraison) */}
-      <KpiOverview kpis={INITIAL_KPIS} />
+      <KpiOverview kpis={kpis} />
 
       {/* Section 2 colonnes : Villes marocaines & File d'appels urgente */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Performances régionales (Villes du Maroc) */}
-        <CityBreakdownCard cities={INITIAL_CITY_STATS} />
+        <CityBreakdownCard cities={cities} />
+
 
         {/* File d'attente prioritaire Call Center */}
         <Card className="shadow-sm">

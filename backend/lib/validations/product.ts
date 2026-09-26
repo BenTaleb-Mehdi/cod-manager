@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const CreateProductSchema = z.object({
+export const ProductBaseSchema = z.object({
   sku: z
     .string({ required_error: "Le SKU est obligatoire." })
     .trim()
@@ -30,14 +30,21 @@ export const CreateProductSchema = z.object({
     .min(0, "Le stock ne peut pas être négatif."),
   categoryId: z
     .string({ required_error: "La catégorie est obligatoire." })
-    .uuid("Identifiant de catégorie invalide."),
-}).refine((data) => data.salePrice >= data.costPrice, {
-  message: "Le prix de vente ne peut pas être inférieur au prix d'achat.",
-  path: ["salePrice"],
+    .min(1, "Veuillez sélectionner une catégorie."),
+  imageUrl: z.string().optional().nullable(),
+  supplierId: z.string().optional().nullable(),
 });
 
-export const UpdateProductSchema = CreateProductSchema.partial().extend({
-  id: z.string().uuid("Identifiant de produit invalide."),
+export const CreateProductSchema = ProductBaseSchema.refine(
+  (data) => data.salePrice >= data.costPrice,
+  {
+    message: "Le prix de vente ne peut pas être inférieur au prix d'achat.",
+    path: ["salePrice"],
+  }
+);
+
+export const UpdateProductSchema = ProductBaseSchema.partial().extend({
+  id: z.string().min(1, "Identifiant de produit invalide."),
 });
 
 export type CreateProductInput = z.infer<typeof CreateProductSchema>;

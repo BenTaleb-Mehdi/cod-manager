@@ -23,9 +23,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, PackagePlus, Loader2, Sparkles, TrendingUp } from "lucide-react";
+import {
+  Plus,
+  PackagePlus,
+  Loader2,
+  Sparkles,
+  TrendingUp,
+  UploadCloud,
+  Image as ImageIcon,
+  Trash2,
+  Link as LinkIcon,
+  AlertCircle,
+} from "lucide-react";
 import { Product, Category } from "@/types";
 import { formatPriceMAD } from "@/lib/utils";
+import { createProductAction } from "@/actions/inventory";
 
 const AddProductSchema = z
   .object({
@@ -52,7 +64,19 @@ const AddProductSchema = z
       .number({ invalid_type_error: "Stock invalide." })
       .int("Le stock doit être un entier.")
       .min(0, "Le stock initial ne peut pas être négatif."),
-    imageUrl: z.string().url("URL de l'image invalide.").optional().or(z.literal("")),
+    imageUrl: z
+      .string()
+      .refine(
+        (val) =>
+          !val ||
+          val.startsWith("data:image/") ||
+          val.startsWith("http://") ||
+          val.startsWith("https://") ||
+          val.startsWith("/"),
+        "Format d'image non valide (sélectionnez un fichier ou collez une URL)."
+      )
+      .optional()
+      .or(z.literal("")),
     description: z.string().max(1000).optional(),
   })
   .refine((data) => data.salePrice >= data.costPrice, {
@@ -65,14 +89,25 @@ type AddProductFormValues = z.infer<typeof AddProductSchema>;
 interface AddProductDialogProps {
   categories: Category[];
   onProductCreated?: (newProduct: Product) => void;
+  trigger?: React.ReactNode;
 }
 
 export function AddProductDialog({
   categories,
   onProductCreated,
+  trigger,
 }: AddProductDialogProps) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Drag and Drop Image state
+  const [isDragging, setIsDragging] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileSize, setFileSize] = useState<string | null>(null);
+  const [useUrlInput, setUseUrlInput] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -95,6 +130,13 @@ export function AddProductDialog({
       description: "",
     },
   });
+
+  // Synchroniser la catégorie par défaut dès que la liste est chargée depuis le backend
+  React.useEffect(() => {
+    if (categories.length > 0 && !watch("categoryId")) {
+      setValue("categoryId", categories[0].id);
+    }
+  }, [categories, setValue, watch]);
 
   const costPrice = watch("costPrice") || 0;
   const salePrice = watch("salePrice") || 0;
@@ -119,23 +161,103 @@ export function AddProductDialog({
     setValue("sku", `${prefix}-${randomSuffix}`, { shouldValidate: true });
   };
 
+  const processImageFile = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Veuillez sélectionner un fichier image valide (JPG, PNG, WebP).");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert("L'image ne doit pas dépasser 5 Mo.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (result) {
+        setPreviewUrl(result);
+        setFileName(file.name);
+        setFileSize((file.size / 1024).toFixed(1) + " KB");
+        setValue("imageUrl", result, { shouldValidate: true });
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      processImageFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      processImageFile(e.target.files[0]);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setPreviewUrl(null);
+    setFileName(null);
+    setFileSize(null);
+    setValue("imageUrl", "", { shouldValidate: true });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const onSubmit = async (values: AddProductFormValues) => {
     setIsSubmitting(true);
+    setSubmitError(null);
     try {
       const selectedCategory = categories.find((c) => c.id === values.categoryId);
 
-      const newProduct: Product = {
-        id: `p-${Date.now()}`,
-        name: values.name,
+      // Appel de l'API backend pour enregistrer en base de données MySQL
+      const res = await createProductAction({
         sku: values.sku,
+        name: values.name,
         description: values.description,
         costPrice: values.costPrice,
         salePrice: values.salePrice,
         stock: values.stock,
         categoryId: values.categoryId,
-        category: selectedCategory,
-        imageUrl: values.imageUrl || null,
-        createdAt: new Date().toISOString(),
+        imageUrl: values.imageUrl || undefined,
+      });
+
+      if (!res.success || !res.data) {
+        setSubmitError(res.error || "Erreur lors de l'enregistrement du produit en base de données.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      const createdProduct = res.data;
+      const newProduct: Product = {
+        id: createdProduct.id,
+        name: createdProduct.name,
+        sku: createdProduct.sku,
+        description: createdProduct.description,
+        costPrice: Number(createdProduct.costPrice),
+        salePrice: Number(createdProduct.salePrice),
+        stock: createdProduct.stock,
+        categoryId: createdProduct.categoryId,
+        category: createdProduct.category || selectedCategory,
+        imageUrl: createdProduct.imageUrl || null,
+        createdAt: createdProduct.createdAt || new Date().toISOString(),
       };
 
       if (onProductCreated) {
@@ -143,19 +265,36 @@ export function AddProductDialog({
       }
 
       reset();
+      handleRemoveImage();
+      setUseUrlInput(false);
       setOpen(false);
+    } catch (e) {
+      console.error("Error creating product:", e);
+      setSubmitError(e instanceof Error ? e.message : "Erreur inattendue lors de la création du produit.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(val) => {
+        setOpen(val);
+        if (!val) {
+          setSubmitError(null);
+        }
+      }}
+    >
       <DialogTrigger asChild>
-        <Button size="sm" className="gap-1.5 h-9 bg-primary">
-          <PackagePlus className="h-4 w-4" />
-          <span>Nouveau Produit</span>
-        </Button>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button size="sm" className="gap-1.5 h-9 bg-primary">
+            <PackagePlus className="h-4 w-4" />
+            <span>Nouveau Produit</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[560px]">
         <DialogHeader>
@@ -167,6 +306,13 @@ export function AddProductDialog({
             Renseignez les informations produits et configurez le prix d'achat et de vente pour le suivi de rentabilité.
           </DialogDescription>
         </DialogHeader>
+
+        {submitError && (
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive flex items-center gap-2">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            <span>{submitError}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-2">
           {/* Nom du Produit */}
@@ -213,16 +359,22 @@ export function AddProductDialog({
                 name="categoryId"
                 control={control}
                 render={({ field }) => (
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value || ""}>
                     <SelectTrigger>
                       <SelectValue placeholder="Choisir une catégorie" />
                     </SelectTrigger>
                     <SelectContent>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat.id} value={cat.id}>
-                          {cat.name}
+                      {categories.length === 0 ? (
+                        <SelectItem value="loading" disabled>
+                          Chargement des catégories...
                         </SelectItem>
-                      ))}
+                      ) : (
+                        categories.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
                 )}
@@ -294,14 +446,121 @@ export function AddProductDialog({
             </div>
           </div>
 
-          {/* Image URL & Description */}
-          <div className="space-y-1.5">
-            <Label htmlFor="prod-img">URL de l'image (optionnelle)</Label>
-            <Input
-              id="prod-img"
-              placeholder="https://..."
-              {...register("imageUrl")}
+          {/* Zone Image : Glisser-Déposer ou Parcourir */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="flex items-center gap-1.5 text-xs font-semibold">
+                <ImageIcon className="h-4 w-4 text-primary" />
+                Image du Produit
+              </Label>
+              <button
+                type="button"
+                onClick={() => setUseUrlInput(!useUrlInput)}
+                className="text-[11px] text-primary hover:underline flex items-center gap-1"
+              >
+                <LinkIcon className="h-3 w-3" />
+                {useUrlInput ? "Glisser-déposer une image" : "Ou coller une URL"}
+              </button>
+            </div>
+
+            {/* Input fichier masqué */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/png,image/jpeg,image/webp,image/jpg"
+              onChange={handleFileInputChange}
+              className="hidden"
             />
+
+            {useUrlInput ? (
+              <div className="space-y-1.5">
+                <Input
+                  id="prod-img"
+                  placeholder="https://images.unsplash.com/..."
+                  {...register("imageUrl")}
+                  onChange={(e) => {
+                    register("imageUrl").onChange(e);
+                    setPreviewUrl(e.target.value.trim() || null);
+                  }}
+                />
+                {previewUrl && (
+                  <div className="relative mt-2 p-2 border rounded-lg bg-muted/20 flex items-center gap-3">
+                    <img
+                      src={previewUrl}
+                      alt="Aperçu URL"
+                      className="h-12 w-12 rounded object-cover border bg-background"
+                      onError={() => setPreviewUrl(null)}
+                    />
+                    <span className="text-[11px] text-muted-foreground truncate">
+                      Aperçu de l'URL chargée
+                    </span>
+                  </div>
+                )}
+              </div>
+            ) : previewUrl ? (
+              /* Aperçu de l'image glissée/sélectionnée */
+              <div className="relative rounded-xl border bg-card p-3 flex items-center gap-3 shadow-sm">
+                <img
+                  src={previewUrl}
+                  alt="Aperçu produit"
+                  className="h-16 w-16 rounded-lg object-cover border bg-muted/20 shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-foreground truncate">
+                    {fileName || "Image produit importée"}
+                  </p>
+                  {fileSize && (
+                    <p className="text-[11px] text-muted-foreground font-mono">{fileSize}</p>
+                  )}
+                  <div className="flex items-center gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="text-[11px] text-primary hover:underline font-medium"
+                    >
+                      Changer l'image
+                    </button>
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={handleRemoveImage}
+                  className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/40 h-8 w-8 shrink-0"
+                  title="Supprimer l'image"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : (
+              /* Zone de Glisser-Déposer active */
+              <div
+                onDragOver={handleDragOver}
+                onDragEnter={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`border-2 border-dashed rounded-xl p-5 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all ${
+                  isDragging
+                    ? "border-primary bg-primary/10 scale-[1.01]"
+                    : "border-muted-foreground/30 hover:border-primary hover:bg-muted/30"
+                }`}
+              >
+                <div className="p-2.5 rounded-full bg-primary/10 text-primary">
+                  <UploadCloud className="h-6 w-6" />
+                </div>
+                <div className="text-center space-y-0.5">
+                  <p className="text-xs font-semibold text-foreground">
+                    Glissez-déposez votre image ici, ou <span className="text-primary underline">parcourez</span>
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    Formats supportés : PNG, JPG, WebP jusqu'à 5 Mo
+                  </p>
+                </div>
+              </div>
+            )}
+
             {errors.imageUrl && (
               <p className="text-xs text-destructive font-medium">{errors.imageUrl.message}</p>
             )}

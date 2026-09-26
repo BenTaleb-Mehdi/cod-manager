@@ -21,9 +21,15 @@ import {
   Truck,
   RotateCcw,
   Sparkles,
+  Navigation,
+  FileText,
+  MapPin,
 } from "lucide-react";
+import Link from "next/link";
 import { generateWhatsAppLink } from "@/lib/moroccan-data";
 import { formatMoroccanPhone } from "@/lib/utils";
+import { AddTrackingDialog } from "./AddTrackingDialog";
+import { OrderTrackingModal } from "./OrderTrackingModal";
 
 interface OrderQuickActionsProps {
   order: Order;
@@ -37,6 +43,7 @@ export function OrderQuickActions({
   onIncrementAttempts,
 }: OrderQuickActionsProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [trackingModalOpen, setTrackingModalOpen] = useState(false);
 
   const productSummary =
     order.items.length > 0
@@ -110,8 +117,37 @@ export function OrderQuickActions({
 
           <DropdownMenuSeparator />
           <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground">
+            Suivi & Expédition
+          </DropdownMenuLabel>
+
+          {/* 3. Voir Suivi & Carte GPS */}
+          <DropdownMenuItem
+            onClick={() => setTrackingModalOpen(true)}
+            className="cursor-pointer text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/40"
+          >
+            <Navigation className="mr-2 h-4 w-4 text-emerald-600" />
+            <div className="flex flex-col">
+              <span className="font-medium text-xs">Carte GPS & Suivi Colis</span>
+              <span className="text-[10px] text-muted-foreground">Localisation temps réel (Modal)</span>
+            </div>
+          </DropdownMenuItem>
+
+          {/* 4. Voir / Imprimer Facture */}
+          <DropdownMenuItem asChild className="cursor-pointer text-slate-700 dark:text-slate-300">
+            <Link href={`/orders/${order.id}/invoice`} className="flex items-center w-full">
+              <FileText className="mr-2 h-4 w-4 text-slate-600" />
+              <div className="flex flex-col">
+                <span className="font-medium text-xs">Facture A4 & Ticket</span>
+                <span className="text-[10px] text-muted-foreground">Mentions ICE / IF</span>
+              </div>
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground">
             Changer le Statut
           </DropdownMenuLabel>
+
 
           {/* Pas de réponse */}
           <DropdownMenuItem
@@ -180,6 +216,13 @@ export function OrderQuickActions({
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/* Modal de Suivi & Carte GPS */}
+      <OrderTrackingModal
+        order={order}
+        open={trackingModalOpen}
+        onOpenChange={setTrackingModalOpen}
+      />
     </div>
   );
 }

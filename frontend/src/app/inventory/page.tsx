@@ -1,18 +1,37 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import { ProductDataTable } from "@/components/inventory/ProductDataTable";
 import { AddProductDialog } from "@/components/inventory/AddProductDialog";
 import { AddCategoryDialog } from "@/components/inventory/AddCategoryDialog";
-import { MOCK_PRODUCTS, MOCK_CATEGORIES } from "@/lib/moroccan-data";
 import { Product, Category } from "@/types";
+import { getInventoryAction } from "@/actions/inventory";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPriceMAD } from "@/lib/utils";
 import { Boxes, AlertTriangle, TrendingUp, DollarSign } from "lucide-react";
 
 export default function InventoryPage() {
-  const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
-  const [categories, setCategories] = useState<Category[]>(MOCK_CATEGORIES);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const res = await getInventoryAction();
+        if (res.success && res.data) {
+          setProducts(res.data.products);
+          setCategories(res.data.categories);
+        }
+      } catch (e) {
+        console.error("Failed to load inventory from backend:", e);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadData();
+  }, []);
 
   const handleProductCreated = (newProduct: Product) => {
     setProducts((prev) => [newProduct, ...prev]);

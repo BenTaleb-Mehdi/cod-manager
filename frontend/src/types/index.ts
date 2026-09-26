@@ -81,11 +81,15 @@ export interface DashboardKPIs {
   confirmationRate: number;
   deliveryRate: number;
   pendingCallsCount: number; // NEW + NO_ANSWER
-  deliveredCount: number;
+  newCount: number;
+  noAnswerCount: number;
+  confirmedCount: number;
   shippedCount: number;
+  deliveredCount: number;
   returnedCount: number;
   cancelledCount: number;
 }
+
 
 export interface CityStat {
   city: string;
@@ -94,3 +98,39 @@ export interface CityStat {
   deliveryRate: number;
   revenue: number;
 }
+
+export interface Supplier {
+  id: string;
+  name: string;
+  phone: string;
+  city: string;
+  address?: string | null;
+  balanceDue: number;
+  productsCount: number;
+  ordersCount: number;
+  createdAt: string;
+}
+
+export interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  orderId?: string;
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  status: "PENDING" | "PAID" | "CANCELLED";
+  createdAt: string;
+}
+
+export interface StoreSetting {
+  id?: string;
+  storeName: string;
+  phone: string;
+  email?: string | null;
+  address: string;
+  currency?: string;
+  ice?: string | null;
+  taxNumber?: string | null;
+  patente?: string | null;
+}
+

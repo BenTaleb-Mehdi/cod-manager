@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { formatPriceMAD } from "@/lib/utils";
-import { Search, AlertTriangle, ArrowUpDown, Layers } from "lucide-react";
+import { Search, AlertTriangle, ArrowUpDown, Layers, Package } from "lucide-react";
 
 interface ProductDataTableProps {
   products: Product[];
@@ -143,15 +143,28 @@ export function ProductDataTable({ products }: ProductDataTableProps) {
                       {product.sku}
                     </TableCell>
 
-                    {/* Nom & Catégorie */}
+                    {/* Nom & Catégorie avec Image */}
                     <TableCell>
-                      <div className="flex flex-col">
-                        <span className="font-medium text-foreground">{product.name}</span>
-                        {product.category && (
-                          <span className="text-[11px] text-muted-foreground">
-                            {product.category.name}
-                          </span>
+                      <div className="flex items-center gap-3">
+                        {product.imageUrl ? (
+                          <img
+                            src={product.imageUrl}
+                            alt={product.name}
+                            className="h-9 w-9 rounded-md object-cover border bg-muted/20 shrink-0"
+                          />
+                        ) : (
+                          <div className="h-9 w-9 rounded-md bg-muted/40 border flex items-center justify-center text-muted-foreground shrink-0">
+                            <Package className="h-4 w-4" />
+                          </div>
                         )}
+                        <div className="flex flex-col min-w-0">
+                          <span className="font-semibold text-foreground truncate">{product.name}</span>
+                          {product.category && (
+                            <span className="text-[11px] text-muted-foreground">
+                              {product.category.name}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </TableCell>
 

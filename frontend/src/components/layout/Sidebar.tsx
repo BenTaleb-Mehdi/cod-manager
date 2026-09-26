@@ -11,6 +11,8 @@ import {
   Truck,
   PhoneCall,
   BadgePercent,
+  Building2,
+  Settings,
 } from "lucide-react";
 
 interface NavigationItem {
@@ -31,12 +33,16 @@ const navigationItems: NavigationItem[] = [
     name: "Commandes (COD)",
     href: "/orders",
     icon: ShoppingCart,
-    badge: "14",
   },
   {
     name: "Inventaire & Marges",
     href: "/inventory",
     icon: Boxes,
+  },
+  {
+    name: "Fournisseurs & Achats",
+    href: "/suppliers",
+    icon: Building2,
   },
   {
     name: "Transporteurs",
@@ -48,10 +54,15 @@ const navigationItems: NavigationItem[] = [
     name: "Call Center",
     href: "/orders?status=NO_ANSWER",
     icon: PhoneCall,
-    badge: "9",
     statusFilter: "NO_ANSWER",
   },
+  {
+    name: "Paramètres Système",
+    href: "/settings",
+    icon: Settings,
+  },
 ];
+
 
 function SidebarNav() {
   const pathname = usePathname();
@@ -70,6 +81,10 @@ function SidebarNav() {
           isActive = pathname === "/";
         } else if (item.href === "/inventory") {
           isActive = pathname.startsWith("/inventory");
+        } else if (item.href === "/suppliers") {
+          isActive = pathname.startsWith("/suppliers");
+        } else if (item.href === "/settings") {
+          isActive = pathname.startsWith("/settings");
         } else if (item.statusFilter) {
           // Actif uniquement si on est sur /orders ET que le statut correspond exactement
           isActive = pathname === "/orders" && currentStatus === item.statusFilter;
@@ -80,6 +95,7 @@ function SidebarNav() {
             currentStatus !== "SHIPPED" &&
             currentStatus !== "NO_ANSWER";
         }
+
 
         const Icon = item.icon;
 
