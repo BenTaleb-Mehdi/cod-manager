@@ -264,6 +264,8 @@ model SocialPost {
   viewsCount    Int       @default(0)
   likesCount    Int       @default(0)
   commentsCount Int       @default(0)
+  sharesCount   Int       @default(0)
+  savesCount    Int       @default(0)
   publishedAt   DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -271,4 +273,39 @@ model SocialPost {
   @@index([viewsCount(sort: Desc)])
   @@map("social_posts")
 }
+
+model SocialMediaPost {
+  id            String    @id @default(uuid())
+  mediaId       String    @unique @db.VarChar(191)
+  caption       String?   @db.Text
+  mediaType     String    @default("REEL") @db.VarChar(50)
+  mediaUrl      String?   @db.Text
+  permalink     String?   @db.VarChar(500)
+  viewsCount    Int       @default(0)
+  likesCount    Int       @default(0)
+  commentsCount Int       @default(0)
+  sharesCount   Int       @default(0)
+  savesCount    Int       @default(0)
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([viewsCount(sort: Desc)])
+  @@map("social_media_posts")
+}
+
+model SocialAccountStats {
+  id             String   @id @default(uuid())
+  followersCount Int      @default(0)
+  followsCount   Int      @default(0)
+  mediaCount     Int      @default(0)
+  reach          Int      @default(0)
+  impressions    Int      @default(0)
+  profileViews   Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("social_account_stats")
+}
+
 

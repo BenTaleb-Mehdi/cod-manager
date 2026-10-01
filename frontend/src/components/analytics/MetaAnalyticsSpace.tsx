@@ -15,6 +15,7 @@ import {
   SocialAnalyticsResponse,
   SocialMediaPost,
 } from "@/actions/social-analytics";
+import { AIAdvisorPanel } from "./ai-advisor-panel";
 import {
   Instagram,
   Eye,
@@ -474,6 +475,9 @@ export function MetaAnalyticsSpace({ initialData }: MetaAnalyticsSpaceProps) {
           )}
         </CardContent>
       </Card>
+
+      {/* Conseiller Stratégique IA Gemini 2.5 Flash */}
+      <AIAdvisorPanel />
     </div>
   );
 }

@@ -68,10 +68,11 @@ export function MetaIntegrationCard({ initialSettings }: MetaIntegrationCardProp
       try {
         const res = await getMetaSettingsAction();
         if (res.success && res.data) {
+          const data = res.data;
           setFormData((prev) => ({
             ...prev,
-            ...res.data,
-            accessToken: res.data.rawAccessToken || res.data.accessToken || prev.accessToken,
+            ...data,
+            accessToken: (data as any).rawAccessToken || data.accessToken || prev.accessToken,
           }));
         }
       } catch (err) {
