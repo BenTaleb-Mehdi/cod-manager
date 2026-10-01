@@ -18,8 +18,12 @@ export async function apiFetch<T>(
   const url = `${BACKEND_URL}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+
     const res = await fetch(url, {
       ...options,
+      signal: options.signal || controller.signal,
       headers: {
         "Content-Type": "application/json",
         ...options.headers,
@@ -27,6 +31,7 @@ export async function apiFetch<T>(
       // Pas de mise en cache agressive pour les données temps réel du COD
       cache: "no-store",
     });
+    clearTimeout(timeoutId);
 
     const contentType = res.headers.get("content-type") || "";
     const isJson = contentType.includes("application/json");
@@ -71,12 +76,16 @@ export async function apiFetch<T>(
       data: textData as unknown as T,
     };
   } catch (error: unknown) {
+    const isAbort =
+      error instanceof Error && (error.name === "AbortError" || error.name === "TimeoutError");
     const isNetworkError =
       error instanceof TypeError && error.message.includes("fetch");
 
     return {
       success: false,
-      error: isNetworkError
+      error: isAbort
+        ? `Délai d'attente dépassé (timeout) pour joindre le backend (${BACKEND_URL}).`
+        : isNetworkError
         ? `Impossible de joindre le backend (${BACKEND_URL}). Assurez-vous que le backend tourne sur le port 3001.`
         : error instanceof Error
         ? error.message

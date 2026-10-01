@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
+import { NavigationProgressBar } from "@/components/layout/NavigationProgressBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className="h-full">
       <body className={`${inter.className} h-full bg-muted/20 text-foreground print:bg-white print:h-auto print:overflow-visible`}>
+        <NavigationProgressBar />
         <div className="flex min-h-screen print:block print:min-h-0">
           <Sidebar />
           <div className="flex flex-1 flex-col overflow-hidden print:block print:overflow-visible">
