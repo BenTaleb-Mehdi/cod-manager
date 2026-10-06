@@ -28,8 +28,8 @@ export default function ContactPage() {
 
   return (
     <div className="bg-[#FAF7F2] min-h-screen pb-20 text-[#18221D]">
-      {/* 1. HERO HEADER */}
-      <section className="border-b border-[#E8E2D8] bg-[#F7F3EC] py-12 sm:py-16 relative overflow-hidden">
+      {/* 1. HERO HEADER WITH PERSONALIZED MÉRAF CONCIERGERIE IMAGE */}
+      <section className="border-b border-[#E8E2D8] bg-[#F7F3EC] py-8 sm:py-12 relative overflow-hidden">
         {/* Subtle decorative curves */}
         <div className="absolute inset-0 pointer-events-none opacity-30">
           <svg className="w-full h-full" viewBox="0 0 1200 300" fill="none">
@@ -37,27 +37,64 @@ export default function ContactPage() {
           </svg>
         </div>
 
-        <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center space-y-3.5 max-w-3xl">
-          {/* Breadcrumbs */}
-          <nav className="flex items-center justify-center gap-2 text-[11px] font-medium tracking-wider text-[#18221D]/60 uppercase mb-2">
-            <Link href="/" className="hover:text-[#0B2D23] transition-colors">
-              Accueil
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-[#0B2D23] font-semibold">Contact & Conciergerie</span>
-          </nav>
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left Column: Typography */}
+            <div className="lg:col-span-6 space-y-4 max-w-xl text-center lg:text-left">
+              {/* Breadcrumbs */}
+              <nav className="flex items-center justify-center lg:justify-start gap-2 text-[11px] font-medium tracking-wider text-[#18221D]/60 uppercase">
+                <Link href="/" className="hover:text-[#0B2D23] transition-colors">
+                  Accueil
+                </Link>
+                <ChevronRight className="h-3 w-3" />
+                <span className="text-[#0B2D23] font-semibold">Conciergerie & Contact</span>
+              </nav>
 
-          <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] text-[#C5A880] uppercase block">
-            À VOTRE ÉCOUTE • SERVICE CLIENT PRIVILÉGIÉ
-          </span>
+              <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] text-[#C5A880] uppercase block">
+                À VOTRE ÉCOUTE • SALON PRIVÉ JOAILLIER
+              </span>
 
-          <h1 className="font-serif text-3xl sm:text-5xl font-normal text-[#0B2D23] tracking-tight">
-            Conciergerie & Contact
-          </h1>
+              <h1 className="font-serif text-3xl sm:text-5xl font-normal text-[#0B2D23] tracking-tight leading-tight">
+                Conciergerie & Contact Maison MÉRAF
+              </h1>
 
-          <p className="text-xs sm:text-sm text-[#18221D]/75 leading-relaxed font-sans max-w-xl mx-auto">
-            Une question sur un modèle, un conseil pour choisir la taille d&apos;une bague ou besoin d&apos;aide pour suivre votre commande ? Notre équipe dédiée vous répond 7j/7.
-          </p>
+              <p className="text-xs sm:text-sm text-[#18221D]/75 leading-relaxed font-sans">
+                Une question sur un modèle, un conseil personnalisé pour choisir une bague ou besoin d&apos;assistance pour suivre votre livraison ? Notre équipe conciergerie vous répond <strong>7j/7 avec bienveillance</strong>.
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1 text-[11px] text-[#0B2D23] font-medium">
+                <span className="bg-[#FAF7F2] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
+                  ✦ Support WhatsApp direct &lt; 10 min
+                </span>
+                <span className="bg-[#FAF7F2] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
+                  ✦ Échanges sans frais 30 jours
+                </span>
+                <span className="bg-[#FAF7F2] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
+                  ✦ Partout au Maroc
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column: Personalized MÉRAF Salon Hero Image */}
+            <div className="lg:col-span-6 relative">
+              <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-3xl overflow-hidden border-2 border-[#E8E2D8] shadow-2xl bg-[#FAF7F2] group">
+                <img
+                  src="/images/meraf/contact-hero.jpg"
+                  alt="MÉRAF Salon Privé et Conciergerie Joaillière"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+
+                {/* Floating Concierge Badge */}
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 bg-[#FAF7F2]/95 backdrop-blur-sm border border-[#C5A880] rounded-full px-3.5 py-1.5 shadow-lg flex items-center gap-2">
+                  <Sparkles className="h-3.5 w-3.5 text-[#A8875A]" />
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-[#0B2D23]">
+                    MÉRAF CONCIERGERIE VIP
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

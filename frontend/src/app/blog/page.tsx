@@ -17,8 +17,8 @@ export default function BlogIndexPage() {
 
   return (
     <div className="bg-[#FAF7F2] min-h-screen pb-20">
-      {/* 1. HERO HEADER */}
-      <section className="border-b border-[#E8E2D8] bg-[#F7F3EC] py-12 sm:py-16 relative overflow-hidden">
+      {/* 1. HERO HEADER WITH PERSONALIZED MÉRAF ATELIER IMAGE */}
+      <section className="border-b border-[#E8E2D8] bg-[#F7F3EC] py-8 sm:py-12 relative overflow-hidden">
         {/* Decorative background glow */}
         <div className="absolute inset-0 pointer-events-none opacity-30">
           <svg className="w-full h-full" viewBox="0 0 1200 300" fill="none">
@@ -26,27 +26,64 @@ export default function BlogIndexPage() {
           </svg>
         </div>
 
-        <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center space-y-3.5 max-w-3xl">
-          {/* Breadcrumbs */}
-          <nav className="flex items-center justify-center gap-2 text-[11px] font-medium tracking-wider text-[#18221D]/60 uppercase mb-2">
-            <Link href="/" className="hover:text-[#0B2D23] transition-colors">
-              Accueil
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-[#0B2D23] font-semibold">Le Journal</span>
-          </nav>
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left Column: Typography */}
+            <div className="lg:col-span-6 space-y-4 max-w-xl text-center lg:text-left">
+              {/* Breadcrumbs */}
+              <nav className="flex items-center justify-center lg:justify-start gap-2 text-[11px] font-medium tracking-wider text-[#18221D]/60 uppercase">
+                <Link href="/" className="hover:text-[#0B2D23] transition-colors">
+                  Accueil
+                </Link>
+                <ChevronRight className="h-3 w-3" />
+                <span className="text-[#0B2D23] font-semibold">Le Journal</span>
+              </nav>
 
-          <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] text-[#C5A880] uppercase block">
-            CONSEILS D&apos;EXPERTS • SAVOIR-FAIRE JOAILLIER
-          </span>
+              <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] text-[#C5A880] uppercase block">
+                CONSEILS D&apos;EXPERTS • SAVOIR-FAIRE JOAILLIER
+              </span>
 
-          <h1 className="font-serif text-3xl sm:text-5xl font-normal text-[#0B2D23] tracking-tight">
-            Le Journal de la Maison
-          </h1>
+              <h1 className="font-serif text-3xl sm:text-5xl font-normal text-[#0B2D23] tracking-tight leading-tight">
+                Le Journal de la Maison MÉRAF
+              </h1>
 
-          <p className="text-xs sm:text-sm text-[#18221D]/75 leading-relaxed font-sans max-w-xl mx-auto">
-            Plongez dans l&apos;univers de la joaillerie moderne. Découvrez nos guides d&apos;entretien, secrets de fabrication et inspirations de style pour sublimer vos parures au quotidien.
-          </p>
+              <p className="text-xs sm:text-sm text-[#18221D]/75 leading-relaxed font-sans">
+                Plongez dans les coulisses de la création joaillière. Découvrez nos <strong>guides d&apos;entretien pour l&apos;acier 316L</strong>, nos conseils de <strong>layering de colliers</strong> et le guide infaillible pour mesurer votre tour de doigt à la maison.
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1 text-[11px] text-[#0B2D23] font-medium">
+                <span className="bg-[#FAF7F2] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
+                  ✦ Guides d&apos;entretien
+                </span>
+                <span className="bg-[#FAF7F2] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
+                  ✦ Guide des tailles
+                </span>
+                <span className="bg-[#FAF7F2] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
+                  ✦ Tendances 2026 au Maroc
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column: Personalized MÉRAF Atelier Hero Image */}
+            <div className="lg:col-span-6 relative">
+              <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-3xl overflow-hidden border-2 border-[#E8E2D8] shadow-2xl bg-[#FAF7F2] group">
+                <img
+                  src="/images/meraf/blog-hero.jpg"
+                  alt="MÉRAF Journal d'Atelier - Carnet de Créations et Gemmes"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+
+                {/* Overlapping Atelier Tag */}
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 bg-[#FAF7F2]/95 backdrop-blur-sm border border-[#C5A880] rounded-full px-3.5 py-1.5 shadow-lg flex items-center gap-2">
+                  <Sparkles className="h-3.5 w-3.5 text-[#A8875A]" />
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-[#0B2D23]">
+                    CARNET D&apos;ATELIER MÉRAF
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

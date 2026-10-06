@@ -92,7 +92,7 @@ export function StorefrontHeader() {
                       href={`/collections?category=${cat.slug}`}
                       className="block px-3 py-2 text-[11px] font-medium tracking-wider text-[#18221D] hover:bg-[#F4EFEA] hover:text-[#0B2D23] rounded-lg transition-colors"
                     >
-                      {cat.name} ({cat.count})
+                      {cat.name}
                     </Link>
                   ))}
                 </div>
@@ -215,7 +215,7 @@ export function StorefrontHeader() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="rounded-xl border border-[#E8E2D8] bg-[#FDFCF9] p-2.5 text-xs font-medium text-[#0B2D23] hover:border-[#C5A880] transition-colors text-center"
                 >
-                  {cat.name} ({cat.count})
+                  {cat.name}
                 </Link>
               ))}
             </div>

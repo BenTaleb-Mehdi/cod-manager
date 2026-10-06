@@ -123,7 +123,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div>
-          <CityBreakdownCard stats={cities} />
+          <CityBreakdownCard cities={cities} />
         </div>
       </div>
     </div>
