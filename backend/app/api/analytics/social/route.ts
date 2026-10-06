@@ -81,6 +81,50 @@ export async function GET(_request: NextRequest) {
 
     if (accountJson.error) {
       console.warn("[Meta API Account Error]:", accountJson.error);
+      const isExpired = accountJson.error.code === 190;
+
+      if (isExpired) {
+        try {
+          await db.metaIntegration.update({
+            where: { id: "default" },
+            data: { isConnected: false },
+          });
+        } catch {}
+
+        let cachedMedia: SocialMediaItem[] = [];
+        try {
+          const cached = await db.socialPost.findMany({
+            orderBy: { viewsCount: "desc" },
+            take: 30,
+          });
+          cachedMedia = cached.map((p) => ({
+            id: p.mediaId,
+            caption: p.caption || "Sans légende",
+            mediaType: p.mediaType,
+            mediaUrl: p.mediaUrl || "",
+            permalink: p.permalink || "",
+            viewsCount: p.viewsCount,
+            likesCount: p.likesCount,
+            commentsCount: p.commentsCount,
+            publishedAt: p.publishedAt ? p.publishedAt.toISOString() : new Date().toISOString(),
+          }));
+        } catch {}
+
+        return jsonResponse({
+          success: true,
+          data: {
+            isConnected: false,
+            isTokenExpired: true,
+            source: config.source,
+            message:
+              "Votre token d'accès Meta a expiré (Erreur 190). Rendez-vous dans les Paramètres pour renouveler votre token permanent.",
+            account: null,
+            metrics: { reach: 0, impressions: 0, profileViews: 0 },
+            topMedia: cachedMedia,
+          },
+        });
+      }
+
       return errorResponse(`Erreur Meta API: ${accountJson.error.message}`, 400);
     }
 

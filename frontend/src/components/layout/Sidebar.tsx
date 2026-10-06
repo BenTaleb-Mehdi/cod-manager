@@ -14,6 +14,7 @@ import {
   Building2,
   Settings,
   BarChart3,
+  Sparkles,
 } from "lucide-react";
 
 interface NavigationItem {
@@ -27,8 +28,13 @@ interface NavigationItem {
 const navigationItems: NavigationItem[] = [
   {
     name: "Tableau de bord",
-    href: "/",
+    href: "/admin",
     icon: LayoutDashboard,
+  },
+  {
+    name: "Vitrine Morly 🛍️",
+    href: "/",
+    icon: Sparkles,
   },
   {
     name: "Commandes (COD)",
@@ -74,6 +80,12 @@ function SidebarNav() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentStatus = searchParams?.get("status") || null;
+  const [pendingHref, setPendingHref] = React.useState<string | null>(null);
+
+  // Réinitialiser le statut pending quand la route change
+  React.useEffect(() => {
+    setPendingHref(null);
+  }, [pathname, searchParams]);
 
   return (
     <div className="space-y-1">
@@ -81,41 +93,47 @@ function SidebarNav() {
         Menu Principal
       </span>
       {navigationItems.map((item) => {
-        let isActive = false;
+        let isRouteActive = false;
 
         if (item.href === "/") {
-          isActive = pathname === "/";
+          isRouteActive = pathname === "/";
         } else if (item.href === "/analytics") {
-          isActive = pathname.startsWith("/analytics");
+          isRouteActive = pathname.startsWith("/analytics");
         } else if (item.href === "/inventory") {
-          isActive = pathname.startsWith("/inventory");
+          isRouteActive = pathname.startsWith("/inventory");
         } else if (item.href === "/suppliers") {
-          isActive = pathname.startsWith("/suppliers");
+          isRouteActive = pathname.startsWith("/suppliers");
         } else if (item.href === "/settings") {
-          isActive = pathname.startsWith("/settings");
+          isRouteActive = pathname.startsWith("/settings");
         } else if (item.statusFilter) {
-          // Actif uniquement si on est sur /orders ET que le statut correspond exactement
-          isActive = pathname === "/orders" && currentStatus === item.statusFilter;
+          isRouteActive = pathname === "/orders" && currentStatus === item.statusFilter;
         } else if (item.href === "/orders") {
-          // "Commandes (COD)" est actif seulement si on est sur /orders SANS filtre de sous-menu spécial
-          isActive =
+          isRouteActive =
             pathname === "/orders" &&
             currentStatus !== "SHIPPED" &&
             currentStatus !== "NO_ANSWER";
         }
 
-
+        const isPending = pendingHref === item.href && !isRouteActive;
+        const isActive = isRouteActive || isPending;
         const Icon = item.icon;
 
         return (
           <Link
             key={item.name}
             href={item.href}
+            prefetch={true}
+            onClick={() => {
+              if (!isRouteActive) {
+                setPendingHref(item.href);
+              }
+            }}
             className={cn(
-              "group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors outline-none",
+              "group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 outline-none select-none",
               isActive
                 ? "bg-primary text-primary-foreground shadow-sm font-semibold"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              isPending && "animate-pulse"
             )}
           >
             <div className="flex items-center gap-3">
@@ -169,13 +187,15 @@ function SidebarNavFallback() {
         const Icon = item.icon;
 
         return (
-          <div
+          <Link
             key={item.name}
+            href={item.href}
+            prefetch={true}
             className={cn(
               "group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors",
               isActive
                 ? "bg-primary text-primary-foreground shadow-sm font-semibold"
-                : "text-muted-foreground"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
           >
             <div className="flex items-center gap-3">
@@ -187,7 +207,7 @@ function SidebarNavFallback() {
                 {item.badge}
               </span>
             )}
-          </div>
+          </Link>
         );
       })}
     </div>

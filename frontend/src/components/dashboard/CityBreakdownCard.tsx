@@ -7,10 +7,12 @@ import { formatPriceMAD } from "@/lib/utils";
 import { MapPin, TrendingUp } from "lucide-react";
 
 interface CityBreakdownCardProps {
-  cities: CityStat[];
+  cities?: CityStat[];
+  stats?: CityStat[];
 }
 
-export function CityBreakdownCard({ cities }: CityBreakdownCardProps) {
+export function CityBreakdownCard({ cities, stats }: CityBreakdownCardProps) {
+  const data = cities || stats || [];
   return (
     <Card className="shadow-sm">
       <CardHeader className="pb-3">
@@ -28,7 +30,7 @@ export function CityBreakdownCard({ cities }: CityBreakdownCardProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {cities.map((item) => (
+          {data.map((item) => (
             <div
               key={item.city}
               className="flex items-center justify-between rounded-lg border bg-muted/20 p-2.5 text-xs transition-colors hover:bg-muted/40"

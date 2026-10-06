@@ -15,6 +15,7 @@ import {
   SocialAnalyticsResponse,
   SocialMediaPost,
 } from "@/actions/social-analytics";
+import { AIAdvisorPanel } from "./ai-advisor-panel";
 import {
   Instagram,
   Eye,
@@ -79,17 +80,20 @@ export function MetaAnalyticsSpace({ initialData }: MetaAnalyticsSpaceProps) {
             <Instagram className="h-8 w-8" />
           </div>
           <h3 className="text-lg font-bold text-foreground">
-            Espace Meta & Instagram non connecté
+            {data?.isTokenExpired
+              ? "Session Meta expirée (Erreur 190)"
+              : "Espace Meta & Instagram non connecté"}
           </h3>
           <p className="text-sm text-muted-foreground max-w-md mt-1 mb-6">
-            Connectez votre compte Instagram Business et votre Page Meta dans les paramètres
-            pour synchroniser en direct vos abonnés, portées publicitaires et performances de vos Reels COD.
+            {data?.isTokenExpired
+              ? "Votre token d'accès Meta a expiré. Rendez-vous dans les Paramètres pour configurer un token permanent (Utilisateur Système) ou renouveler vos accès."
+              : "Connectez votre compte Instagram Business et votre Page Meta dans les paramètres pour synchroniser en direct vos abonnés, portées publicitaires et performances de vos Reels COD."}
           </p>
           <div className="flex items-center gap-3">
             <Button asChild className="gap-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white shadow">
               <Link href="/settings">
                 <Settings className="h-4 w-4" />
-                <span>Configurer l'intégration Meta</span>
+                <span>{data?.isTokenExpired ? "Renouveler le token Meta" : "Configurer l'intégration Meta"}</span>
               </Link>
             </Button>
             <Button variant="outline" onClick={fetchAnalytics} disabled={isLoading} className="gap-2">
@@ -474,6 +478,9 @@ export function MetaAnalyticsSpace({ initialData }: MetaAnalyticsSpaceProps) {
           )}
         </CardContent>
       </Card>
+
+      {/* Conseiller Stratégique IA Gemini 2.5 Flash */}
+      <AIAdvisorPanel />
     </div>
   );
 }

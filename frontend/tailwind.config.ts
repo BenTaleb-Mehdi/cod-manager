@@ -16,6 +16,10 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        serif: ["var(--font-serif)", "Playfair Display", "Cormorant Garamond", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "Montserrat", "Outfit", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -49,6 +53,22 @@ const config: Config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // Lumière Fine Jewelry Luxury Theme Colors
+        lumiere: {
+          emerald: "#0B2D23",
+          "emerald-dark": "#071E17",
+          "emerald-light": "#154738",
+          "emerald-card": "#0F382C",
+          gold: "#C5A880",
+          "gold-light": "#E2D3BE",
+          "gold-dark": "#A8875A",
+          "gold-metallic": "#B38F4D",
+          cream: "#FAF7F2",
+          "cream-light": "#FDFCF9",
+          "cream-card": "#F4EFEA",
+          "cream-border": "#E8E2D8",
+          charcoal: "#18221D",
         },
         // Moroccan COD status specific semantic colors
         cod: {

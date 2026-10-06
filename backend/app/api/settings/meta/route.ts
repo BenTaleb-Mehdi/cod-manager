@@ -58,12 +58,69 @@ export async function PUT(request: NextRequest) {
     const validated = MetaCredentialsSchema.parse(body);
 
     const { accessToken, instagramAccountId } = validated;
+    const currentConfig = await getMetaConfig();
 
-    // 1. Tester la validité via la Meta Graph API
+    let effectiveAccessToken = accessToken.trim();
+    let isUpgradedToPermanentOrLongLived = false;
+
+    // 1. Tenter un échange automatique vers un Token Longue Durée (60 jours) ou Permanent
+    // si l'App ID et l'App Secret sont configurés ou transmis
+    const effectiveAppId = validated.appId?.trim() || currentConfig.appId || undefined;
+    const effectiveAppSecret =
+      validated.appSecret && validated.appSecret !== "••••••••••••••••"
+        ? validated.appSecret.trim()
+        : currentConfig.appSecret || undefined;
+
+    if (effectiveAppId && effectiveAppSecret && effectiveAccessToken) {
+      try {
+        const exchangeUrl = `https://graph.facebook.com/v19.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${encodeURIComponent(
+          effectiveAppId
+        )}&client_secret=${encodeURIComponent(
+          effectiveAppSecret
+        )}&fb_exchange_token=${encodeURIComponent(effectiveAccessToken)}`;
+
+        const exRes = await fetch(exchangeUrl, { cache: "no-store" });
+        const exData = await exRes.json();
+
+        if (exData.access_token) {
+          effectiveAccessToken = exData.access_token;
+          isUpgradedToPermanentOrLongLived = true;
+          console.log("[Meta API] Token étendu avec succès en Long-Lived Token (60 jours).");
+
+          // Essayer de récupérer le Page Access Token permanent (Never-Expiring)
+          try {
+            const accountsUrl = `https://graph.facebook.com/v19.0/me/accounts?fields=id,name,access_token,instagram_business_account&access_token=${encodeURIComponent(
+              effectiveAccessToken
+            )}`;
+            const accRes = await fetch(accountsUrl, { cache: "no-store" });
+            const accData = await accRes.json();
+
+            if (accData.data && Array.isArray(accData.data)) {
+              const matchedPage = accData.data.find(
+                (p: any) =>
+                  (validated.pageId && p.id === validated.pageId.trim()) ||
+                  p.instagram_business_account?.id === instagramAccountId.trim()
+              ) || accData.data[0];
+
+              if (matchedPage?.access_token) {
+                effectiveAccessToken = matchedPage.access_token;
+                console.log("[Meta API] Page Access Token permanent (Never Expiring) configuré !");
+              }
+            }
+          } catch (pageErr) {
+            console.warn("[Meta API] Page token retrieval skipped:", pageErr);
+          }
+        }
+      } catch (exchangeErr) {
+        console.warn("[Meta API] Token exchange warning:", exchangeErr);
+      }
+    }
+
+    // 2. Tester la validité via la Meta Graph API
     const metaVerifyUrl = `https://graph.facebook.com/v19.0/${encodeURIComponent(
       instagramAccountId
     )}?fields=username,name,followers_count,media_count,profile_picture_url&access_token=${encodeURIComponent(
-      accessToken
+      effectiveAccessToken
     )}`;
 
     let metaData: {
@@ -99,20 +156,28 @@ export async function PUT(request: NextRequest) {
 
     if (metaData.error) {
       console.warn("[Meta Graph API Validation Failed]:", metaData.error);
+      if (metaData.error.code === 190) {
+        return errorResponse(
+          `Erreur Meta Graph API (190) : Le token d'accès a expiré (${metaData.error.message}). ` +
+          `Les tokens temporaires de session générés depuis l'explorateur Graph API expirent après 1 à 2 heures. ` +
+          `Veuillez générer un Token Permanent (Utilisateur Système avec expiration "Jamais" dans Meta Business Suite) ou un Token Longue Durée (60 jours) pour continuer.`,
+          400
+        );
+      }
       return errorResponse(
         `Erreur Meta Graph API (${metaData.error.code}): ${metaData.error.message}`,
         400
       );
     }
 
-    // 2. Si la validation réussit, persister dans la table MySQL `meta_integrations`
+    // 3. Si la validation réussit, persister dans la table MySQL `meta_integrations`
     const updated = await db.metaIntegration.upsert({
       where: { id: "default" },
       create: {
         id: "default",
         appId: validated.appId?.trim() || null,
         appSecret: validated.appSecret?.trim() || null,
-        accessToken: validated.accessToken.trim(),
+        accessToken: effectiveAccessToken,
         instagramAccountId: validated.instagramAccountId.trim(),
         adAccountId: validated.adAccountId?.trim() || null,
         pageId: validated.pageId?.trim() || null,
@@ -123,7 +188,7 @@ export async function PUT(request: NextRequest) {
         ...(validated.appSecret && validated.appSecret !== "••••••••••••••••"
           ? { appSecret: validated.appSecret.trim() }
           : {}),
-        accessToken: validated.accessToken.trim(),
+        accessToken: effectiveAccessToken,
         instagramAccountId: validated.instagramAccountId.trim(),
         adAccountId: validated.adAccountId?.trim() || null,
         pageId: validated.pageId?.trim() || null,
@@ -131,10 +196,14 @@ export async function PUT(request: NextRequest) {
       },
     });
 
+    const statusNote = isUpgradedToPermanentOrLongLived
+      ? " (Token Longue Durée / Permanent activé)"
+      : "";
+
     return jsonResponse({
       success: true,
       data: {
-        message: `Connexion réussie avec le compte Instagram @${metaData.username || metaData.name} !`,
+        message: `Connexion réussie avec le compte Instagram @${metaData.username || metaData.name} !${statusNote}`,
         account: {
           username: metaData.username,
           name: metaData.name,

@@ -32,6 +32,13 @@ import {
   ShieldCheck,
   TrendingUp,
   Video,
+  AlertTriangle,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  Clock,
+  BookOpen,
 } from "lucide-react";
 
 interface MetaIntegrationCardProps {
@@ -53,6 +60,7 @@ export function MetaIntegrationCard({ initialSettings }: MetaIntegrationCardProp
   const [showToken, setShowToken] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisconnecting, setIsDisconnecting] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [connectedAccount, setConnectedAccount] = useState<{
@@ -68,10 +76,11 @@ export function MetaIntegrationCard({ initialSettings }: MetaIntegrationCardProp
       try {
         const res = await getMetaSettingsAction();
         if (res.success && res.data) {
+          const data = res.data;
           setFormData((prev) => ({
             ...prev,
-            ...res.data,
-            accessToken: res.data.rawAccessToken || res.data.accessToken || prev.accessToken,
+            ...data,
+            accessToken: (data as any).rawAccessToken || data.accessToken || prev.accessToken,
           }));
         }
       } catch (err) {
@@ -111,14 +120,18 @@ export function MetaIntegrationCard({ initialSettings }: MetaIntegrationCardProp
           setConnectedAccount(result.data.account);
         }
       } else {
-        setErrorMessage(
-          result.error || "Échec de validation des identifiants avec la Meta Graph API."
-        );
+        const err = result.error || "Échec de validation des identifiants avec la Meta Graph API.";
+        setErrorMessage(err);
+        if (err.includes("190") || err.toLowerCase().includes("expir")) {
+          setShowGuide(true);
+        }
       }
     } catch (err: unknown) {
-      setErrorMessage(
-        err instanceof Error ? err.message : "Une erreur réseau inattendue est survenue."
-      );
+      const msg = err instanceof Error ? err.message : "Une erreur réseau inattendue est survenue.";
+      setErrorMessage(msg);
+      if (msg.includes("190") || msg.toLowerCase().includes("expir")) {
+        setShowGuide(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -171,8 +184,20 @@ export function MetaIntegrationCard({ initialSettings }: MetaIntegrationCardProp
             </div>
           </div>
 
-          {/* Badge de Statut de Connexion */}
-          <div>
+          {/* Badge de Statut de Connexion & Bouton Guide */}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setShowGuide(!showGuide)}
+              className="h-8 gap-1.5 text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800"
+            >
+              <BookOpen className="h-3.5 w-3.5" />
+              <span>Guide Token Permanent</span>
+              {showGuide ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+            </Button>
+
             {formData.isConnected ? (
               <Badge className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-emerald-500/30 gap-1.5 px-3 py-1 font-semibold text-xs">
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -199,9 +224,124 @@ export function MetaIntegrationCard({ initialSettings }: MetaIntegrationCardProp
           )}
 
           {errorMessage && (
-            <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/30 p-3.5 text-xs text-red-800 dark:text-red-300">
-              <XCircle className="h-4 w-4 shrink-0 text-red-600 mt-0.5" />
-              <div className="flex-1 font-medium">{errorMessage}</div>
+            <div className="space-y-2.5">
+              <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/30 p-3.5 text-xs text-red-800 dark:text-red-300">
+                <XCircle className="h-4 w-4 shrink-0 text-red-600 mt-0.5" />
+                <div className="flex-1 font-medium">{errorMessage}</div>
+              </div>
+
+              {(errorMessage.includes("190") || errorMessage.toLowerCase().includes("expir")) && (
+                <div className="flex items-start gap-3 rounded-lg border border-amber-300 bg-amber-50/90 dark:bg-amber-950/40 p-3.5 text-xs text-amber-900 dark:text-amber-200">
+                  <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
+                  <div className="flex-1 space-y-1.5">
+                    <p className="font-semibold text-xs">Pourquoi cette erreur d'expiration (Code 190) ?</p>
+                    <p className="text-[11px] leading-relaxed text-amber-800 dark:text-amber-300">
+                      Les tokens générés via l'outil <strong>Graph API Explorer</strong> ont une durée de validité courte (1 à 2 heures). Pour que votre synchronisation COD Manager reste active en continu, générez un <strong>Token Permanent</strong> via un Utilisateur Système Meta Business.
+                    </p>
+                    <div className="pt-1 flex flex-wrap items-center gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setShowGuide(true)}
+                        className="h-7 text-[11px] font-semibold bg-amber-100 hover:bg-amber-200 text-amber-900 border-amber-300 gap-1.5"
+                      >
+                        <Sparkles className="h-3 w-3" />
+                        <span>Voir comment obtenir un Token Permanent</span>
+                      </Button>
+                      <a
+                        href="https://business.facebook.com/settings/system-users"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-medium text-amber-900 dark:text-amber-200 hover:underline"
+                      >
+                        <span>Ouvrir Meta Business Settings</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Guide Interactif Token Permanent Meta */}
+          {showGuide && (
+            <div className="rounded-xl border border-indigo-200 dark:border-indigo-900 bg-gradient-to-br from-indigo-50/70 via-slate-50 to-purple-50/50 dark:from-indigo-950/40 dark:via-slate-900/40 dark:to-purple-950/30 p-4 space-y-3.5 text-xs">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 font-bold text-indigo-950 dark:text-indigo-200">
+                  <Sparkles className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                  <span>Comment obtenir un Token Permanent (Qui n'expire jamais) ?</span>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowGuide(false)}
+                  className="h-6 px-2 text-[11px] text-muted-foreground hover:text-foreground"
+                >
+                  Fermer
+                </Button>
+              </div>
+
+              <p className="text-muted-foreground text-[11px] leading-relaxed">
+                Par défaut, les tokens générés sur l'explorateur Meta expirent après 1 à 2 heures (Erreur 190).
+                Pour que COD Manager fonctionne en continu sans coupure, suivez cette méthode recommandée :
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-1">
+                <div className="rounded-lg bg-card border p-3 space-y-1.5 shadow-2xs">
+                  <div className="flex items-center gap-2 font-semibold text-foreground">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 text-[10px] font-bold">1</span>
+                    <span>Utilisateur Système</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    Allez dans <strong>Meta Business Suite</strong> &gt; Paramètres &gt; <strong>Utilisateurs système</strong>. Créez un utilisateur avec le rôle <em>Admin</em>.
+                  </p>
+                  <a
+                    href="https://business.facebook.com/settings/system-users"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline pt-0.5"
+                  >
+                    <span>Ouvrir Business Suite</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div className="rounded-lg bg-card border p-3 space-y-1.5 shadow-2xs">
+                  <div className="flex items-center gap-2 font-semibold text-foreground">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 text-[10px] font-bold">2</span>
+                    <span>Attribuer les Actifs</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    Cliquez sur <em>Ajouter des actifs</em> et associez votre <strong>Page Facebook</strong>, <strong>Compte Instagram</strong> et compte publicitaire.
+                  </p>
+                </div>
+
+                <div className="rounded-lg bg-card border p-3 space-y-1.5 shadow-2xs">
+                  <div className="flex items-center gap-2 font-semibold text-foreground">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 text-[10px] font-bold">3</span>
+                    <span>Générer avec "Jamais"</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    Cliquez sur <em>Générer un token</em>, réglez l'expiration sur <strong>Jamais</strong>, cochez les permissions ci-dessous et collez le token ici.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] text-muted-foreground">
+                <span className="font-semibold text-foreground">Permissions requises :</span>
+                <code className="bg-muted px-1.5 py-0.5 rounded text-[10px] text-foreground font-mono">instagram_basic</code>
+                <code className="bg-muted px-1.5 py-0.5 rounded text-[10px] text-foreground font-mono">instagram_manage_insights</code>
+                <code className="bg-muted px-1.5 py-0.5 rounded text-[10px] text-foreground font-mono">pages_show_list</code>
+                <code className="bg-muted px-1.5 py-0.5 rounded text-[10px] text-foreground font-mono">pages_read_engagement</code>
+                <code className="bg-muted px-1.5 py-0.5 rounded text-[10px] text-muted-foreground font-mono">ads_read (optionnel)</code>
+              </div>
+
+              <div className="rounded-lg bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 p-2.5 text-[11px] text-indigo-900 dark:text-indigo-300">
+                <strong>Astuce automatique :</strong> Si vous renseignez également votre <em>Meta App ID</em> et <em>Meta App Secret</em>, COD Manager convertit automatiquement vos tokens temporaires en tokens longue durée (60 jours) ou permanents lors de l'enregistrement.
+              </div>
             </div>
           )}
 

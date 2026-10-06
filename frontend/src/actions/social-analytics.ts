@@ -16,6 +16,7 @@ export interface SocialMediaPost {
 
 export interface SocialAnalyticsResponse {
   isConnected: boolean;
+  isTokenExpired?: boolean;
   source: string;
   message?: string;
   account: {
