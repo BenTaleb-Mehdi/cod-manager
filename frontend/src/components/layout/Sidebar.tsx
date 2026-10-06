@@ -14,6 +14,7 @@ import {
   Building2,
   Settings,
   BarChart3,
+  Sparkles,
 } from "lucide-react";
 
 interface NavigationItem {
@@ -27,8 +28,13 @@ interface NavigationItem {
 const navigationItems: NavigationItem[] = [
   {
     name: "Tableau de bord",
-    href: "/",
+    href: "/admin",
     icon: LayoutDashboard,
+  },
+  {
+    name: "Vitrine Morly 🛍️",
+    href: "/",
+    icon: Sparkles,
   },
   {
     name: "Commandes (COD)",
