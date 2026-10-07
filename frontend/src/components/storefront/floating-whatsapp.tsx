@@ -9,7 +9,7 @@ export function FloatingWhatsApp() {
   const whatsappUrl = buildWhatsAppOrderLink({});
 
   return (
-    <div className="fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-30 flex flex-col items-end gap-2">
+    <div className="hidden sm:flex fixed bottom-6 right-6 z-30 flex-col items-end gap-2">
       {/* Bulle d'incitation flottante - visible sur desktop ou quand activée, ne bloque pas le formulaire mobile */}
       {showTooltip && (
         <div className="hidden sm:block relative rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] p-3 shadow-xl max-w-[220px] text-xs animate-in fade-in slide-in-from-bottom-2 duration-300">

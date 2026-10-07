@@ -208,14 +208,14 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
       id="cod-checkout-section"
       className={`rounded-2xl border border-[#E8E2D8] bg-[#FDFCF9] p-5 sm:p-7 shadow-xl relative overflow-hidden ${className}`}
     >
-      {/* Ruban d'en-tête attractif Deep Emerald */}
-      <div className="absolute top-0 left-0 right-0 bg-[#0B2D23] py-2 px-4 text-center text-xs font-semibold text-[#FAF7F2] shadow-sm flex items-center justify-center gap-2">
-        <Sparkles className="h-3.5 w-3.5 text-[#C5A880]" />
-        <span className="tracking-wide">Paiement à la Livraison après ouverture du colis • الدفع عند الاستلام</span>
+      {/* Ruban d'en-tête Deep Emerald Flow Naturel (Jamais d'overlap) */}
+      <div className="-mx-5 -mt-5 sm:-mx-7 sm:-mt-7 mb-4 bg-[#0B2D23] py-2.5 px-4 text-center text-xs font-semibold text-[#FAF7F2] shadow-xs flex items-center justify-center gap-2">
+        <Sparkles className="h-3.5 w-3.5 text-[#C5A880] shrink-0" />
+        <span className="text-[11px] sm:text-xs tracking-wide">Paiement à la Livraison après ouverture du colis • الدفع عند الاستلام</span>
       </div>
 
-      <div className="pt-6 pb-2 text-center space-y-1">
-        <span className="text-[10px] font-bold tracking-[0.25em] text-[#C5A880] uppercase block">
+      <div className="text-center space-y-1 pb-1">
+        <span className="text-[10px] font-bold tracking-[0.2em] text-[#C5A880] uppercase block">
           COMMANDE RAPIDE
         </span>
         <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#0B2D23] tracking-tight">
@@ -226,75 +226,81 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-        {/* Étape 1 : Choix de l'offre */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 mt-3">
+        {/* Étape 1 : Choix de l'offre (Pack) - Design Clair & Spacieux */}
         <div className="space-y-2.5">
-          <label className="text-xs font-semibold tracking-wider uppercase text-[#0B2D23] flex items-center justify-between">
-            <span>1. Choisissez votre coffret :</span>
-            <span className="text-[#0B2D23] font-medium text-xs flex items-center gap-1">
+          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#0B2D23]">
+            <span>1. Choisissez votre offre :</span>
+            <span className="text-emerald-800 text-[11px] font-bold flex items-center gap-1">
               <Truck className="h-3.5 w-3.5 text-[#C5A880]" /> Livraison Offerte
             </span>
-          </label>
+          </div>
 
-          <div className="grid grid-cols-1 gap-2.5">
+          <div className="space-y-2.5">
             {product.offers.map((offer) => {
               const isSelected = selectedPack === offer.id;
               return (
                 <div
                   key={offer.id}
                   onClick={() => handleSelectPack(offer.id)}
-                  className={`relative cursor-pointer rounded-xl border p-3.5 transition-all duration-200 ${
+                  className={`cursor-pointer rounded-2xl p-3.5 sm:p-4 transition-all duration-200 border-2 ${
                     isSelected
-                      ? "border-[#0B2D23] bg-[#FAF7F2] shadow-sm ring-1 ring-[#0B2D23]"
+                      ? "border-[#0B2D23] bg-[#FAF7F2] shadow-md ring-1 ring-[#0B2D23]/20"
                       : "border-[#E8E2D8] hover:border-[#C5A880] bg-white"
                   }`}
                 >
-                  {offer.badge && (
-                    <span
-                      className={`absolute -top-2.5 right-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-xs ${
-                        offer.isPopular
-                          ? "bg-[#0B2D23] text-[#FAF7F2]"
-                          : "bg-[#C5A880] text-[#0B2D23]"
-                      }`}
-                    >
-                      {offer.badge}
-                    </span>
-                  )}
-
                   <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2.5">
+                    {/* Radio + Détails de l'offre */}
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      {/* Radio rond luxe */}
                       <div
-                        className={`h-4.5 w-4.5 rounded-full border flex items-center justify-center transition-colors ${
+                        className={`h-5 w-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
                           isSelected
-                            ? "border-[#0B2D23] bg-[#0B2D23] text-white"
-                            : "border-[#E8E2D8] bg-transparent"
+                            ? "border-[#0B2D23] bg-[#0B2D23]"
+                            : "border-[#C5A880] bg-white"
                         }`}
                       >
-                        {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                        {isSelected && <div className="h-2 w-2 rounded-full bg-white" />}
                       </div>
-                      <div>
-                        <p className="font-medium text-sm text-[#18221D]">
-                          {offer.title}
-                        </p>
+
+                      <div className="min-w-0 flex-1 space-y-0.5">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-serif font-bold text-sm sm:text-base text-[#0B2D23]">
+                            {offer.title}
+                          </span>
+                          {offer.isPopular && (
+                            <span className="bg-[#0B2D23] text-[#FAF7F2] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
+                              ⭐ Le Plus Choisi
+                            </span>
+                          )}
+                          {!offer.isPopular && offer.badge && offer.badge !== "Standard" && offer.badge !== "Livraison Gratuite" && (
+                            <span className="bg-[#C5A880]/20 text-[#0B2D23] border border-[#C5A880]/40 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                              {offer.badge.replace(/Morly/g, "MÉRAF")}
+                            </span>
+                          )}
+                        </div>
+
                         {offer.savingsMAD > 0 && (
-                          <p className="text-xs font-semibold text-[#0B2D23]">
-                            Économisez {offer.savingsMAD} DH
-                          </p>
+                          <div className="inline-block text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-md">
+                            Économisez {offer.savingsMAD} DH • Livraison 0 DH
+                          </div>
                         )}
+
                         {offer.includes && (
-                          <p className="text-[11px] text-[#18221D]/60 mt-0.5">
-                            Inclus : {offer.includes.join(" • ")}
+                          <p className="text-[11px] text-[#18221D]/60 pt-0.5 leading-snug">
+                            Inclus : {offer.includes.map(i => i.replace(/Morly/g, "MÉRAF")).join(" • ")}
                           </p>
                         )}
                       </div>
                     </div>
 
-                    <div className="text-right">
-                      <div className="text-base sm:text-lg font-serif font-bold text-[#0B2D23]">
+                    {/* Prix en DH */}
+                    <div className="text-right shrink-0 pl-2">
+                      <div className="text-lg sm:text-xl font-serif font-bold text-[#0B2D23]">
                         {offer.priceMAD} DH
                       </div>
                       {offer.compareAtPriceMAD > offer.priceMAD && (
-                        <div className="text-xs text-[#18221D]/40 line-through">
+                        <div className="text-[11px] text-[#18221D]/45 line-through">
                           {offer.compareAtPriceMAD} DH
                         </div>
                       )}
