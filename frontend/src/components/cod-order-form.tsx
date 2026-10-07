@@ -26,6 +26,7 @@ import { Product, ProductOffer, MoroccoCity } from "@/types/storefront";
 import { getCities, buildWhatsAppOrderLink, BRAND_NAME } from "@/lib/storefront-data";
 import { formatPriceMAD } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
+import { CityCombobox } from "@/components/storefront/city-combobox";
 
 /**
  * Schéma de validation Zod optimisé pour le marché marocain COD
@@ -372,84 +373,12 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
             )}
           </div>
 
-          {/* Champ Ville searchable */}
-          <div className="relative">
-            <div className="relative">
-              <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#18221D]/50" />
-              <button
-                type="button"
-                onClick={() => setIsCityDropdownOpen(!isCityDropdownOpen)}
-                className={`w-full rounded-xl border bg-[#FAF7F2] py-3 pl-10 pr-10 text-left text-sm font-medium transition-colors flex items-center justify-between focus:border-[#0B2D23] focus:outline-none ${
-                  errors.city ? "border-red-500" : "border-[#E8E2D8]"
-                }`}
-              >
-                <span>{currentCityValue || "Sélectionnez votre ville..."}</span>
-                <div className="flex items-center gap-1.5">
-                  {selectedCityObj && (
-                    <span className="text-[11px] font-semibold text-[#0B2D23] bg-white border border-[#E8E2D8] px-2 py-0.5 rounded-full">
-                      {selectedCityObj.deliveryTime}
-                    </span>
-                  )}
-                  <ChevronDown className="h-4 w-4 text-[#18221D]/50" />
-                </div>
-              </button>
-            </div>
-
-            {/* Menu déroulant searchable */}
-            {isCityDropdownOpen && (
-              <div className="absolute z-30 mt-1 w-full rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] shadow-2xl p-2 max-h-60 overflow-y-auto">
-                <div className="relative mb-2">
-                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#18221D]/50" />
-                  <input
-                    type="text"
-                    value={citySearch}
-                    onChange={(e) => setCitySearch(e.target.value)}
-                    placeholder="Rechercher votre ville..."
-                    className="w-full rounded-lg border border-[#E8E2D8] bg-white py-1.5 pl-8 pr-3 text-xs focus:outline-none focus:border-[#0B2D23]"
-                    autoFocus
-                  />
-                </div>
-                <div className="space-y-0.5">
-                  {filteredCities.map((c) => (
-                    <div
-                      key={c.id}
-                      onClick={() => {
-                        setValue("city", c.name, { shouldValidate: true });
-                        setIsCityDropdownOpen(false);
-                        setCitySearch("");
-                      }}
-                      className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
-                        currentCityValue === c.name
-                          ? "bg-[#0B2D23] text-[#FAF7F2] font-semibold"
-                          : "hover:bg-[#F4EFEA] text-[#18221D]"
-                      }`}
-                    >
-                      <span>{c.name}</span>
-                      <span
-                        className={`text-[10px] px-1.5 py-0.5 rounded ${
-                          currentCityValue === c.name
-                            ? "bg-white/20 text-[#FAF7F2]"
-                            : "text-[#18221D]/60"
-                        }`}
-                      >
-                        {c.deliveryTime} • Gratuit
-                      </span>
-                    </div>
-                  ))}
-                  {filteredCities.length === 0 && (
-                    <p className="text-center text-xs text-[#18221D]/60 py-2">
-                      Ville introuvable. Notre transporteur livre tout le Maroc.
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-            {errors.city && (
-              <p className="text-xs text-red-500 mt-1 font-medium pl-1">
-                {errors.city.message}
-              </p>
-            )}
-          </div>
+          {/* Champ Ville Combobox searchable */}
+          <CityCombobox
+            value={currentCityValue}
+            onChange={(val) => setValue("city", val, { shouldValidate: true })}
+            error={errors.city?.message}
+          />
 
           {/* Champ Adresse / Quartier */}
           <div>
@@ -497,21 +426,25 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
         <button
           type="submit"
           disabled={isPending}
-          className="w-full relative group overflow-hidden rounded-2xl bg-gradient-to-r from-[#0B2D23] via-[#123E32] to-[#0B2D23] hover:from-[#123E32] hover:to-[#1a5544] py-4 px-4 sm:px-6 text-[#FAF7F2] shadow-xl shadow-[#0B2D23]/25 border border-[#C5A880]/35 transition-all duration-300 hover:scale-[1.005] active:scale-[0.99] disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer flex flex-col items-center justify-center gap-1.5"
+          className="w-full relative group overflow-hidden rounded-2xl bg-gradient-to-r from-[#0B2D23] via-[#144738] to-[#0B2D23] hover:from-[#144738] hover:to-[#1a5544] py-3.5 sm:py-4 px-4 text-[#FAF7F2] shadow-xl shadow-[#0B2D23]/25 border border-[#C5A880]/40 transition-all duration-300 hover:scale-[1.005] active:scale-[0.99] disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer flex flex-col items-center justify-center gap-1.5"
         >
           {/* Shimmer animation au survol */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 pointer-events-none" />
 
+          {/* Ligne 1 : Titre Action Centré avec Badge Icon */}
           <div className="relative z-10 flex items-center justify-center gap-2 text-center">
-            <CheckCircle2 className="h-5 w-5 text-[#C5A880] shrink-0" />
-            <span className="font-bold text-xs sm:text-sm tracking-wider uppercase text-white">
-              {isPending ? "Validation en cours..." : `Acheter Maintenant (${activeOffer.priceMAD} DH) • COD`}
+            <div className="h-5.5 w-5.5 rounded-full bg-[#C5A880]/20 border border-[#C5A880]/50 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#C5A880]" />
+            </div>
+            <span className="font-bold text-xs sm:text-sm tracking-wide uppercase text-white">
+              {isPending ? "Validation de votre commande..." : "Acheter Maintenant (Paiement à la Livraison)"}
             </span>
           </div>
 
-          <div className="relative z-10 flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] font-normal text-[#DFCCA8]/95 text-center">
+          {/* Ligne 2 : Reassurance Centrée avec Icône Cadenas */}
+          <div className="relative z-10 flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] font-normal text-[#DFCCA8] text-center leading-tight">
             <Lock className="h-3 w-3 text-[#C5A880] shrink-0" />
-            <span>Paiement en espèces à la réception après ouverture du colis</span>
+            <span>Paiement à la réception après ouverture du colis</span>
           </div>
         </button>
 

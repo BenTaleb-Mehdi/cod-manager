@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { getCities, buildWhatsAppOrderLink } from "@/lib/storefront-data";
+import { CityCombobox } from "./city-combobox";
 
 export function CartDrawer() {
   const router = useRouter();
@@ -401,22 +402,11 @@ export function CartDrawer() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-semibold text-[#0B2D23] mb-0.5">
-                    Ville :
-                  </label>
-                  <select
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] px-3 py-2 text-xs text-[#18221D] focus:border-[#0B2D23] focus:bg-white focus:outline-none transition-all cursor-pointer"
-                  >
-                    {cities.map((c) => (
-                      <option key={c.name} value={c.name}>
-                        {c.name} ({c.deliveryTime})
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <CityCombobox
+                  label="Ville de livraison :"
+                  value={city}
+                  onChange={(newCity) => setCity(newCity)}
+                />
 
                 <div>
                   <label className="block text-[11px] font-semibold text-[#0B2D23] mb-0.5">

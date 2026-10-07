@@ -22,6 +22,7 @@ import {
 import { Product, ProductOffer } from "@/types/storefront";
 import { getCities, buildWhatsAppOrderLink } from "@/lib/storefront-data";
 import { useCart } from "@/context/cart-context";
+import { CityCombobox } from "./city-combobox";
 
 interface QuickCheckoutModalProps {
   product: Product | null;
@@ -374,24 +375,12 @@ export function QuickCheckoutModal({
                 </p>
               </div>
 
-              {/* City */}
-              <div>
-                <label className="block text-[11px] font-semibold text-[#0B2D23] mb-1 flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-[#C5A880]" />
-                  <span>Ville de livraison</span>
-                </label>
-                <select
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  className="w-full rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] px-3 py-2 text-xs text-[#18221D] focus:border-[#0B2D23] focus:bg-white focus:outline-none transition-all cursor-pointer"
-                >
-                  {cities.map((c) => (
-                    <option key={c.name} value={c.name}>
-                      {c.name} (Livr. {c.deliveryTime})
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {/* City Combobox */}
+              <CityCombobox
+                label="Ville de livraison"
+                value={city}
+                onChange={(newCity) => setCity(newCity)}
+              />
 
               {/* Address */}
               <div>
