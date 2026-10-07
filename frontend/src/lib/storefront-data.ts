@@ -83,27 +83,61 @@ export function getCategories() {
 }
 
 /**
- * Génère le lien WhatsApp pré-rempli pour la commande ou le support client
+ * Génère le lien WhatsApp pré-rempli pour la commande ou le support client avec tous les détails
  */
 export function buildWhatsAppOrderLink(params: {
+  orderId?: string;
   productTitle?: string;
   priceMAD?: number;
   packName?: string;
   productUrl?: string;
   customerName?: string;
+  phone?: string;
   city?: string;
+  address?: string;
+  notes?: string;
 }): string {
-  let message = `Salam Maison MÉRAF! 👋\n`;
-  if (params.productTitle) {
-    message += `Bghit ncommander had le bijou svp :\n`;
-    message += `✨ *${params.productTitle}*\n`;
-    if (params.packName) message += `📦 Offre : *${params.packName}*\n`;
-    if (params.priceMAD) message += `💰 Prix : *${params.priceMAD} DH* (Paiement à la livraison)\n`;
-    if (params.productUrl) message += `🔗 Lien : ${params.productUrl}\n`;
+  let message = `Salam Maison MÉRAF ! 👋\n`;
+
+  if (params.orderId) {
+    message += `Bghit n'confirmer ma commande joaillerie :\n`;
+    message += `🏷️ *Réf Commande :* ${params.orderId}\n`;
+  } else if (params.productTitle) {
+    message += `Bghit n'commander had le bijou svp :\n`;
   } else {
     message += `Bghit des informations 3la les collections joaillerie MÉRAF svp.\n`;
   }
-  message += `\nMerhba b confirmation dialkoum !`;
+
+  if (params.productTitle) {
+    message += `✨ *Création :* ${params.productTitle}\n`;
+  }
+  if (params.packName) {
+    message += `📦 *Offre :* ${params.packName}\n`;
+  }
+  if (params.priceMAD !== undefined) {
+    message += `💰 *Montant :* ${params.priceMAD} DH (Paiement à la livraison)\n`;
+  }
+  if (params.customerName) {
+    message += `👤 *Nom complet :* ${params.customerName}\n`;
+  }
+  if (params.phone) {
+    message += `📞 *Téléphone :* ${params.phone}\n`;
+  }
+  if (params.city) {
+    message += `📍 *Ville :* ${params.city}\n`;
+  }
+  if (params.address) {
+    message += `🏠 *Adresse de livraison :* ${params.address}\n`;
+  }
+  if (params.notes) {
+    message += `📝 *Note livraison :* ${params.notes}\n`;
+  }
+  if (params.productUrl) {
+    message += `🔗 *Lien produit :* ${params.productUrl}\n`;
+  }
+
+  message += `\nMerhba b confirmation dialkoum ! Choukran.`;
 
   return `https://wa.me/${BRAND_PHONE_WHATSAPP}?text=${encodeURIComponent(message)}`;
 }
+

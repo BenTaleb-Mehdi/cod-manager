@@ -24,18 +24,21 @@ export const MOROCCAN_CITIES = [
   "Settat",
 ] as const;
 
-export const DEFAULT_STORE_NAME = "Atlas Boutique COD";
+export const DEFAULT_STORE_NAME = "Maison MÉRAF";
 
 /**
  * Génère le lien WhatsApp avec le numéro normalisé au format international 212...
- * et le message type de confirmation pré-rempli.
+ * et le message type de confirmation pré-rempli avec l'adresse et tous les détails de la commande.
  */
 export function generateWhatsAppLink(
   phone: string,
   customerName: string,
   city: string,
   totalAmount: number,
-  productSummary: string
+  productSummary: string,
+  address?: string,
+  orderId?: string,
+  shippingNote?: string
 ): string {
   // Nettoyer le numéro pour WhatsApp (enlever le 0 initial si nécessaire et préfixer par 212)
   let cleanPhone = phone.replace(/\D/g, "");
@@ -45,14 +48,23 @@ export function generateWhatsAppLink(
     cleanPhone = "212" + cleanPhone;
   }
 
-  const message = `Salam ${customerName} ! 👋
-C'est le service confirmation de *${DEFAULT_STORE_NAME}*.
-Nous vous contactons pour valider votre commande de :
-📦 *${productSummary}*
-💰 Montant total : *${totalAmount} DH* (Paiement à la livraison)
-📍 Ville : *${city}*
-
-Confirmez-vous l'expédition de votre colis pour livraison sous 24-48h ? Merci de répondre par OUI.`;
+  let message = `Salam ${customerName} ! 👋\n`;
+  message += `C'est le service confirmation de *${DEFAULT_STORE_NAME}*.\n`;
+  message += `Nous vous contactons pour valider votre commande`;
+  if (orderId) {
+    message += ` N° *${orderId}*`;
+  }
+  message += ` :\n\n`;
+  message += `📦 *Article(s) :* ${productSummary}\n`;
+  message += `💰 *Montant total :* ${totalAmount} DH (Paiement à la livraison)\n`;
+  message += `📍 *Ville :* ${city}\n`;
+  if (address) {
+    message += `🏠 *Adresse de livraison :* ${address}\n`;
+  }
+  if (shippingNote) {
+    message += `📝 *Note client :* ${shippingNote}\n`;
+  }
+  message += `\nConfirmez-vous l'expédition de votre colis pour livraison sous 24-48h ? Merci de répondre par OUI.`;
 
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
 }
