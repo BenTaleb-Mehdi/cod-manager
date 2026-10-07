@@ -72,8 +72,6 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
     selectedOfferId || product.offers.find((o) => o.isPopular)?.id || product.offers[0]?.id || "pack-1"
   );
   const [rawPhoneInput, setRawPhoneInput] = useState<string>("");
-  const [citySearch, setCitySearch] = useState<string>("");
-  const [isCityDropdownOpen, setIsCityDropdownOpen] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const cities = useMemo(() => getCities(), []);
@@ -125,17 +123,6 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
     setSelectedPack(packId);
     setValue("packId", packId, { shouldValidate: true });
   };
-
-  const filteredCities = useMemo(() => {
-    if (!citySearch.trim()) return cities;
-    return cities.filter((c) =>
-      c.name.toLowerCase().includes(citySearch.toLowerCase())
-    );
-  }, [cities, citySearch]);
-
-  const selectedCityObj = useMemo(() => {
-    return cities.find((c) => c.name === currentCityValue);
-  }, [cities, currentCityValue]);
 
   // Soumission de la commande COD
   const onSubmit = async (values: CodOrderFormValues) => {

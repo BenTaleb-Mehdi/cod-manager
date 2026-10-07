@@ -23,7 +23,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { useCart } from "@/context/cart-context";
-import { getCities, buildWhatsAppOrderLink } from "@/lib/storefront-data";
+import { buildWhatsAppOrderLink } from "@/lib/storefront-data";
 import { CityCombobox } from "./city-combobox";
 
 export function CartDrawer() {
@@ -48,8 +48,6 @@ export function CartDrawer() {
   const [city, setCity] = useState("Casablanca");
   const [address, setAddress] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
-
-  const cities = useMemo(() => getCities(), []);
 
   // Close on Escape key
   useEffect(() => {

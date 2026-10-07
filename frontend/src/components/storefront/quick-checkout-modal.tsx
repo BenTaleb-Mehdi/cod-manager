@@ -20,7 +20,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { Product, ProductOffer } from "@/types/storefront";
-import { getCities, buildWhatsAppOrderLink } from "@/lib/storefront-data";
+import { buildWhatsAppOrderLink } from "@/lib/storefront-data";
 import { useCart } from "@/context/cart-context";
 import { CityCombobox } from "./city-combobox";
 
@@ -47,8 +47,6 @@ export function QuickCheckoutModal({
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
-
-  const cities = useMemo(() => getCities(), []);
 
   // Sync selected pack when product opens
   useEffect(() => {
