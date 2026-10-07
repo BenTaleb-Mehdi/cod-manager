@@ -119,7 +119,7 @@ export function CartDrawer() {
 
     startTransition(async () => {
       try {
-        const orderId = `MORLY-${Date.now().toString().slice(-6)}`;
+        const orderId = `MERAF-${Date.now().toString().slice(-6)}`;
         const productsSummary = items
           .map((i) => `${i.product.title} (${i.offer.title} x${i.quantity})`)
           .join(", ");
@@ -144,6 +144,7 @@ export function CartDrawer() {
         };
 
         if (typeof window !== "undefined") {
+          window.localStorage.setItem("meraf_last_order", JSON.stringify(orderPayload));
           window.localStorage.setItem("morly_last_order", JSON.stringify(orderPayload));
         }
 
@@ -174,8 +175,10 @@ export function CartDrawer() {
         const queryParams = new URLSearchParams({
           orderId,
           name: fullName.trim(),
+          phone: rawPhone,
           city: city.trim(),
-          product: `Votre Panier (${totalItems} articles)`,
+          address: address.trim(),
+          product: `Votre Panier (${totalItems} articles: ${productsSummary})`,
           pack: `${totalItems} pièces`,
           total: String(totalMAD),
         });
@@ -189,7 +192,16 @@ export function CartDrawer() {
   };
 
   const whatsappCartUrl = buildWhatsAppOrderLink({
-    productTitle: `Panier MÉRAF (${totalItems} articles - ${totalMAD} DH): ` + items.map((i) => `${i.product.title} (x${i.quantity})`).join(", "),
+    productTitle:
+      items.length > 0
+        ? items.map((i) => `${i.product.title} (x${i.quantity})`).join(", ")
+        : "Articles Panier MÉRAF",
+    priceMAD: totalMAD,
+    packName: `${totalItems} article(s)`,
+    customerName: fullName.trim() || undefined,
+    phone: rawPhone || undefined,
+    city: city.trim() || undefined,
+    address: address.trim() || undefined,
   });
 
   return (

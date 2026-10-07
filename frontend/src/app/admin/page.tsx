@@ -38,7 +38,7 @@ export default async function AdminDashboardPage() {
             </span>
           </h1>
           <p className="text-sm text-muted-foreground">
-            Gestion des commandes du storefront Morly, call center et expéditions.
+            Gestion des commandes du storefront MÉRAF, call center et expéditions.
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export default async function AdminDashboardPage() {
           <Button asChild variant="outline" size="sm" className="gap-1.5 h-9">
             <Link href="/" target="_blank">
               <Sparkles className="h-4 w-4 text-amber-600" />
-              <span>Voir la Vitrine Morly</span>
+              <span>Voir la Vitrine MÉRAF</span>
             </Link>
           </Button>
 

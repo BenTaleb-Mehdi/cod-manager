@@ -32,7 +32,7 @@ const navigationItems: NavigationItem[] = [
     icon: LayoutDashboard,
   },
   {
-    name: "Vitrine Morly 🛍️",
+    name: "Vitrine MÉRAF 🛍️",
     href: "/",
     icon: Sparkles,
   },

@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Fallback local réussi pour le Storefront
-    const fallbackOrderId = `MORLY-${Math.floor(100000 + Math.random() * 900000)}`;
+    const fallbackOrderId = `MERAF-${Math.floor(100000 + Math.random() * 900000)}`;
     const totalAmount = body.items?.reduce(
       (sum: number, item: { price?: number; quantity?: number }) =>
         sum + (item.price || 199) * (item.quantity || 1),

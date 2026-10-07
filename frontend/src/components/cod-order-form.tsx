@@ -130,7 +130,7 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
     startTransition(async () => {
       try {
         const orderPayload = {
-          orderId: `MORLY-${Date.now().toString().slice(-6)}`,
+          orderId: `MERAF-${Date.now().toString().slice(-6)}`,
           customerName: values.fullName,
           phone: values.phone,
           city: values.city,
@@ -150,6 +150,7 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
 
         // Sauvegarde locale de secours pour la page de remerciement
         if (typeof window !== "undefined") {
+          window.localStorage.setItem("meraf_last_order", JSON.stringify(orderPayload));
           window.localStorage.setItem("morly_last_order", JSON.stringify(orderPayload));
         }
 
@@ -181,7 +182,10 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
         const queryParams = new URLSearchParams({
           orderId: orderPayload.orderId,
           name: values.fullName,
+          phone: values.phone,
           city: values.city,
+          address: values.address,
+          notes: values.notes || "",
           product: product.title,
           pack: activeOffer.title,
           total: String(activeOffer.priceMAD),

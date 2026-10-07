@@ -8,11 +8,11 @@ export const BRAND_SUBTITLE = "JEWELRY";
 export const BRAND_SLOGAN = "Exquisite designs, ethically crafted to celebrate every moment that matters.";
 
 // Réseaux Sociaux & Coordonnées Storefront (Modifiables facilement)
-export const BRAND_INSTAGRAM = "https://www.instagram.com/meraf.jewelry";
-export const BRAND_FACEBOOK = "https://www.facebook.com/meraf.jewelry";
-export const BRAND_X = "https://x.com/meraf_jewelry";
-export const BRAND_GMAIL = "meraf.jewelry@gmail.com";
-export const BRAND_EMAIL = "meraf.jewelry@gmail.com";
+export const BRAND_INSTAGRAM = "https://www.instagram.com/meraf.ma";
+export const BRAND_FACEBOOK = "https://web.facebook.com/profile.php?id=61595194649596";
+export const BRAND_X = "https://x.com/MerafJewels";
+export const BRAND_GMAIL = "https://www.tiktok.com/@meraf.ma";
+export const BRAND_EMAIL = "meraf.officiel@gmail.com";
 
 export const BRAND_SOCIALS = {
   instagram: BRAND_INSTAGRAM,

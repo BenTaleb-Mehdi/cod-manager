@@ -140,7 +140,7 @@ export function QuickCheckoutModal({
 
     startTransition(async () => {
       try {
-        const orderId = `MORLY-${Date.now().toString().slice(-6)}`;
+        const orderId = `MERAF-${Date.now().toString().slice(-6)}`;
         const orderPayload = {
           orderId,
           customerName: fullName.trim(),
@@ -161,6 +161,7 @@ export function QuickCheckoutModal({
         };
 
         if (typeof window !== "undefined") {
+          window.localStorage.setItem("meraf_last_order", JSON.stringify(orderPayload));
           window.localStorage.setItem("morly_last_order", JSON.stringify(orderPayload));
         }
 
@@ -192,7 +193,10 @@ export function QuickCheckoutModal({
         const queryParams = new URLSearchParams({
           orderId,
           name: fullName.trim(),
+          phone: rawPhone,
           city: city.trim(),
+          address: address.trim(),
+          notes: notes.trim(),
           product: product.title,
           pack: activeOffer.title,
           total: String(activeOffer.priceMAD),
@@ -209,6 +213,12 @@ export function QuickCheckoutModal({
   const whatsappUrl = buildWhatsAppOrderLink({
     productTitle: product.title,
     packName: activeOffer.title,
+    priceMAD: activeOffer.priceMAD,
+    customerName: fullName.trim() || undefined,
+    phone: rawPhone || undefined,
+    city: city.trim() || undefined,
+    address: address.trim() || undefined,
+    notes: notes.trim() || undefined,
   });
 
   return (

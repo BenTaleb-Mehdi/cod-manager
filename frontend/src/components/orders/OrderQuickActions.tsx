@@ -55,7 +55,10 @@ export function OrderQuickActions({
     order.customerName,
     order.city,
     order.totalAmount,
-    productSummary
+    productSummary,
+    order.address,
+    order.id,
+    order.shippingNote || undefined
   );
 
   const handleNoAnswer = () => {

@@ -22,6 +22,7 @@ interface SavedOrder {
   phone?: string;
   city?: string;
   address?: string;
+  notes?: string;
   productTitle?: string;
   productImage?: string;
   packTitle?: string;
@@ -36,7 +37,10 @@ function ThankYouContent() {
     // 1. Lire d'abord les query params
     const queryOrderId = searchParams.get("orderId");
     const queryName = searchParams.get("name");
+    const queryPhone = searchParams.get("phone");
     const queryCity = searchParams.get("city");
+    const queryAddress = searchParams.get("address");
+    const queryNotes = searchParams.get("notes");
     const queryProduct = searchParams.get("product");
     const queryPack = searchParams.get("pack");
     const queryTotal = searchParams.get("total");
@@ -45,8 +49,11 @@ function ThankYouContent() {
       setOrder({
         orderId: queryOrderId,
         customerName: queryName || "Chère Cliente",
+        phone: queryPhone || "",
         city: queryCity || "Maroc",
-        productTitle: queryProduct || "Bijou Morly",
+        address: queryAddress || "",
+        notes: queryNotes || "",
+        productTitle: queryProduct || "Bijou MÉRAF",
         packTitle: queryPack || "Offre Standard",
         totalMAD: queryTotal ? parseFloat(queryTotal) : 199,
       });
@@ -55,7 +62,7 @@ function ThankYouContent() {
 
     // 2. Sinon lire localStorage de secours
     if (typeof window !== "undefined") {
-      const stored = window.localStorage.getItem("morly_last_order");
+      const stored = window.localStorage.getItem("meraf_last_order") || window.localStorage.getItem("morly_last_order");
       if (stored) {
         try {
           setOrder(JSON.parse(stored));
@@ -68,12 +75,33 @@ function ThankYouContent() {
 
   const orderId = order?.orderId || "MERAF-892145";
   const customerName = order?.customerName || "Chère Cliente";
+  const phone = order?.phone || "";
   const city = order?.city || "Casablanca";
+  const address = order?.address || "";
+  const notes = order?.notes || "";
   const productTitle = order?.productTitle || "Bijou MÉRAF Acier Inoxydable";
   const packTitle = order?.packTitle || "Offre Standard (1 Pièce)";
   const totalMAD = order?.totalMAD || 199;
 
-  const whatsappMessage = `Salam Maison MÉRAF ! 👋\nBghit nsuivre ma commande N° *${orderId}* (${productTitle}) pour ${customerName} à ${city}.`;
+  let whatsappMessage = `Salam Maison MÉRAF ! 👋\n`;
+  whatsappMessage += `Bghit n'confirmer ma commande joaillerie :\n\n`;
+  whatsappMessage += `🏷️ *Réf Commande :* ${orderId}\n`;
+  whatsappMessage += `👤 *Client :* ${customerName}\n`;
+  if (phone) {
+    whatsappMessage += `📞 *Téléphone :* ${phone}\n`;
+  }
+  whatsappMessage += `📍 *Ville :* ${city}\n`;
+  if (address) {
+    whatsappMessage += `🏠 *Adresse de livraison :* ${address}\n`;
+  }
+  whatsappMessage += `✨ *Création :* ${productTitle}\n`;
+  whatsappMessage += `📦 *Offre :* ${packTitle}\n`;
+  whatsappMessage += `💰 *Montant à régler au livreur :* ${totalMAD} DH (Paiement à la livraison)\n`;
+  if (notes) {
+    whatsappMessage += `📝 *Remarque :* ${notes}\n`;
+  }
+  whatsappMessage += `\n3afak confirmiw liya l'expédition dial l'colis sous 24-48h. Choukran !`;
+
   const whatsappUrl = `https://wa.me/${BRAND_PHONE_WHATSAPP}?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
@@ -134,6 +162,20 @@ function ThankYouContent() {
           <span className="text-[#18221D]/60">Destination :</span>
           <span className="font-medium text-[#18221D]">📍 {city}, Maroc</span>
         </div>
+
+        {address && (
+          <div className="flex items-start justify-between text-sm py-1.5 border-b border-[#E8E2D8]/60">
+            <span className="text-[#18221D]/60 shrink-0 mr-2">Adresse :</span>
+            <span className="font-medium text-[#18221D] text-right break-words">{address}</span>
+          </div>
+        )}
+
+        {phone && (
+          <div className="flex items-center justify-between text-sm py-1.5 border-b border-[#E8E2D8]/60">
+            <span className="text-[#18221D]/60">Téléphone :</span>
+            <span className="font-medium text-[#18221D]">{phone}</span>
+          </div>
+        )}
 
         <div className="flex items-center justify-between text-sm py-1.5 border-b border-[#E8E2D8]/60">
           <span className="text-[#18221D]/60">Délai estimé :</span>
