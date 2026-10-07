@@ -20,10 +20,12 @@ import {
   Search,
   Gift,
   HelpCircle,
+  ShoppingBag,
 } from "lucide-react";
 import { Product, ProductOffer, MoroccoCity } from "@/types/storefront";
 import { getCities, buildWhatsAppOrderLink, BRAND_NAME } from "@/lib/storefront-data";
 import { formatPriceMAD } from "@/lib/utils";
+import { useCart } from "@/context/cart-context";
 
 /**
  * Schéma de validation Zod optimisé pour le marché marocain COD
@@ -63,6 +65,7 @@ interface CodOrderFormProps {
 
 export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOrderFormProps) {
   const router = useRouter();
+  const { addToCart } = useCart();
   const [isPending, startTransition] = useTransition();
   const [selectedPack, setSelectedPack] = useState<string>(
     selectedOfferId || product.offers.find((o) => o.isPopular)?.id || product.offers[0]?.id || "pack-1"
@@ -490,35 +493,47 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
           </div>
         )}
 
-        {/* Bouton d'action Principal Vibrant COD */}
+        {/* Bouton d'action Principal COD - Design Joaillerie Moderne & Responsive */}
         <button
           type="submit"
           disabled={isPending}
-          className="w-full relative group overflow-hidden rounded-full bg-[#0B2D23] hover:bg-[#154738] p-4 text-[#FAF7F2] font-semibold text-sm sm:text-base tracking-[0.12em] uppercase shadow-lg shadow-[#0B2D23]/20 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer"
+          className="w-full relative group overflow-hidden rounded-2xl bg-gradient-to-r from-[#0B2D23] via-[#123E32] to-[#0B2D23] hover:from-[#123E32] hover:to-[#1a5544] py-4 px-4 sm:px-6 text-[#FAF7F2] shadow-xl shadow-[#0B2D23]/25 border border-[#C5A880]/35 transition-all duration-300 hover:scale-[1.005] active:scale-[0.99] disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer flex flex-col items-center justify-center gap-1.5"
         >
-          <div className="flex flex-col items-center justify-center gap-0.5">
-            <div className="flex items-center justify-center gap-2">
-              <CheckCircle2 className="h-4.5 w-4.5 text-[#C5A880]" />
-              <span>
-                {isPending ? "Validation en cours..." : "Acheter Maintenant (Paiement à la Livraison)"}
-              </span>
-            </div>
-            <span className="text-[11px] font-normal text-[#DFCCA8]/80 flex items-center gap-1">
-              <Lock className="h-3 w-3" /> Paiement à la réception après ouverture du colis
+          {/* Shimmer animation au survol */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-center gap-2 text-center">
+            <CheckCircle2 className="h-5 w-5 text-[#C5A880] shrink-0" />
+            <span className="font-bold text-xs sm:text-sm tracking-wider uppercase text-white">
+              {isPending ? "Validation en cours..." : `Acheter Maintenant (${activeOffer.priceMAD} DH) • COD`}
             </span>
+          </div>
+
+          <div className="relative z-10 flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] font-normal text-[#DFCCA8]/95 text-center">
+            <Lock className="h-3 w-3 text-[#C5A880] shrink-0" />
+            <span>Paiement en espèces à la réception après ouverture du colis</span>
           </div>
         </button>
 
-        {/* Bouton Alternatif : WhatsApp Direct */}
-        <div className="pt-1">
+        {/* Boutons Secondaires : Ajouter au Panier & WhatsApp Direct */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+          <button
+            type="button"
+            onClick={() => addToCart(product, activeOffer, 1)}
+            className="w-full flex items-center justify-center gap-2 rounded-xl border-2 border-[#0B2D23] bg-white hover:bg-[#FAF7F2] py-3 px-4 text-xs font-bold tracking-wider uppercase text-[#0B2D23] shadow-xs active:scale-98 transition-all cursor-pointer"
+          >
+            <ShoppingBag className="h-4 w-4 text-[#C5A880]" />
+            <span>Ajouter au Panier</span>
+          </button>
+
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 rounded-full border border-[#0B2D23]/30 bg-transparent hover:bg-[#FAF7F2] py-3 px-4 text-xs font-semibold tracking-wider uppercase text-[#0B2D23] transition-colors"
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-[#0B2D23]/30 bg-[#FAF7F2] hover:bg-white py-3 px-4 text-xs font-semibold tracking-wider uppercase text-[#0B2D23] transition-colors"
           >
             <MessageCircle className="h-4 w-4 text-[#0B2D23]" />
-            <span>Commander directement via WhatsApp</span>
+            <span>Commander par WhatsApp</span>
           </a>
         </div>
       </form>

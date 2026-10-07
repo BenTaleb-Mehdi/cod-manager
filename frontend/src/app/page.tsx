@@ -115,6 +115,7 @@ export default function StorefrontHomePage() {
                     src="/images/lumiere/hero-jewelry.jpg"
                     alt="Lumière Fine Jewelry - Emerald & Gold Collection"
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 480px"
                     priority
                     className="object-cover object-center hover:scale-105 transition-transform duration-700"
                   />
@@ -166,6 +167,7 @@ export default function StorefrontHomePage() {
                   src={cat.image}
                   alt={cat.name}
                   fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
                   className="object-cover group-hover:scale-108 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -291,6 +293,7 @@ export default function StorefrontHomePage() {
                 src="/images/lumiere/artisan-craft.jpg"
                 alt="Jeweler Artisan Craftsmanship at Workbench"
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover object-center"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-[#0B2D23] via-transparent to-transparent lg:block hidden" />
@@ -327,6 +330,7 @@ export default function StorefrontHomePage() {
                 src="/images/lumiere/gift-guide.jpg"
                 alt="Lumière Luxury Gift Box Packaging"
                 fill
+                sizes="(max-width: 640px) 160px, 192px"
                 className="object-cover"
               />
             </div>

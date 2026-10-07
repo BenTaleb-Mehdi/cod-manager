@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
 
-export default function OrderDetailsPage({
+export default async function OrderDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  redirect(`/orders/${params.id}/tracking`);
+  const { id } = await params;
+  redirect(`/orders/${id}/tracking`);
 }

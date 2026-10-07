@@ -54,8 +54,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className="scroll-smooth">
+    <html lang="fr" className="scroll-smooth" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${playfair.variable} ${montserrat.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
       >
         <StorefrontOrAdminShell>{children}</StorefrontOrAdminShell>

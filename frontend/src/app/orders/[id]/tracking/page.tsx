@@ -42,9 +42,10 @@ const MOROCCAN_CITY_COORDINATES: Record<string, [number, number]> = {
 export default async function OrderTrackingPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const result = await getOrderByIdAction(params.id);
+  const { id } = await params;
+  const result = await getOrderByIdAction(id);
 
   if (!result.success || !result.data) {
     notFound();

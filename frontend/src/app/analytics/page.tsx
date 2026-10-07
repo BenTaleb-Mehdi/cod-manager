@@ -25,12 +25,14 @@ export const metadata: Metadata = {
 };
 
 interface AnalyticsPageProps {
-  searchParams?: {
+  searchParams?: Promise<{
     tab?: string;
-  };
+  }>;
 }
 
 export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps) {
+  const resolvedSearchParams = await searchParams;
+
   // Chargement en parallèle des données analytiques Commandes et Meta
   const [ordersRes, metaRes] = await Promise.all([
     getAnalyticsAction(),
@@ -42,11 +44,11 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
   const metaData = metaRes.success && metaRes.data ? metaRes.data : null;
 
   const defaultTab =
-    searchParams?.tab === "meta"
+    resolvedSearchParams?.tab === "meta"
       ? "meta"
-      : searchParams?.tab === "orders"
+      : resolvedSearchParams?.tab === "orders"
       ? "orders"
-      : searchParams?.tab === "all"
+      : resolvedSearchParams?.tab === "all"
       ? "all"
       : "meta";
 

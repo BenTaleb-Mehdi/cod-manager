@@ -33,6 +33,7 @@ export function BlogListView({ posts, categories }: BlogListViewProps) {
                 alt={featuredPost.title}
                 fill
                 priority
+                sizes="(max-width: 1024px) 100vw, 60vw"
                 className="object-cover hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute top-4 left-4 z-10">
@@ -71,6 +72,7 @@ export function BlogListView({ posts, categories }: BlogListViewProps) {
                       src={featuredPost.author.avatar}
                       alt={featuredPost.author.name}
                       fill
+                      sizes="36px"
                       className="object-cover"
                     />
                   </div>
@@ -144,6 +146,7 @@ export function BlogListView({ posts, categories }: BlogListViewProps) {
                 src={post.coverImage}
                 alt={post.title}
                 fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover group-hover:scale-106 transition-transform duration-500"
               />
               <div className="absolute top-3 left-3">
@@ -185,6 +188,7 @@ export function BlogListView({ posts, categories }: BlogListViewProps) {
                       src={post.author.avatar}
                       alt={post.author.name}
                       fill
+                      sizes="28px"
                       className="object-cover"
                     />
                   </div>

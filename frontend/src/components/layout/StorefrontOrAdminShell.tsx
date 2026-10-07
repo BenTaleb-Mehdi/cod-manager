@@ -9,6 +9,9 @@ import { StorefrontHeader } from "@/components/storefront/storefront-header";
 import { StorefrontFooter } from "@/components/storefront/storefront-footer";
 import { FloatingWhatsApp } from "@/components/storefront/floating-whatsapp";
 
+import { CartProvider } from "@/context/cart-context";
+import { CartDrawer } from "@/components/storefront/cart-drawer";
+
 interface StorefrontOrAdminShellProps {
   children: React.ReactNode;
 }
@@ -40,21 +43,26 @@ export function StorefrontOrAdminShell({ children }: StorefrontOrAdminShellProps
     );
   }
 
-  // Vitrine E-commerce Storefront "LUMIÈRE Fine Jewelry" (Luxury Theme, COD Maroc)
+  // Vitrine E-commerce Storefront "MÉRAF Fine Jewelry" (Luxury Theme, COD Maroc)
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-foreground selection:bg-[#0B2D23]/15 selection:text-[#0B2D23]">
-      <NavigationProgressBar />
-      {/* En-tête avec annonce sticky, logo Morly & catégories */}
-      <StorefrontHeader />
+    <CartProvider>
+      <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-foreground selection:bg-[#0B2D23]/15 selection:text-[#0B2D23]">
+        <NavigationProgressBar />
+        {/* En-tête avec annonce sticky, logo Maison MÉRAF & catégories */}
+        <StorefrontHeader />
 
-      {/* Contenu principal de la page storefront */}
-      <main className="flex-1">{children}</main>
+        {/* Contenu principal de la page storefront */}
+        <main className="flex-1">{children}</main>
 
-      {/* Pied de page Morly avec réassurance COD Maroc */}
-      <StorefrontFooter />
+        {/* Pied de page avec réassurance COD Maroc */}
+        <StorefrontFooter />
 
-      {/* Bouton d'action flottant WhatsApp avec badge conseiller en direct */}
-      <FloatingWhatsApp />
-    </div>
+        {/* Panier Tiroir Glissant latéral */}
+        <CartDrawer />
+
+        {/* Bouton d'action flottant WhatsApp avec badge conseiller en direct */}
+        <FloatingWhatsApp />
+      </div>
+    </CartProvider>
   );
 }

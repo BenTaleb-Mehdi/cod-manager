@@ -6,9 +6,10 @@ import { InvoiceView } from "@/components/invoices/InvoiceView";
 export default async function InvoicePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const result = await getInvoicePrintDataAction(params.id);
+  const { id } = await params;
+  const result = await getInvoicePrintDataAction(id);
 
   if (!result.success || !result.data) {
     notFound();

@@ -25,9 +25,9 @@ import { ArticleContent } from "@/components/storefront/article-content";
 import { ProductCard } from "@/components/storefront/product-card";
 
 interface ArticlePageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -38,7 +38,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: ArticlePageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const post = getBlogPostBySlug(slug);
 
   if (!post) {
@@ -53,8 +53,8 @@ export async function generateMetadata({ params }: ArticlePageProps) {
   };
 }
 
-export default function BlogPostDetailPage({ params }: ArticlePageProps) {
-  const { slug } = params;
+export default async function BlogPostDetailPage({ params }: ArticlePageProps) {
+  const { slug } = await params;
   const post = getBlogPostBySlug(slug);
 
   if (!post) {
@@ -126,6 +126,7 @@ export default function BlogPostDetailPage({ params }: ArticlePageProps) {
                 src={post.author.avatar}
                 alt={post.author.name}
                 fill
+                sizes="44px"
                 className="object-cover"
               />
             </div>
@@ -147,6 +148,7 @@ export default function BlogPostDetailPage({ params }: ArticlePageProps) {
             alt={post.title}
             fill
             priority
+            sizes="(max-width: 1024px) 100vw, 800px"
             className="object-cover"
           />
         </div>
@@ -243,6 +245,7 @@ export default function BlogPostDetailPage({ params }: ArticlePageProps) {
                       src={rPost.coverImage}
                       alt={rPost.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>

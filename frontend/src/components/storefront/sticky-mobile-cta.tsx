@@ -1,20 +1,31 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ShoppingBag, ArrowUpRight } from "lucide-react";
+import { ShoppingBag, Zap } from "lucide-react";
 import { Product } from "@/types/storefront";
+import { useCart } from "@/context/cart-context";
 
 interface StickyMobileCtaProps {
   product: Product;
 }
 
 export function StickyMobileCta({ product }: StickyMobileCtaProps) {
+  const { addToCart } = useCart();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Afficher la barre sticky dès qu'on a scrollé plus de 350px
-      const scrolled = window.scrollY > 350;
+      const checkoutEl = document.getElementById("cod-checkout-section");
+      if (checkoutEl) {
+        const rect = checkoutEl.getBoundingClientRect();
+        // Si le formulaire COD est déjà visible à l'écran, masquer la barre sticky pour ne pas gêner
+        if (rect.top <= window.innerHeight * 0.8) {
+          setIsVisible(false);
+          return;
+        }
+      }
+      // Afficher la barre sticky dès qu'on a scrollé plus de 300px
+      const scrolled = window.scrollY > 300;
       setIsVisible(scrolled);
     };
 
@@ -33,7 +44,7 @@ export function StickyMobileCta({ product }: StickyMobileCtaProps) {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 block sm:hidden border-t border-[#E8E2D8] bg-[#FAF7F2]/95 backdrop-blur-md p-3 shadow-2xl animate-in slide-in-from-bottom duration-300">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-2.5">
         <div className="min-w-0 flex-1">
           <p className="truncate text-xs font-serif font-medium text-[#18221D]">
             {product.title}
@@ -51,14 +62,24 @@ export function StickyMobileCta({ product }: StickyMobileCtaProps) {
           </div>
         </div>
 
-        <button
-          onClick={scrollToCheckout}
-          className="shrink-0 rounded-full bg-[#0B2D23] hover:bg-[#154738] px-4 py-2.5 text-xs font-semibold tracking-wider uppercase text-[#FAF7F2] shadow-md shadow-[#0B2D23]/20 active:scale-95 flex items-center gap-1.5"
-        >
-          <ShoppingBag className="h-3.5 w-3.5 text-[#C5A880]" />
-          <span>Acheter (COD)</span>
-          <ArrowUpRight className="h-3.5 w-3.5 text-[#C5A880]" />
-        </button>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            onClick={() => addToCart(product)}
+            className="rounded-xl border-2 border-[#0B2D23] bg-white px-2.5 py-2 text-xs font-bold text-[#0B2D23] shadow-xs active:scale-95 flex items-center gap-1 cursor-pointer"
+            title="Ajouter au Panier"
+          >
+            <ShoppingBag className="h-3.5 w-3.5 text-[#C5A880]" />
+            <span>+ Panier</span>
+          </button>
+
+          <button
+            onClick={scrollToCheckout}
+            className="rounded-xl bg-[#0B2D23] hover:bg-[#154738] px-3 py-2 text-xs font-bold tracking-wider uppercase text-[#FAF7F2] shadow-md shadow-[#0B2D23]/20 active:scale-95 flex items-center gap-1 cursor-pointer"
+          >
+            <Zap className="h-3.5 w-3.5 text-[#C5A880]" />
+            <span>Commander</span>
+          </button>
+        </div>
       </div>
     </div>
   );

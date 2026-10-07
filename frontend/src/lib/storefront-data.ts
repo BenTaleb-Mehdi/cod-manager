@@ -47,7 +47,7 @@ export function getCategories() {
       subtitle: "Bracelets & Joncs",
       slug: "dmalj",
       icon: "CircleDot",
-      image: "https://images.unsplash.com/photo-1611591475871-332924376cbb?auto=format&fit=crop&w=600&q=80",
+      image: "https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&w=600&q=80",
     },
     {
       id: "Khwarsi",

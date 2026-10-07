@@ -22,13 +22,14 @@ import { StickyMobileCta } from "@/components/storefront/sticky-mobile-cta";
 import { ProductCard } from "@/components/storefront/product-card";
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const product = getProductBySlug(params.slug);
+  const { slug } = await params;
+  const product = getProductBySlug(slug);
   if (!product) {
     return {
       title: "Produit Introuvable | Maison MÉRAF",
@@ -60,8 +61,9 @@ export function generateStaticParams() {
   }));
 }
 
-export default function ProductDetailPage({ params }: ProductPageProps) {
-  const product = getProductBySlug(params.slug);
+export default async function ProductDetailPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const product = getProductBySlug(slug);
 
   if (!product) {
     notFound();
@@ -75,7 +77,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
   );
 
   return (
-    <div className="container mx-auto px-4 py-4 sm:py-8 space-y-10 sm:space-y-14">
+    <div className="container mx-auto px-4 py-4 sm:py-8 pb-24 sm:pb-12 space-y-10 sm:space-y-14">
       {/* Barre d'action sticky mobile sur smartphone */}
       <StickyMobileCta product={product} />
 
