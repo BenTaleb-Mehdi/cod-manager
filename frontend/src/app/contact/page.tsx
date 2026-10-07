@@ -12,7 +12,7 @@ import {
   Sparkles,
   RotateCcw,
 } from "lucide-react";
-import { BRAND_PHONE_WHATSAPP } from "@/lib/storefront-data";
+import { BRAND_PHONE_WHATSAPP, BRAND_SOCIALS, BRAND_GMAIL } from "@/lib/storefront-data";
 import { ContactForm } from "@/components/storefront/contact-form";
 
 export const metadata = {
@@ -129,7 +129,7 @@ export default function ContactPage() {
 
           {/* 2. Phone Call */}
           <a
-            href="tel:+212660123456"
+            href={`tel:+${BRAND_PHONE_WHATSAPP}`}
             className="group rounded-2xl border border-[#E8E2D8] bg-[#FDFCF9] p-6 shadow-xs hover:shadow-lg hover:border-[#C5A880] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
           >
             <div className="space-y-3">
@@ -147,14 +147,14 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="pt-4 mt-2 border-t border-[#E8E2D8] text-xs font-semibold text-[#0B2D23] group-hover:text-[#9F8259] flex items-center justify-between">
-              <span>+212 660 123 456</span>
+              <span>+212 718 904 631</span>
               <ChevronRight className="h-4 w-4" />
             </div>
           </a>
 
-          {/* 3. Email Support */}
+          {/* 3. Email & Gmail Support */}
           <a
-            href="mailto:contact@meraf-jewelry.ma"
+            href={BRAND_SOCIALS.gmail}
             className="group rounded-2xl border border-[#E8E2D8] bg-[#FDFCF9] p-6 shadow-xs hover:shadow-lg hover:border-[#C5A880] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
           >
             <div className="space-y-3">
@@ -163,15 +163,15 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="font-serif text-lg font-normal text-[#0B2D23]">
-                  Service Électronique
+                  Service Gmail / Email
                 </h3>
                 <p className="text-xs text-[#18221D]/70 mt-1">
-                  Pour vos questions administratives et partenariats.
+                  Pour vos questions, partenariats et commandes spéciales.
                 </p>
               </div>
             </div>
             <div className="pt-4 mt-2 border-t border-[#E8E2D8] text-xs font-semibold text-[#0B2D23] group-hover:text-[#9F8259] flex items-center justify-between">
-              <span>contact@meraf-jewelry.ma</span>
+              <span>{BRAND_GMAIL}</span>
               <ChevronRight className="h-4 w-4" />
             </div>
           </a>
@@ -194,6 +194,57 @@ export default function ContactPage() {
             </div>
             <div className="pt-4 mt-2 border-t border-[#E8E2D8] text-xs font-semibold text-[#0B2D23]">
               <span>Livraison 24h/48h</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Canaux Officiels & Réseaux Sociaux MÉRAF */}
+        <div className="mt-8 rounded-2xl border border-[#E8E2D8] bg-white p-5 sm:p-6 shadow-xs">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <span className="text-[10px] font-bold tracking-[0.2em] text-[#C5A880] uppercase block">
+                COMMUNAUTÉ & CONTACT OFFICIEL
+              </span>
+              <h3 className="font-serif text-base sm:text-lg text-[#0B2D23]">
+                Retrouvez la Maison MÉRAF sur tous nos réseaux
+              </h3>
+            </div>
+
+            <div className="flex items-center gap-3 flex-wrap">
+              <a
+                href={BRAND_SOCIALS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] hover:bg-white hover:border-[#0B2D23] px-3.5 py-2 text-xs font-semibold text-[#0B2D23] transition-all shadow-2xs"
+              >
+                <span className="text-rose-500 font-bold">IG</span>
+                <span>Instagram</span>
+              </a>
+              <a
+                href={BRAND_SOCIALS.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] hover:bg-white hover:border-[#0B2D23] px-3.5 py-2 text-xs font-semibold text-[#0B2D23] transition-all shadow-2xs"
+              >
+                <span className="text-blue-600 font-bold">FB</span>
+                <span>Facebook</span>
+              </a>
+              <a
+                href={BRAND_SOCIALS.x}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] hover:bg-white hover:border-[#0B2D23] px-3.5 py-2 text-xs font-semibold text-[#0B2D23] transition-all shadow-2xs"
+              >
+                <span className="text-zinc-900 font-bold">𝕏</span>
+                <span>X / Twitter</span>
+              </a>
+              <a
+                href={BRAND_SOCIALS.gmail}
+                className="flex items-center gap-2 rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] hover:bg-white hover:border-[#0B2D23] px-3.5 py-2 text-xs font-semibold text-[#0B2D23] transition-all shadow-2xs"
+              >
+                <Mail className="h-3.5 w-3.5 text-red-500" />
+                <span>Gmail</span>
+              </a>
             </div>
           </div>
         </div>

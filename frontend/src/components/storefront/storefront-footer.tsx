@@ -5,11 +5,21 @@ import {
   RotateCcw,
   ShieldCheck,
   Instagram,
+  Facebook,
+  Mail,
   MessageCircle,
   PhoneCall,
   Sparkles,
 } from "lucide-react";
-import { BRAND_PHONE_WHATSAPP } from "@/lib/storefront-data";
+import { BRAND_PHONE_WHATSAPP, BRAND_SOCIALS, BRAND_GMAIL } from "@/lib/storefront-data";
+
+function XLogo({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
 
 export function StorefrontFooter() {
   return (
@@ -77,22 +87,53 @@ export function StorefrontFooter() {
               Timeless beauty. Thoughtful design. Made to be cherished. Créations d&apos;exception en acier inoxydable 316L certifié et finitions or 18k inaltérables pour la femme moderne.
             </p>
 
-            <div className="flex items-center gap-2.5 pt-2">
+            {/* Réseaux Sociaux & Contact Direct */}
+            <div className="flex items-center gap-2 pt-2 flex-wrap">
               <a
-                href="https://instagram.com"
+                href={BRAND_SOCIALS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-[#FAF7F2] flex items-center justify-center text-[#0B2D23] hover:border-[#0B2D23] transition-colors"
+                aria-label="Instagram @meraf.jewelry"
+                title="Instagram"
+                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-[#FAF7F2] flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] hover:border-[#0B2D23] hover:scale-110 active:scale-95 transition-all shadow-2xs"
               >
                 <Instagram className="h-3.5 w-3.5" />
               </a>
               <a
-                href={`https://wa.me/${BRAND_PHONE_WHATSAPP}`}
+                href={BRAND_SOCIALS.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="WhatsApp"
-                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-[#FAF7F2] flex items-center justify-center text-[#0B2D23] hover:border-[#0B2D23] transition-colors"
+                aria-label="Facebook Maison MÉRAF"
+                title="Facebook"
+                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-[#FAF7F2] flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] hover:border-[#0B2D23] hover:scale-110 active:scale-95 transition-all shadow-2xs"
+              >
+                <Facebook className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href={BRAND_SOCIALS.x}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X (Twitter) @meraf_jewelry"
+                title="X (Twitter)"
+                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-[#FAF7F2] flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] hover:border-[#0B2D23] hover:scale-110 active:scale-95 transition-all shadow-2xs"
+              >
+                <XLogo className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href={BRAND_SOCIALS.gmail}
+                aria-label={`Gmail (${BRAND_GMAIL})`}
+                title={`Gmail : ${BRAND_GMAIL}`}
+                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-[#FAF7F2] flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] hover:border-[#0B2D23] hover:scale-110 active:scale-95 transition-all shadow-2xs"
+              >
+                <Mail className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href={BRAND_SOCIALS.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp Concierge"
+                title="WhatsApp Concierge"
+                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-[#FAF7F2] flex items-center justify-center text-[#0B2D23] hover:text-emerald-700 hover:border-emerald-700 hover:scale-110 active:scale-95 transition-all shadow-2xs"
               >
                 <MessageCircle className="h-3.5 w-3.5" />
               </a>
@@ -195,12 +236,30 @@ export function StorefrontFooter() {
               </li>
               <li>
                 <a
-                  href={`https://wa.me/${BRAND_PHONE_WHATSAPP}`}
+                  href={BRAND_SOCIALS.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-[#0B2D23] transition-colors flex items-center gap-1 text-[#0B2D23] font-semibold"
+                  className="hover:text-[#0B2D23] transition-colors flex items-center gap-1.5 text-[#0B2D23] font-semibold"
                 >
-                  <PhoneCall className="h-3 w-3 text-[#C5A880]" /> Support WhatsApp
+                  <MessageCircle className="h-3 w-3 text-[#C5A880]" /> Support WhatsApp
+                </a>
+              </li>
+              <li>
+                <a
+                  href={BRAND_SOCIALS.gmail}
+                  className="hover:text-[#0B2D23] transition-colors flex items-center gap-1.5"
+                >
+                  <Mail className="h-3 w-3 text-[#C5A880]" /> {BRAND_GMAIL}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={BRAND_SOCIALS.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#0B2D23] transition-colors flex items-center gap-1.5"
+                >
+                  <Instagram className="h-3 w-3 text-[#C5A880]" /> Instagram @meraf.jewelry
                 </a>
               </li>
             </ul>

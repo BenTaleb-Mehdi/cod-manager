@@ -2,10 +2,26 @@ import productsData from "@/data/products.json";
 import citiesData from "@/data/morocco-cities.json";
 import { Product, MoroccoCity } from "@/types/storefront";
 
-export const BRAND_PHONE_WHATSAPP = "212660123456";
+export const BRAND_PHONE_WHATSAPP = "212718904631";
 export const BRAND_NAME = "MÉRAF";
 export const BRAND_SUBTITLE = "JEWELRY";
 export const BRAND_SLOGAN = "Exquisite designs, ethically crafted to celebrate every moment that matters.";
+
+// Réseaux Sociaux & Coordonnées Storefront (Modifiables facilement)
+export const BRAND_INSTAGRAM = "https://www.instagram.com/meraf.jewelry";
+export const BRAND_FACEBOOK = "https://www.facebook.com/meraf.jewelry";
+export const BRAND_X = "https://x.com/meraf_jewelry";
+export const BRAND_GMAIL = "meraf.jewelry@gmail.com";
+export const BRAND_EMAIL = "meraf.jewelry@gmail.com";
+
+export const BRAND_SOCIALS = {
+  instagram: BRAND_INSTAGRAM,
+  facebook: BRAND_FACEBOOK,
+  x: BRAND_X,
+  gmail: `mailto:${BRAND_GMAIL}`,
+  email: `mailto:${BRAND_EMAIL}`,
+  whatsapp: `https://wa.me/${BRAND_PHONE_WHATSAPP}`,
+};
 
 export function getProducts(): Product[] {
   return productsData as Product[];

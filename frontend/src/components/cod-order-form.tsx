@@ -227,10 +227,10 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 mt-3">
-        {/* Étape 1 : Choix de l'offre (Pack) - Design Clair & Spacieux */}
-        <div className="space-y-2.5">
+        {/* Étape 1 : Choix de l'offre (Pack) - Design Aéré, Clair & Spacieux */}
+        <div className="space-y-3">
           <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#0B2D23]">
-            <span>1. Choisissez votre offre :</span>
+            <span>1. Choisissez votre coffret :</span>
             <span className="text-emerald-800 text-[11px] font-bold flex items-center gap-1">
               <Truck className="h-3.5 w-3.5 text-[#C5A880]" /> Livraison Offerte
             </span>
@@ -243,14 +243,14 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
                 <div
                   key={offer.id}
                   onClick={() => handleSelectPack(offer.id)}
-                  className={`cursor-pointer rounded-2xl p-3.5 sm:p-4 transition-all duration-200 border-2 ${
+                  className={`cursor-pointer rounded-2xl p-4 transition-all duration-200 border-2 ${
                     isSelected
-                      ? "border-[#0B2D23] bg-[#FAF7F2] shadow-md ring-1 ring-[#0B2D23]/20"
+                      ? "border-[#0B2D23] bg-[#FAF7F2] shadow-sm ring-2 ring-[#0B2D23]/10"
                       : "border-[#E8E2D8] hover:border-[#C5A880] bg-white"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-3">
-                    {/* Radio + Détails de l'offre */}
+                    {/* Radio + Détails */}
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       {/* Radio rond luxe */}
                       <div
@@ -263,14 +263,14 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
                         {isSelected && <div className="h-2 w-2 rounded-full bg-white" />}
                       </div>
 
-                      <div className="min-w-0 flex-1 space-y-0.5">
+                      <div className="min-w-0 flex-1 space-y-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-serif font-bold text-sm sm:text-base text-[#0B2D23]">
+                          <span className="font-serif font-semibold text-sm sm:text-base text-[#0B2D23]">
                             {offer.title}
                           </span>
                           {offer.isPopular && (
                             <span className="bg-[#0B2D23] text-[#FAF7F2] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
-                              ⭐ Le Plus Choisi
+                              ⭐ Populaire
                             </span>
                           )}
                           {!offer.isPopular && offer.badge && offer.badge !== "Standard" && offer.badge !== "Livraison Gratuite" && (
@@ -280,14 +280,21 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
                           )}
                         </div>
 
-                        {offer.savingsMAD > 0 && (
-                          <div className="inline-block text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-md">
-                            Économisez {offer.savingsMAD} DH • Livraison 0 DH
-                          </div>
-                        )}
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {offer.savingsMAD > 0 && (
+                            <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-md">
+                              Économisez {offer.savingsMAD} DH
+                            </span>
+                          )}
+                          {offer.quantity > 1 && (
+                            <span className="text-[10px] font-medium text-[#18221D]/60">
+                              {offer.quantity} bijoux inclus
+                            </span>
+                          )}
+                        </div>
 
-                        {offer.includes && (
-                          <p className="text-[11px] text-[#18221D]/60 pt-0.5 leading-snug">
+                        {isSelected && offer.includes && (
+                          <p className="text-[10px] text-[#18221D]/70 pt-0.5 leading-snug">
                             Inclus : {offer.includes.map(i => i.replace(/Morly/g, "MÉRAF")).join(" • ")}
                           </p>
                         )}
@@ -300,7 +307,7 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
                         {offer.priceMAD} DH
                       </div>
                       {offer.compareAtPriceMAD > offer.priceMAD && (
-                        <div className="text-[11px] text-[#18221D]/45 line-through">
+                        <div className="text-[11px] text-[#18221D]/40 line-through">
                           {offer.compareAtPriceMAD} DH
                         </div>
                       )}

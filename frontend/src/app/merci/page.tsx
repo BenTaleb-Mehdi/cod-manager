@@ -14,7 +14,7 @@ import {
   Sparkles,
   Clock,
 } from "lucide-react";
-import { BRAND_PHONE_WHATSAPP } from "@/lib/storefront-data";
+import { BRAND_PHONE_WHATSAPP, BRAND_SOCIALS } from "@/lib/storefront-data";
 
 interface SavedOrder {
   orderId?: string;
@@ -169,13 +169,13 @@ function ThankYouContent() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <a
-            href="https://instagram.com"
+            href={BRAND_SOCIALS.instagram}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 rounded-full border border-[#E8E2D8] bg-[#FAF7F2] py-3 px-3 text-xs font-medium text-[#0B2D23] hover:bg-white transition-colors"
           >
             <Instagram className="h-4 w-4 text-[#C5A880]" />
-            <span>Rejoindre @meraf.jewelry</span>
+            <span>Instagram @meraf.jewelry</span>
           </a>
 
           <Link

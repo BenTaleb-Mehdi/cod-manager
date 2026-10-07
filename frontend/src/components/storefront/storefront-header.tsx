@@ -20,9 +20,20 @@ import {
   CircleDot,
   Clock,
   Package,
+  Instagram,
+  Facebook,
+  Mail,
 } from "lucide-react";
-import { BRAND_NAME, BRAND_SUBTITLE, buildWhatsAppOrderLink, BRAND_PHONE_WHATSAPP } from "@/lib/storefront-data";
+import { BRAND_NAME, BRAND_SUBTITLE, buildWhatsAppOrderLink, BRAND_PHONE_WHATSAPP, BRAND_SOCIALS, BRAND_GMAIL } from "@/lib/storefront-data";
 import { useCart } from "@/context/cart-context";
+
+function XLogo({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
 
 export function StorefrontHeader() {
   const { openCart, totalItems } = useCart();
@@ -464,6 +475,48 @@ export function StorefrontHeader() {
                 <Truck className="h-3.5 w-3.5 text-[#0B2D23] shrink-0" />
                 <span>Livraison 24h/48h</span>
               </div>
+            </div>
+
+            {/* Réseaux Sociaux MÉRAF */}
+            <div className="pt-2 flex items-center justify-center gap-2.5">
+              <a
+                href={BRAND_SOCIALS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram @meraf.jewelry"
+                title="Instagram"
+                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-white flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] transition-colors"
+              >
+                <Instagram className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href={BRAND_SOCIALS.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook Maison MÉRAF"
+                title="Facebook"
+                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-white flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] transition-colors"
+              >
+                <Facebook className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href={BRAND_SOCIALS.x}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X (Twitter) @meraf_jewelry"
+                title="X"
+                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-white flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] transition-colors"
+              >
+                <XLogo className="h-3 w-3" />
+              </a>
+              <a
+                href={BRAND_SOCIALS.gmail}
+                aria-label={`Gmail (${BRAND_GMAIL})`}
+                title="Gmail"
+                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-white flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] transition-colors"
+              >
+                <Mail className="h-3.5 w-3.5" />
+              </a>
             </div>
           </div>
         </div>
