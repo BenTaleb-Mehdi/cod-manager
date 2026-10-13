@@ -8,6 +8,8 @@ import {
   RotateCcw,
   CheckCircle2,
   ArrowRight,
+  ArrowLeft,
+  Heart,
   MessageCircle,
   Gem,
   Award,
@@ -39,64 +41,124 @@ export default function StorefrontHomePage() {
           </svg>
         </div>
 
-        {/* MOBILE HERO (Exact Style from User Reference Photo) */}
-        <div className="block lg:hidden px-3 sm:px-4 relative z-10">
-          {/* Main Hero Card with Overlaid Bottom Bar (Exact Reference Shape) */}
-          <div className="relative w-full rounded-[26px] overflow-hidden shadow-2xl border border-[#C5A880]/40 bg-[#0B2D23]">
+        {/* MOBILE HERO & NEW ARRIVALS (Exact Style from User Reference Mockup Screen 1) */}
+        <div className="block lg:hidden px-3 sm:px-4 relative z-10 space-y-6">
+          {/* Main Hero Card with Overlaid Bottom Bar (Exact Reference Screen 1) */}
+          <div className="relative w-full rounded-[28px] overflow-hidden shadow-2xl border border-[#C5A880]/30 bg-[#0B2D23]">
             <div className="relative h-[430px] sm:h-[480px] w-full">
               <Image
                 src="/images/meraf/hero-dark-emerald.jpg"
-                alt="MÉRAF Joaillerie Fine - Collection Signature Émeraude & Or 18K"
+                alt="MÉRAF Fine Jewelry - The Eclipse Collection"
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 500px"
-                className="object-cover object-[center_15%]"
+                className="object-cover object-[center_18%]"
               />
 
               {/* Cinematic Vignette Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-black/30 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-black/35 pointer-events-none" />
 
-              {/* Floating Top Status Badges */}
-              <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">
-                <span className="bg-black/55 backdrop-blur-md border border-[#C5A880]/40 rounded-full px-2.5 py-1 text-[9px] font-bold tracking-widest uppercase text-[#FAF7F2] flex items-center gap-1.5 shadow-sm">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  MÉRAF PARIS
-                </span>
-                <span className="bg-black/55 backdrop-blur-md border border-[#C5A880]/40 rounded-full px-2.5 py-1 text-[9px] font-bold tracking-wider text-[#DFCCA8] flex items-center gap-1 shadow-sm">
+              {/* Minimalist Top Left Back/Collection Button (Matching Mockup Screen 1) */}
+              <div className="absolute top-3.5 left-3.5 z-10">
+                <Link
+                  href="/collections"
+                  aria-label="Retour aux collections"
+                  className="h-8 w-8 rounded-full bg-black/45 backdrop-blur-md border border-white/20 text-white flex items-center justify-center active:scale-90 transition-all shadow-md"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Link>
+              </div>
+
+              {/* Top Right Certified Luxury Badge */}
+              <div className="absolute top-3.5 right-3.5 z-10">
+                <span className="bg-black/45 backdrop-blur-md border border-[#C5A880]/40 rounded-full px-2.5 py-1 text-[9px] font-bold tracking-wider text-[#DFCCA8] flex items-center gap-1 shadow-sm">
                   <Sparkles className="h-2.5 w-2.5 text-[#C5A880]" />
-                  OR 18K CERTIFIÉ
+                  OR 18K & ACIER 316L
                 </span>
               </div>
 
-              {/* Overlaid Bottom Action Bar (Identique au mockup "THE ECLIPSE COLLECTION + Shop Now") */}
-              <div className="absolute bottom-0 inset-x-0 p-3.5 sm:p-4 bg-gradient-to-t from-black/95 via-black/85 to-transparent">
+              {/* Overlaid Bottom Action Bar (Identique au mockup "THE ECLIPSE COLLECTION" + Pill "Shop Now") */}
+              <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 bg-gradient-to-t from-black/95 via-black/75 to-transparent">
                 <div className="flex items-end justify-between gap-3">
-                  <div className="min-w-0 flex-1 space-y-0.5">
-                    <p className="text-[9px] tracking-[0.22em] font-bold text-[#C5A880] uppercase">
-                      COLLECTION SIGNATURE
+                  <div className="space-y-0.5">
+                    <p className="text-[9px] tracking-[0.25em] font-bold text-[#C5A880] uppercase">
+                      MÉRAF JOAILLERIE
                     </p>
-                    <h2 className="font-serif text-lg sm:text-xl font-normal text-white tracking-tight leading-tight">
-                      L&apos;Émeraude Royale
+                    <h2 className="font-serif text-base sm:text-lg font-light tracking-[0.16em] text-white uppercase leading-tight">
+                      THE ECLIPSE<br />COLLECTION
                     </h2>
-                    <p className="text-[11px] text-white/75 font-sans line-clamp-1">
-                      Or 18K & Acier Inox 316L • Paiement à la Livraison
-                    </p>
                   </div>
 
                   <Link
                     href="/collections"
-                    className="shrink-0 rounded-full bg-[#FAF7F2] hover:bg-white text-[#0B2D23] font-bold text-xs tracking-wider uppercase px-4 py-2.5 shadow-lg active:scale-95 transition-all flex items-center gap-1.5"
+                    className="shrink-0 rounded-full bg-[#18392B] hover:bg-[#224E3B] border border-white/20 text-[#FAF7F2] font-semibold text-xs tracking-wider px-4 py-2.5 shadow-xl active:scale-95 transition-all flex items-center gap-1.5"
                   >
                     <span>Shop Now</span>
-                    <ArrowRight className="h-3.5 w-3.5 text-[#0B2D23]" />
+                    <ArrowRight className="h-3.5 w-3.5 text-white" />
                   </Link>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* "New Arrivals" Section (Horizontal Scroll Carousel matching Mockup Screen 1) */}
+          <div className="space-y-3 pt-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-serif text-lg font-medium text-[#18221D] tracking-tight">
+                  New Arrivals
+                </h3>
+                <p className="text-[11px] text-[#18221D]/60 font-sans">
+                  Nos dernières créations raffinées
+                </p>
+              </div>
+              <Link
+                href="/collections"
+                className="text-xs font-semibold tracking-wider text-[#0B2D23] hover:text-[#C5A880] transition-colors flex items-center gap-0.5"
+              >
+                <span>Voir tout</span>
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+
+            {/* Horizontal Scrollable Carousel (Mockup Screen 1) */}
+            <div className="flex gap-3 overflow-x-auto pb-2 -mx-3 px-3 scrollbar-none snap-x snap-mandatory">
+              {products.map((product) => (
+                <Link
+                  key={`new-arrival-${product.id}`}
+                  href={`/product/${product.slug}`}
+                  className="w-[145px] shrink-0 snap-start group rounded-2xl border border-[#E8E4DC] bg-white overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col"
+                >
+                  {/* Square Image container with soft neutral background */}
+                  <div className="relative aspect-square w-full bg-[#F6F5F2] p-2.5 flex items-center justify-center">
+                    <Image
+                      src={product.images[0]}
+                      alt={product.title}
+                      fill
+                      sizes="150px"
+                      className="object-contain p-2 group-hover:scale-108 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 right-2 h-6 w-6 rounded-full bg-white/95 backdrop-blur-xs border border-[#E8E2D8] flex items-center justify-center text-[#18221D]/70 shadow-2xs">
+                      <Heart className="h-3 w-3" />
+                    </div>
+                  </div>
+
+                  {/* Title & Price */}
+                  <div className="p-2.5 space-y-0.5">
+                    <p className="font-serif text-[11px] font-medium text-[#18221D] truncate group-hover:text-[#0B2D23] transition-colors">
+                      {product.title}
+                    </p>
+                    <p className="text-xs font-bold font-serif text-[#0B2D23]">
+                      {product.priceMAD} DH
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {/* Micro Trust Strip (Paiement à la livraison, Livr 24/48h, Anti-rouille) */}
-          <div className="mt-3 grid grid-cols-3 gap-1.5 text-[10px] text-[#0B2D23] font-medium text-center">
+          <div className="grid grid-cols-3 gap-1.5 text-[10px] text-[#0B2D23] font-medium text-center">
             <div className="bg-[#FAF7F2] border border-[#E8E2D8] rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-0.5 shadow-2xs">
               <ShieldCheck className="h-3.5 w-3.5 text-[#0B2D23]" />
               <span className="leading-tight">Ouvrez avant de payer</span>
@@ -112,7 +174,7 @@ export default function StorefrontHomePage() {
           </div>
 
           {/* WhatsApp Direct Order Button */}
-          <div className="mt-2.5">
+          <div>
             <a
               href={whatsappUrl}
               target="_blank"
@@ -288,8 +350,8 @@ export default function StorefrontHomePage() {
           </Link>
         </div>
 
-        {/* Product Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+        {/* Product Cards Grid (2-column on mobile matching mockup) */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {products.map((product) => (
             <div key={product.id} id={`category-${product.category.toLowerCase()}`}>
               <ProductCard product={product} />

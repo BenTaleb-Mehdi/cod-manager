@@ -11,6 +11,7 @@ import { FloatingWhatsApp } from "@/components/storefront/floating-whatsapp";
 
 import { CartProvider } from "@/context/cart-context";
 import { CartDrawer } from "@/components/storefront/cart-drawer";
+import { MobileBottomDock } from "@/components/storefront/mobile-bottom-dock";
 
 interface StorefrontOrAdminShellProps {
   children: React.ReactNode;
@@ -60,8 +61,11 @@ export function StorefrontOrAdminShell({ children }: StorefrontOrAdminShellProps
         {/* Panier Tiroir Glissant latéral */}
         <CartDrawer />
 
-        {/* Bouton d'action flottant WhatsApp avec badge conseiller en direct */}
+        {/* Bouton d'action flottant WhatsApp desktop */}
         <FloatingWhatsApp />
+
+        {/* Barre de navigation flottante glassmorphic mobile (exactement comme le mockup) */}
+        <MobileBottomDock />
       </div>
     </CartProvider>
   );
