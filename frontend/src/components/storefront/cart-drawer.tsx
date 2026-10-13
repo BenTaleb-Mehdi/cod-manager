@@ -3,7 +3,6 @@
 import React, { useState, useTransition, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   X,
   ShoppingBag,
@@ -27,7 +26,6 @@ import { buildWhatsAppOrderLink } from "@/lib/storefront-data";
 import { CityCombobox } from "./city-combobox";
 
 export function CartDrawer() {
-  const router = useRouter();
   const {
     items,
     isCartOpen,
@@ -148,8 +146,9 @@ export function CartDrawer() {
           window.localStorage.setItem("morly_last_order", JSON.stringify(orderPayload));
         }
 
+        let finalOrderId = orderId;
         try {
-          await fetch("/api/orders", {
+          const res = await fetch("/api/orders", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -165,6 +164,10 @@ export function CartDrawer() {
               })),
             }),
           });
+          const data = await res.json();
+          if (data?.orderId) {
+            finalOrderId = data.orderId;
+          }
         } catch {
           // Fallback silencieux : commande enregistrée localement
         }
@@ -172,18 +175,22 @@ export function CartDrawer() {
         clearCart();
         closeCart();
 
-        const queryParams = new URLSearchParams({
-          orderId,
-          name: fullName.trim(),
+        // Redirection directe vers WhatsApp sans passer par aucune autre page
+        const directCartWhatsAppUrl = buildWhatsAppOrderLink({
+          orderId: finalOrderId,
+          productTitle: items.map((i) => `${i.product.title} (x${i.quantity})`).join(", "),
+          priceMAD: totalMAD,
+          packName: `${totalItems} article(s)`,
+          productUrl: typeof window !== "undefined" ? window.location.href : "",
+          customerName: fullName.trim(),
           phone: rawPhone,
           city: city.trim(),
           address: address.trim(),
-          product: `Votre Panier (${totalItems} articles: ${productsSummary})`,
-          pack: `${totalItems} pièces`,
-          total: String(totalMAD),
         });
 
-        router.push(`/merci?${queryParams.toString()}`);
+        if (typeof window !== "undefined") {
+          window.location.href = directCartWhatsAppUrl;
+        }
       } catch (err) {
         console.error("Cart checkout error:", err);
         setFormError("Une erreur est survenue lors de la commande. Veuillez réessayer.");

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useTransition, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -65,7 +64,6 @@ interface CodOrderFormProps {
 }
 
 export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOrderFormProps) {
-  const router = useRouter();
   const { addToCart } = useCart();
   const [isPending, startTransition] = useTransition();
   const [selectedPack, setSelectedPack] = useState<string>(
@@ -154,9 +152,10 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
           window.localStorage.setItem("morly_last_order", JSON.stringify(orderPayload));
         }
 
+        let finalOrderId = orderPayload.orderId;
         // Tenter d'envoyer la commande à l'API interne si disponible
         try {
-          await fetch("/api/orders", {
+          const res = await fetch("/api/orders", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -174,24 +173,31 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
               ],
             }),
           });
+          const data = await res.json();
+          if (data?.orderId) {
+            finalOrderId = data.orderId;
+          }
         } catch {
           // Fallback silencieux : la commande est sécurisée localement
         }
 
-        // Redirection vers la page merci avec query params
-        const queryParams = new URLSearchParams({
-          orderId: orderPayload.orderId,
-          name: values.fullName,
+        // Redirection directe vers WhatsApp sans passer par aucune autre page
+        const directWhatsAppUrl = buildWhatsAppOrderLink({
+          orderId: finalOrderId,
+          productTitle: product.title,
+          packName: activeOffer.title,
+          priceMAD: activeOffer.priceMAD,
+          productUrl: typeof window !== "undefined" ? window.location.href : "",
+          customerName: values.fullName,
           phone: values.phone,
           city: values.city,
           address: values.address,
           notes: values.notes || "",
-          product: product.title,
-          pack: activeOffer.title,
-          total: String(activeOffer.priceMAD),
         });
 
-        router.push(`/merci?${queryParams.toString()}`);
+        if (typeof window !== "undefined") {
+          window.location.href = directWhatsAppUrl;
+        }
       } catch (err: unknown) {
         console.error("Order error:", err);
         setSubmitError("Une erreur est survenue lors de l'enregistrement de votre commande. Veuillez réessayer ou commander directement via WhatsApp.");
@@ -441,7 +447,7 @@ export function CodOrderForm({ product, selectedOfferId, className = "" }: CodOr
               <CheckCircle2 className="h-3.5 w-3.5 text-[#C5A880]" />
             </div>
             <span className="font-bold text-xs sm:text-sm tracking-wide uppercase text-white">
-              {isPending ? "Validation de votre commande..." : "Acheter Maintenant (Paiement à la Livraison)"}
+              {isPending ? "Redirection vers WhatsApp..." : "Acheter Maintenant (Paiement à la Livraison)"}
             </span>
           </div>
 

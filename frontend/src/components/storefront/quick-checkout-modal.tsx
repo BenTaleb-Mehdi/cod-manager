@@ -2,7 +2,6 @@
 
 import React, { useState, useTransition, useMemo, useEffect } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import {
   X,
   CheckCircle2,
@@ -23,6 +22,7 @@ import { Product, ProductOffer } from "@/types/storefront";
 import { buildWhatsAppOrderLink } from "@/lib/storefront-data";
 import { useCart } from "@/context/cart-context";
 import { CityCombobox } from "./city-combobox";
+import { useRouter } from "next/router";
 
 interface QuickCheckoutModalProps {
   product: Product | null;
@@ -35,7 +35,6 @@ export function QuickCheckoutModal({
   isOpen,
   onClose,
 }: QuickCheckoutModalProps) {
-  const router = useRouter();
   const { addToCart } = useCart();
   const [isPending, startTransition] = useTransition();
 
@@ -165,8 +164,9 @@ export function QuickCheckoutModal({
           window.localStorage.setItem("morly_last_order", JSON.stringify(orderPayload));
         }
 
+        let finalOrderId = orderId;
         try {
-          await fetch("/api/orders", {
+          const res = await fetch("/api/orders", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -184,25 +184,33 @@ export function QuickCheckoutModal({
               ],
             }),
           });
+          const data = await res.json();
+          if (data?.orderId) {
+            finalOrderId = data.orderId;
+          }
         } catch {
           // Fallback silencieux : commande enregistrée localement
         }
 
         onClose();
 
-        const queryParams = new URLSearchParams({
-          orderId,
-          name: fullName.trim(),
+        // Redirection directe vers WhatsApp sans passer par aucune autre page
+        const directWhatsAppUrl = buildWhatsAppOrderLink({
+          orderId: finalOrderId,
+          productTitle: product.title,
+          packName: activeOffer.title,
+          priceMAD: activeOffer.priceMAD,
+          productUrl: typeof window !== "undefined" ? window.location.href : "",
+          customerName: fullName.trim(),
           phone: rawPhone,
           city: city.trim(),
           address: address.trim(),
           notes: notes.trim(),
-          product: product.title,
-          pack: activeOffer.title,
-          total: String(activeOffer.priceMAD),
         });
 
-        router.push(`/merci?${queryParams.toString()}`);
+        if (typeof window !== "undefined") {
+          window.location.href = directWhatsAppUrl;
+        }
       } catch (err) {
         console.error("Quick checkout error:", err);
         setFormError("Une erreur est survenue. Veuillez réessayer ou commander par WhatsApp.");
