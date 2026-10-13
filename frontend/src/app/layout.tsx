@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
 import { StorefrontOrAdminShell } from "@/components/layout/StorefrontOrAdminShell";
-
+import { Analytics } from "@vercel/analytics/next"
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -59,6 +59,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${playfair.variable} ${montserrat.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
       >
+        <Analytics/>
         <StorefrontOrAdminShell>{children}</StorefrontOrAdminShell>
       </body>
     </html>
