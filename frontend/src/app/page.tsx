@@ -30,7 +30,7 @@ export default function StorefrontHomePage() {
   return (
     <div className="space-y-16 sm:space-y-24 pb-16 bg-[#FAF7F2] text-[#18221D]">
       {/* 1. HERO SECTION (Split layout matching reference photo) */}
-      <section className="relative overflow-hidden bg-[#FAF7F2] pt-6 sm:pt-10 pb-8 sm:pb-16 border-b border-[#E8E2D8]">
+      <section className="relative overflow-hidden bg-[#FAF7F2] pt-3 sm:pt-10 pb-6 sm:pb-16 border-b border-[#E8E2D8]">
         {/* Subtle decorative gold curves in background */}
         <div className="absolute inset-0 pointer-events-none opacity-40">
           <svg className="w-full h-full" viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,103 +39,130 @@ export default function StorefrontHomePage() {
           </svg>
         </div>
 
-        <div className="container mx-auto px-4 sm:px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-            {/* Left Column: Typography & CTAs */}
-            {/* Left Column: Typography, Mobile Showcase & CTAs */}
-            <div className="lg:col-span-6 space-y-4 sm:space-y-6 max-w-xl">
-              <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] text-[#C5A880] uppercase flex items-center gap-1.5">
-                <Sparkles className="h-3 w-3 text-[#C5A880]" />
+        {/* MOBILE HERO (Exact Style from User Reference Photo) */}
+        <div className="block lg:hidden px-3 sm:px-4 relative z-10">
+          {/* Main Hero Card with Overlaid Bottom Bar (Exact Reference Shape) */}
+          <div className="relative w-full rounded-[26px] overflow-hidden shadow-2xl border border-[#C5A880]/40 bg-[#0B2D23]">
+            <div className="relative h-[430px] sm:h-[480px] w-full">
+              <Image
+                src="/images/meraf/hero-dark-emerald.jpg"
+                alt="MÉRAF Joaillerie Fine - Collection Signature Émeraude & Or 18K"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 500px"
+                className="object-cover object-[center_15%]"
+              />
+
+              {/* Cinematic Vignette Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-black/30 pointer-events-none" />
+
+              {/* Floating Top Status Badges */}
+              <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">
+                <span className="bg-black/55 backdrop-blur-md border border-[#C5A880]/40 rounded-full px-2.5 py-1 text-[9px] font-bold tracking-widest uppercase text-[#FAF7F2] flex items-center gap-1.5 shadow-sm">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  MÉRAF PARIS
+                </span>
+                <span className="bg-black/55 backdrop-blur-md border border-[#C5A880]/40 rounded-full px-2.5 py-1 text-[9px] font-bold tracking-wider text-[#DFCCA8] flex items-center gap-1 shadow-sm">
+                  <Sparkles className="h-2.5 w-2.5 text-[#C5A880]" />
+                  OR 18K CERTIFIÉ
+                </span>
+              </div>
+
+              {/* Overlaid Bottom Action Bar (Identique au mockup "THE ECLIPSE COLLECTION + Shop Now") */}
+              <div className="absolute bottom-0 inset-x-0 p-3.5 sm:p-4 bg-gradient-to-t from-black/95 via-black/85 to-transparent">
+                <div className="flex items-end justify-between gap-3">
+                  <div className="min-w-0 flex-1 space-y-0.5">
+                    <p className="text-[9px] tracking-[0.22em] font-bold text-[#C5A880] uppercase">
+                      COLLECTION SIGNATURE
+                    </p>
+                    <h2 className="font-serif text-lg sm:text-xl font-normal text-white tracking-tight leading-tight">
+                      L&apos;Émeraude Royale
+                    </h2>
+                    <p className="text-[11px] text-white/75 font-sans line-clamp-1">
+                      Or 18K & Acier Inox 316L • Paiement à la Livraison
+                    </p>
+                  </div>
+
+                  <Link
+                    href="/collections"
+                    className="shrink-0 rounded-full bg-[#FAF7F2] hover:bg-white text-[#0B2D23] font-bold text-xs tracking-wider uppercase px-4 py-2.5 shadow-lg active:scale-95 transition-all flex items-center gap-1.5"
+                  >
+                    <span>Shop Now</span>
+                    <ArrowRight className="h-3.5 w-3.5 text-[#0B2D23]" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Micro Trust Strip (Paiement à la livraison, Livr 24/48h, Anti-rouille) */}
+          <div className="mt-3 grid grid-cols-3 gap-1.5 text-[10px] text-[#0B2D23] font-medium text-center">
+            <div className="bg-[#FAF7F2] border border-[#E8E2D8] rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-0.5 shadow-2xs">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#0B2D23]" />
+              <span className="leading-tight">Ouvrez avant de payer</span>
+            </div>
+            <div className="bg-[#FAF7F2] border border-[#E8E2D8] rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-0.5 shadow-2xs">
+              <Truck className="h-3.5 w-3.5 text-[#0B2D23]" />
+              <span className="leading-tight">Livraison 24/48h</span>
+            </div>
+            <div className="bg-[#FAF7F2] border border-[#E8E2D8] rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-0.5 shadow-2xs">
+              <Sparkles className="h-3.5 w-3.5 text-[#C5A880]" />
+              <span className="leading-tight">100% Anti-Rouille</span>
+            </div>
+          </div>
+
+          {/* WhatsApp Direct Order Button */}
+          <div className="mt-2.5">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 rounded-2xl border border-[#0B2D23]/30 bg-white hover:bg-[#FAF7F2] py-2.5 px-4 text-xs font-semibold tracking-wider uppercase text-[#0B2D23] transition-colors shadow-2xs"
+            >
+              <MessageCircle className="h-4 w-4 text-[#0B2D23]" />
+              <span>Commander directement par WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
+        {/* DESKTOP HERO (Exclusively rendered on lg screens) */}
+        <div className="hidden lg:block container mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-12 gap-8 items-center">
+            {/* Desktop Left Column */}
+            <div className="col-span-6 space-y-6 max-w-xl">
+              <span className="text-xs font-bold tracking-[0.25em] text-[#C5A880] uppercase block">
                 TIMELESS ELEGANCE, MODERN YOU.
               </span>
 
-              <h1 className="font-serif text-3xl sm:text-5xl lg:text-7xl font-normal text-[#0B2D23] leading-[1.12] tracking-tight">
-                Jewelry That <br className="hidden sm:inline" />
+              <h1 className="font-serif text-6xl xl:text-7xl font-normal text-[#0B2D23] leading-[1.08] tracking-tight">
+                Jewelry That <br />
                 <span className="italic font-light">Tells Your Story</span>
               </h1>
 
-              {/* Mobile Hero Centerpiece Showcase Card (< lg only) */}
-              <div className="block lg:hidden relative pt-1 pb-1">
-                <Link
-                  href="/collections"
-                  aria-label="Découvrir la collection signature MÉRAF"
-                  className="block relative group"
-                >
-                  {/* Subtle golden ambient glow */}
-                  <div className="absolute -inset-1.5 bg-gradient-to-r from-[#C5A880]/30 via-[#0B2D23]/20 to-[#C5A880]/30 rounded-3xl blur-sm -z-1 opacity-70 group-hover:opacity-100 transition-opacity" />
-
-                  {/* Arched Luxury Container */}
-                  <div className="relative aspect-[16/10] w-full rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-[#C5A880]/70 shadow-2xl shadow-[#0B2D23]/20 bg-[#FAF7F2]">
-                    <Image
-                      src="/images/meraf/hero-mobile.jpg"
-                      alt="MÉRAF Fine Jewelry - Création Signature Émeraude & Or 18K"
-                      fill
-                      sizes="(max-width: 768px) 100vw, 480px"
-                      priority
-                      className="object-cover object-[center_35%] group-hover:scale-105 transition-transform duration-700"
-                    />
-
-                    {/* Gradient overlays for readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-
-                    {/* Top Floating Badge: Live Status & Brand */}
-                    <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-md rounded-full px-2.5 py-1 border border-[#C5A880]/50 shadow-sm flex items-center gap-1.5">
-                      <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse" />
-                      <span className="text-[9px] font-bold tracking-wider uppercase text-[#0B2D23]">
-                        MÉRAF PARIS • CASABLANCA
-                      </span>
-                    </div>
-
-                    {/* Top-Right: Certified Material Badge */}
-                    <div className="absolute top-2.5 right-2.5 bg-[#0B2D23]/90 backdrop-blur-md rounded-full px-2.5 py-1 border border-[#C5A880]/60 shadow-sm flex items-center gap-1">
-                      <Sparkles className="h-2.5 w-2.5 text-[#C5A880]" />
-                      <span className="text-[9px] font-bold tracking-wider uppercase text-[#FAF7F2]">
-                        OR 18K & ÉMERAUDE
-                      </span>
-                    </div>
-
-                    {/* Bottom Bar: Reviews & COD Reassurance */}
-                    <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between gap-2 bg-[#FAF7F2]/95 backdrop-blur-md rounded-xl py-1.5 px-3 border border-[#E8E2D8] shadow-md">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[#C5A880] text-xs">★★★★★</span>
-                        <span className="text-[10px] font-bold text-[#0B2D23]">
-                          4.9/5 <span className="text-[#18221D]/60 font-normal">(+1,800 avis)</span>
-                        </span>
-                      </div>
-                      <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md">
-                        Livraison Gratuite (COD)
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-
-              <p className="text-xs sm:text-base text-[#18221D]/75 leading-relaxed font-sans max-w-lg">
-                Exquisite designs, ethically crafted. Créations en <strong>Acier Inoxydable 316L certifié</strong> et or 18k inaltérable.
+              <p className="text-base text-[#18221D]/75 leading-relaxed font-sans max-w-lg">
+                Exquisite designs, ethically crafted to celebrate every moment that matters.
+                Créations en <strong>Acier Inoxydable 316L certifié</strong> et or 18k inaltérable.
                 Commandez en toute confiance avec le <strong>Paiement à la Livraison</strong>.
               </p>
 
-              {/* 3 Reassurance pills (Responsive clean row) */}
-              <div className="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap items-center sm:gap-2 pt-1 text-[10px] sm:text-xs text-[#0B2D23] font-medium">
-                <span className="flex items-center justify-center gap-1 bg-[#F4EFEA] border border-[#E8E2D8] px-2 py-1.5 rounded-xl text-center shadow-2xs">
-                  <ShieldCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0B2D23] shrink-0" />
-                  <span className="truncate">Ouvrez & Vérifiez</span>
+              {/* 3 Reassurance pills */}
+              <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-[#0B2D23]/80 font-medium">
+                <span className="inline-flex items-center gap-1.5 bg-[#F4EFEA] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#0B2D23]" /> Vérifiez avant de payer
                 </span>
-                <span className="flex items-center justify-center gap-1 bg-[#F4EFEA] border border-[#E8E2D8] px-2 py-1.5 rounded-xl text-center shadow-2xs">
-                  <Truck className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0B2D23] shrink-0" />
-                  <span className="truncate">Livr. Gratuite</span>
+                <span className="inline-flex items-center gap-1.5 bg-[#F4EFEA] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
+                  <Truck className="h-3.5 w-3.5 text-[#0B2D23]" /> Livraison Gratuite 24/48h
                 </span>
-                <span className="flex items-center justify-center gap-1 bg-[#F4EFEA] border border-[#E8E2D8] px-2 py-1.5 rounded-xl text-center shadow-2xs">
-                  <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#C5A880] shrink-0" />
-                  <span className="truncate">Anti-Rouille 100%</span>
+                <span className="inline-flex items-center gap-1.5 bg-[#F4EFEA] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
+                  <Sparkles className="h-3.5 w-3.5 text-[#C5A880]" /> Garanti 100% Anti-Rouille
                 </span>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1 sm:pt-2">
+              <div className="flex items-center gap-3 pt-2">
                 <Link
                   href="/collections"
-                  className="rounded-full bg-[#0B2D23] hover:bg-[#154738] text-[#FAF7F2] px-8 py-3.5 sm:py-4 font-semibold text-xs sm:text-sm tracking-[0.15em] uppercase shadow-lg shadow-[#0B2D23]/15 transition-all text-center flex items-center justify-center gap-2 group active:scale-95"
+                  className="rounded-full bg-[#0B2D23] hover:bg-[#154738] text-[#FAF7F2] px-8 py-4 font-semibold text-sm tracking-[0.15em] uppercase shadow-lg shadow-[#0B2D23]/15 transition-all text-center flex items-center justify-center gap-2 group active:scale-95"
                 >
                   <span>SHOP THE COLLECTION</span>
                   <ArrowRight className="h-4 w-4 text-[#C5A880] group-hover:translate-x-1 transition-transform" />
@@ -145,7 +172,7 @@ export default function StorefrontHomePage() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full border border-[#0B2D23]/30 bg-transparent hover:bg-[#F4EFEA] px-6 py-3.5 sm:py-4 text-[#0B2D23] font-semibold text-xs sm:text-sm tracking-[0.12em] uppercase transition-colors text-center flex items-center justify-center gap-2"
+                  className="rounded-full border border-[#0B2D23]/30 bg-transparent hover:bg-[#F4EFEA] px-6 py-4 text-[#0B2D23] font-semibold text-sm tracking-[0.12em] uppercase transition-colors text-center flex items-center justify-center gap-2"
                 >
                   <MessageCircle className="h-4 w-4 text-[#0B2D23]" />
                   <span>COMMANDER SUR WHATSAPP</span>
@@ -153,13 +180,10 @@ export default function StorefrontHomePage() {
               </div>
             </div>
 
-            {/* Right Column: Hero Visual with Arch Frame & Circular Medallion (Desktop only) */}
-            <div className="hidden lg:flex lg:col-span-6 relative justify-center items-center">
-              {/* Emerald Green background panel card */}
+            {/* Desktop Right Column: Hero Visual with Arch Frame & Circular Medallion */}
+            <div className="col-span-6 relative flex justify-center items-center">
               <div className="relative w-full max-w-[480px]">
-                {/* Emerald accent panel on right (matching reference) */}
-                <div className="absolute top-0 right-0 bottom-0 w-2/5 bg-[#0B2D23] rounded-3xl -z-1 hidden sm:block overflow-hidden shadow-2xl">
-                  {/* Circular Gold Seal Stamp */}
+                <div className="absolute top-0 right-0 bottom-0 w-2/5 bg-[#0B2D23] rounded-3xl -z-1 overflow-hidden shadow-2xl">
                   <div className="absolute top-10 right-4 w-28 h-28 rounded-full border border-[#C5A880]/50 flex items-center justify-center text-center p-2">
                     <div className="text-[7.5px] uppercase tracking-widest text-[#C5A880] font-semibold flex flex-col items-center">
                       <Sparkles className="h-3.5 w-3.5 mb-1 text-[#C5A880]" />
@@ -169,21 +193,19 @@ export default function StorefrontHomePage() {
                   </div>
                 </div>
 
-                {/* Main Arched Photo Container (matching reference image) */}
-                <div className="relative aspect-[4/5] sm:w-4/5 rounded-t-[140px] rounded-b-2xl overflow-hidden border-2 border-[#E8E2D8] shadow-2xl bg-[#FAF7F2]">
+                <div className="relative aspect-[4/5] w-4/5 rounded-t-[140px] rounded-b-2xl overflow-hidden border-2 border-[#E8E2D8] shadow-2xl bg-[#FAF7F2]">
                   <Image
-                    src="/images/lumiere/hero-jewelry.jpg"
-                    alt="Lumière Fine Jewelry - Emerald & Gold Collection"
+                    src="/images/meraf/hero-dark-emerald.jpg"
+                    alt="MÉRAF Fine Jewelry - Emerald & Gold Collection"
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 480px"
+                    sizes="(max-width: 1200px) 50vw, 480px"
                     priority
                     className="object-cover object-center hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                 </div>
 
-                {/* Overlapping Floating Seal Badge (Bottom Right) */}
-                <div className="absolute -bottom-4 right-4 sm:right-10 bg-[#FAF7F2] border-2 border-[#C5A880] rounded-full p-2.5 shadow-xl flex items-center gap-2">
+                <div className="absolute -bottom-4 right-10 bg-[#FAF7F2] border-2 border-[#C5A880] rounded-full p-2.5 shadow-xl flex items-center gap-2">
                   <div className="h-8 w-8 rounded-full bg-[#0B2D23] flex items-center justify-center text-[#C5A880]">
                     <Sparkles className="h-4 w-4" />
                   </div>
