@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 33% 97%;
+    --foreground: 155 18% 12%;
+    --card: 40 33% 99%;
+    --card-foreground: 155 18% 12%;
+    --popover: 40 33% 99%;
+    --popover-foreground: 155 18% 12%;
+    --primary: 164 61% 11%;
+    --primary-foreground: 40 33% 97%;
+    --secondary: 38 25% 93%;
+    --secondary-foreground: 164 61% 11%;
+    --muted: 38 20% 92%;
+    --muted-foreground: 155 10% 42%;
+    --accent: 35 38% 64%;
+    --accent-foreground: 164 61% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 38 18% 88%;
+    --input: 38 18% 88%;
+    --ring: 164 61% 11%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 164 61% 6%;
+    --foreground: 40 30% 95%;
+    --card: 164 55% 8%;
+    --card-foreground: 40 30% 95%;
+    --popover: 164 55% 8%;
+    --popover-foreground: 40 30% 95%;
+    --primary: 35 38% 64%;
+    --primary-foreground: 164 61% 11%;
+    --secondary: 164 40% 12%;
+    --secondary-foreground: 40 30% 95%;
+    --muted: 164 40% 12%;
+    --muted-foreground: 155 15% 65%;
+    --accent: 35 38% 64%;
+    --accent-foreground: 164 61% 11%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 164 35% 15%;
+    --input: 164 35% 15%;
+    --ring: 35 38% 64%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@media print {
+  /* Masquer barre de navigation, menus, sidebar et boutons */
+  header,
+  nav,
+  aside,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+}
+

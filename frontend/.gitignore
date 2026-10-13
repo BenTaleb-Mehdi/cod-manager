@@ -1,0 +1,17 @@
+/node_modules
+.env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.tsbuildinfo
+/.next
+
+/generated/prisma
+pnpm-lock.yaml
+package-lock.json
+pnpm-workspace.yaml
+yarn.lock
+bun.lockb
+bun.lock
