@@ -42,40 +42,100 @@ export default function StorefrontHomePage() {
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
             {/* Left Column: Typography & CTAs */}
-            <div className="lg:col-span-6 space-y-6 sm:space-y-7 max-w-xl">
-              <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] text-[#C5A880] uppercase block">
+            {/* Left Column: Typography, Mobile Showcase & CTAs */}
+            <div className="lg:col-span-6 space-y-4 sm:space-y-6 max-w-xl">
+              <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] text-[#C5A880] uppercase flex items-center gap-1.5">
+                <Sparkles className="h-3 w-3 text-[#C5A880]" />
                 TIMELESS ELEGANCE, MODERN YOU.
               </span>
 
-              <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal text-[#0B2D23] leading-[1.08] tracking-tight">
-                Jewelry That <br />
+              <h1 className="font-serif text-3xl sm:text-5xl lg:text-7xl font-normal text-[#0B2D23] leading-[1.12] tracking-tight">
+                Jewelry That <br className="hidden sm:inline" />
                 <span className="italic font-light">Tells Your Story</span>
               </h1>
 
-              <p className="text-sm sm:text-base text-[#18221D]/75 leading-relaxed font-sans max-w-lg">
-                Exquisite designs, ethically crafted to celebrate every moment that matters.
-                Créations en <strong>Acier Inoxydable 316L certifié</strong> et or 18k inaltérable.
+              {/* Mobile Hero Centerpiece Showcase Card (< lg only) */}
+              <div className="block lg:hidden relative pt-1 pb-1">
+                <Link
+                  href="/collections"
+                  aria-label="Découvrir la collection signature MÉRAF"
+                  className="block relative group"
+                >
+                  {/* Subtle golden ambient glow */}
+                  <div className="absolute -inset-1.5 bg-gradient-to-r from-[#C5A880]/30 via-[#0B2D23]/20 to-[#C5A880]/30 rounded-3xl blur-sm -z-1 opacity-70 group-hover:opacity-100 transition-opacity" />
+
+                  {/* Arched Luxury Container */}
+                  <div className="relative aspect-[16/10] w-full rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-[#C5A880]/70 shadow-2xl shadow-[#0B2D23]/20 bg-[#FAF7F2]">
+                    <Image
+                      src="/images/meraf/hero-mobile.jpg"
+                      alt="MÉRAF Fine Jewelry - Création Signature Émeraude & Or 18K"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 480px"
+                      priority
+                      className="object-cover object-[center_35%] group-hover:scale-105 transition-transform duration-700"
+                    />
+
+                    {/* Gradient overlays for readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+
+                    {/* Top Floating Badge: Live Status & Brand */}
+                    <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-md rounded-full px-2.5 py-1 border border-[#C5A880]/50 shadow-sm flex items-center gap-1.5">
+                      <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                      <span className="text-[9px] font-bold tracking-wider uppercase text-[#0B2D23]">
+                        MÉRAF PARIS • CASABLANCA
+                      </span>
+                    </div>
+
+                    {/* Top-Right: Certified Material Badge */}
+                    <div className="absolute top-2.5 right-2.5 bg-[#0B2D23]/90 backdrop-blur-md rounded-full px-2.5 py-1 border border-[#C5A880]/60 shadow-sm flex items-center gap-1">
+                      <Sparkles className="h-2.5 w-2.5 text-[#C5A880]" />
+                      <span className="text-[9px] font-bold tracking-wider uppercase text-[#FAF7F2]">
+                        OR 18K & ÉMERAUDE
+                      </span>
+                    </div>
+
+                    {/* Bottom Bar: Reviews & COD Reassurance */}
+                    <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between gap-2 bg-[#FAF7F2]/95 backdrop-blur-md rounded-xl py-1.5 px-3 border border-[#E8E2D8] shadow-md">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[#C5A880] text-xs">★★★★★</span>
+                        <span className="text-[10px] font-bold text-[#0B2D23]">
+                          4.9/5 <span className="text-[#18221D]/60 font-normal">(+1,800 avis)</span>
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md">
+                        Livraison Gratuite (COD)
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+
+              <p className="text-xs sm:text-base text-[#18221D]/75 leading-relaxed font-sans max-w-lg">
+                Exquisite designs, ethically crafted. Créations en <strong>Acier Inoxydable 316L certifié</strong> et or 18k inaltérable.
                 Commandez en toute confiance avec le <strong>Paiement à la Livraison</strong>.
               </p>
 
-              {/* 3 Reassurance pills */}
-              <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-[#0B2D23]/80 font-medium">
-                <span className="inline-flex items-center gap-1.5 bg-[#F4EFEA] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
-                  <ShieldCheck className="h-3.5 w-3.5 text-[#0B2D23]" /> Vérifiez avant de payer
+              {/* 3 Reassurance pills (Responsive clean row) */}
+              <div className="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap items-center sm:gap-2 pt-1 text-[10px] sm:text-xs text-[#0B2D23] font-medium">
+                <span className="flex items-center justify-center gap-1 bg-[#F4EFEA] border border-[#E8E2D8] px-2 py-1.5 rounded-xl text-center shadow-2xs">
+                  <ShieldCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0B2D23] shrink-0" />
+                  <span className="truncate">Ouvrez & Vérifiez</span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 bg-[#F4EFEA] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
-                  <Truck className="h-3.5 w-3.5 text-[#0B2D23]" /> Livraison Gratuite 24/48h
+                <span className="flex items-center justify-center gap-1 bg-[#F4EFEA] border border-[#E8E2D8] px-2 py-1.5 rounded-xl text-center shadow-2xs">
+                  <Truck className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0B2D23] shrink-0" />
+                  <span className="truncate">Livr. Gratuite</span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 bg-[#F4EFEA] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
-                  <Sparkles className="h-3.5 w-3.5 text-[#C5A880]" /> Garanti 100% Anti-Rouille
+                <span className="flex items-center justify-center gap-1 bg-[#F4EFEA] border border-[#E8E2D8] px-2 py-1.5 rounded-xl text-center shadow-2xs">
+                  <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#C5A880] shrink-0" />
+                  <span className="truncate">Anti-Rouille 100%</span>
                 </span>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1 sm:pt-2">
                 <Link
                   href="/collections"
-                  className="rounded-full bg-[#0B2D23] hover:bg-[#154738] text-[#FAF7F2] px-8 py-4 font-semibold text-xs sm:text-sm tracking-[0.15em] uppercase shadow-lg shadow-[#0B2D23]/15 transition-all text-center flex items-center justify-center gap-2 group active:scale-95"
+                  className="rounded-full bg-[#0B2D23] hover:bg-[#154738] text-[#FAF7F2] px-8 py-3.5 sm:py-4 font-semibold text-xs sm:text-sm tracking-[0.15em] uppercase shadow-lg shadow-[#0B2D23]/15 transition-all text-center flex items-center justify-center gap-2 group active:scale-95"
                 >
                   <span>SHOP THE COLLECTION</span>
                   <ArrowRight className="h-4 w-4 text-[#C5A880] group-hover:translate-x-1 transition-transform" />
@@ -85,7 +145,7 @@ export default function StorefrontHomePage() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full border border-[#0B2D23]/30 bg-transparent hover:bg-[#F4EFEA] px-6 py-4 text-[#0B2D23] font-semibold text-xs sm:text-sm tracking-[0.12em] uppercase transition-colors text-center flex items-center justify-center gap-2"
+                  className="rounded-full border border-[#0B2D23]/30 bg-transparent hover:bg-[#F4EFEA] px-6 py-3.5 sm:py-4 text-[#0B2D23] font-semibold text-xs sm:text-sm tracking-[0.12em] uppercase transition-colors text-center flex items-center justify-center gap-2"
                 >
                   <MessageCircle className="h-4 w-4 text-[#0B2D23]" />
                   <span>COMMANDER SUR WHATSAPP</span>
@@ -93,8 +153,8 @@ export default function StorefrontHomePage() {
               </div>
             </div>
 
-            {/* Right Column: Hero Visual with Arch Frame & Circular Medallion */}
-            <div className="lg:col-span-6 relative flex justify-center items-center">
+            {/* Right Column: Hero Visual with Arch Frame & Circular Medallion (Desktop only) */}
+            <div className="hidden lg:flex lg:col-span-6 relative justify-center items-center">
               {/* Emerald Green background panel card */}
               <div className="relative w-full max-w-[480px]">
                 {/* Emerald accent panel on right (matching reference) */}
