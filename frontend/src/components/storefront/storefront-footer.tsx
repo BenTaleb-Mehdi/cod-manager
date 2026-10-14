@@ -79,12 +79,12 @@ export function StorefrontFooter() {
                 MÉRAF
               </span>
               <span className="text-[9px] tracking-[0.35em] text-[#9F8259] uppercase block font-medium">
-                JEWELRY
+                ACCESSORIES
               </span>
             </Link>
 
             <p className="text-xs text-[#18221D]/70 max-w-sm leading-relaxed">
-              Timeless beauty. Thoughtful design. Made to be cherished. Créations d&apos;exception en acier inoxydable 316L certifié et finitions or 18k inaltérables pour la femme moderne.
+              Accessoires et bijoux tendance en acier inoxydable 316L haute qualité pour femmes et jeunes filles. Finition dorée inaltérable, waterproof, ne noircit jamais. Paiement à la livraison après inspection partout au Maroc.
             </p>
 
             {/* Réseaux Sociaux & Contact Direct */}
@@ -201,8 +201,8 @@ export function StorefrontFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/blog/pourquoi-choisir-or-18k-et-acier-316l" className="hover:text-[#0B2D23] transition-colors">
-                  Pourquoi l&apos;Or 18K & Acier 316L
+                <Link href="/blog/guide-entretien-acier-inoxydable-316l" className="hover:text-[#0B2D23] transition-colors">
+                  Pourquoi l&apos;Acier Inoxydable 316L ?
                 </Link>
               </li>
             </ul>

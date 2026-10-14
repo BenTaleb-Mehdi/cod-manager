@@ -10,7 +10,10 @@ import { StorefrontFooter } from "@/components/storefront/storefront-footer";
 import { FloatingWhatsApp } from "@/components/storefront/floating-whatsapp";
 
 import { CartProvider } from "@/context/cart-context";
+import { WishlistProvider } from "@/context/wishlist-context";
+import { LanguageProvider } from "@/context/language-context";
 import { CartDrawer } from "@/components/storefront/cart-drawer";
+import { WishlistDrawer } from "@/components/storefront/wishlist-drawer";
 import { MobileBottomDock } from "@/components/storefront/mobile-bottom-dock";
 
 interface StorefrontOrAdminShellProps {
@@ -46,27 +49,34 @@ export function StorefrontOrAdminShell({ children }: StorefrontOrAdminShellProps
 
   // Vitrine E-commerce Storefront "MÉRAF Fine Jewelry" (Luxury Theme, COD Maroc)
   return (
-    <CartProvider>
-      <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-foreground selection:bg-[#0B2D23]/15 selection:text-[#0B2D23]">
-        <NavigationProgressBar />
-        {/* En-tête avec annonce sticky, logo Maison MÉRAF & catégories */}
-        <StorefrontHeader />
+    <LanguageProvider>
+      <WishlistProvider>
+        <CartProvider>
+          <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-foreground selection:bg-[#0B2D23]/15 selection:text-[#0B2D23]">
+            <NavigationProgressBar />
+            {/* En-tête avec annonce sticky, logo Maison MÉRAF & catégories */}
+            <StorefrontHeader />
 
-        {/* Contenu principal de la page storefront */}
-        <main className="flex-1">{children}</main>
+            {/* Contenu principal de la page storefront */}
+            <main className="flex-1">{children}</main>
 
-        {/* Pied de page avec réassurance COD Maroc */}
-        <StorefrontFooter />
+            {/* Pied de page avec réassurance COD Maroc */}
+            <StorefrontFooter />
 
-        {/* Panier Tiroir Glissant latéral */}
-        <CartDrawer />
+            {/* Panier Tiroir Glissant latéral */}
+            <CartDrawer />
 
-        {/* Bouton d'action flottant WhatsApp desktop */}
-        <FloatingWhatsApp />
+            {/* Tiroir Glissant des Favoris */}
+            <WishlistDrawer />
 
-        {/* Barre de navigation flottante glassmorphic mobile (exactement comme le mockup) */}
-        <MobileBottomDock />
-      </div>
-    </CartProvider>
+            {/* Bouton d'action flottant WhatsApp desktop */}
+            <FloatingWhatsApp />
+
+            {/* Barre de navigation flottante glassmorphic mobile (exactement comme le mockup) */}
+            <MobileBottomDock />
+          </div>
+        </CartProvider>
+      </WishlistProvider>
+    </LanguageProvider>
   );
 }

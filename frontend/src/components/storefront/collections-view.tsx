@@ -36,8 +36,9 @@ type PriceFilterOption = "all" | "under-200" | "200-250" | "above-250";
 export function CollectionsView({ initialProducts, categories }: CollectionsViewProps) {
   const searchParams = useSearchParams();
   const initialCategoryParam = searchParams.get("category");
+  const initialSearchParam = searchParams.get("search");
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(initialSearchParam || "");
   const [selectedCategory, setSelectedCategory] = useState<string>(
     initialCategoryParam || "all"
   );
@@ -46,12 +47,15 @@ export function CollectionsView({ initialProducts, categories }: CollectionsView
   const [inStockOnly, setInStockOnly] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  // Sync with searchParams if url changes (e.g. from header dropdown links)
+  // Sync with searchParams if url changes (e.g. from header dropdown links or search bar)
   useEffect(() => {
     if (initialCategoryParam) {
       setSelectedCategory(initialCategoryParam);
     }
-  }, [initialCategoryParam]);
+    if (initialSearchParam !== null) {
+      setSearchQuery(initialSearchParam);
+    }
+  }, [initialCategoryParam, initialSearchParam]);
 
   // Filter & Sort Logic
   const filteredProducts = useMemo(() => {

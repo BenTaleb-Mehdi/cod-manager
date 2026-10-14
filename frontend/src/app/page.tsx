@@ -73,7 +73,7 @@ export default function StorefrontHomePage() {
               <div className="absolute top-3.5 right-3.5 z-10">
                 <span className="bg-black/45 backdrop-blur-md border border-[#C5A880]/40 rounded-full px-2.5 py-1 text-[9px] font-bold tracking-wider text-[#DFCCA8] flex items-center gap-1 shadow-sm">
                   <Sparkles className="h-2.5 w-2.5 text-[#C5A880]" />
-                  OR 18K & ACIER 316L
+                  ACIER INOXYDABLE HAUTE QUALITÉ
                 </span>
               </div>
 
@@ -82,10 +82,10 @@ export default function StorefrontHomePage() {
                 <div className="flex items-end justify-between gap-3">
                   <div className="space-y-0.5">
                     <p className="text-[9px] tracking-[0.25em] font-bold text-[#C5A880] uppercase">
-                      MÉRAF JOAILLERIE
+                      MÉRAF ACCESSOIRES
                     </p>
                     <h2 className="font-serif text-base sm:text-lg font-light tracking-[0.16em] text-white uppercase leading-tight">
-                      THE ECLIPSE<br />COLLECTION
+                      BIJOUX INOXYDABLES<br />POUR FEMMES & FILLES
                     </h2>
                   </div>
 
@@ -130,13 +130,13 @@ export default function StorefrontHomePage() {
                   className="w-[145px] shrink-0 snap-start group rounded-2xl border border-[#E8E4DC] bg-white overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col"
                 >
                   {/* Square Image container with soft neutral background */}
-                  <div className="relative aspect-square w-full bg-[#F6F5F2] p-2.5 flex items-center justify-center">
+                  <div className="relative aspect-square w-full bg-[#F6F5F2] overflow-hidden">
                     <Image
                       src={product.images[0]}
                       alt={product.title}
                       fill
                       sizes="150px"
-                      className="object-contain p-2 group-hover:scale-108 transition-transform duration-300"
+                      className="object-cover group-hover:scale-108 transition-transform duration-300"
                     />
                     <div className="absolute top-2 right-2 h-6 w-6 rounded-full bg-white/95 backdrop-blur-xs border border-[#E8E2D8] flex items-center justify-center text-[#18221D]/70 shadow-2xs">
                       <Heart className="h-3 w-3" />
@@ -202,9 +202,9 @@ export default function StorefrontHomePage() {
               </h1>
 
               <p className="text-base text-[#18221D]/75 leading-relaxed font-sans max-w-lg">
-                Exquisite designs, ethically crafted to celebrate every moment that matters.
-                Créations en <strong>Acier Inoxydable 316L certifié</strong> et or 18k inaltérable.
-                Commandez en toute confiance avec le <strong>Paiement à la Livraison</strong>.
+                Des accessoires et bijoux tendance en <strong>Acier Inoxydable 316L haute qualité</strong> pour femmes et jeunes filles.
+                Finition dorée inaltérable, 100% résistant à l&apos;eau et qui ne noircit jamais.
+                Commandez en toute sérénité avec le <strong>Paiement à la Livraison après inspection</strong>.
               </p>
 
               {/* 3 Reassurance pills */}
@@ -571,10 +571,10 @@ export default function StorefrontHomePage() {
           <div className="rounded-2xl border border-[#E8E2D8] bg-[#FDFCF9] p-5 shadow-xs space-y-2">
             <h3 className="font-semibold text-sm sm:text-base text-[#0B2D23] flex items-center gap-2.5">
               <Sparkles className="h-4 w-4 text-[#C5A880] shrink-0" />
-              <span>Est-ce que l&apos;acier inoxydable 316L change de couleur ?</span>
+              <span>Est-ce du vrai or ? Et est-ce que le bijou change de couleur ?</span>
             </h3>
             <p className="text-xs sm:text-sm text-[#18221D]/75 leading-relaxed pl-6">
-              Non ! Notre acier chirurgical 316L avec placage or 18k sous vide est inaltérable. Il ne noircit jamais, ne rouille pas et résiste parfaitement aux parfums, crèmes et bains.
+              Nos accessoires sont conçus en <strong>Acier Inoxydable 316L de haute qualité avec finition dorée inaltérable</strong> (ce n&apos;est pas de l&apos;or massif, mais un acier inoxydable premium). L&apos;avantage ? Il <strong>ne noircit jamais, ne rouille pas et résiste à 100% à l&apos;eau</strong> (douche, mer, parfums) avec l&apos;éclat du vrai or à un prix accessible pour femmes et filles !
             </p>
           </div>
         </div>

@@ -5,42 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Grid, Heart, ShoppingBag, MessageCircle } from "lucide-react";
 import { useCart } from "@/context/cart-context";
+import { useWishlist } from "@/context/wishlist-context";
+import { useLanguage } from "@/context/language-context";
 import { buildWhatsAppOrderLink } from "@/lib/storefront-data";
 
 export function MobileBottomDock() {
   const pathname = usePathname();
   const { totalItems, openCart } = useCart();
-  const [wishlistCount, setWishlistCount] = useState(0);
-
-  // Sync wishlist count from localStorage
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("meraf_wishlist");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          setWishlistCount(parsed.length);
-        }
-      }
-    } catch {
-      // ignore
-    }
-
-    const handleWishlistUpdate = () => {
-      try {
-        const saved = localStorage.getItem("meraf_wishlist");
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed)) setWishlistCount(parsed.length);
-        }
-      } catch {
-        // ignore
-      }
-    };
-
-    window.addEventListener("wishlist_updated", handleWishlistUpdate);
-    return () => window.removeEventListener("wishlist_updated", handleWishlistUpdate);
-  }, []);
+  const { wishlistCount } = useWishlist();
+  const { isArabic } = useLanguage();
 
   const whatsappUrl = buildWhatsAppOrderLink({});
 
@@ -65,34 +38,34 @@ export function MobileBottomDock() {
         {/* 1. Home */}
         <Link
           href="/"
-          className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2.5 rounded-full transition-all ${
+          className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full transition-all ${
             pathname === "/"
               ? "text-[#C5A880] font-semibold scale-105"
               : "text-white/70 hover:text-white"
           }`}
         >
           <Home className="h-4 w-4" />
-          <span className="text-[9px] tracking-wide">Accueil</span>
+          <span className="text-[8.5px] tracking-tight">{isArabic ? "الرئيسية" : "Accueil"}</span>
         </Link>
 
         {/* 2. Collections / Categories */}
         <Link
           href="/collections"
-          className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2.5 rounded-full transition-all ${
+          className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full transition-all ${
             pathname.startsWith("/collections")
               ? "text-[#C5A880] font-semibold scale-105"
               : "text-white/70 hover:text-white"
           }`}
         >
           <Grid className="h-4 w-4" />
-          <span className="text-[9px] tracking-wide">Catégories</span>
+          <span className="text-[8.5px] tracking-tight">{isArabic ? "الأصناف" : "Catégories"}</span>
         </Link>
 
         {/* 3. Wishlist / Favoris */}
         <Link
-          href="/collections?wishlist=true"
-          className={`relative flex flex-col items-center justify-center gap-0.5 py-1 px-2.5 rounded-full transition-all ${
-            pathname.includes("wishlist")
+          href="/favoris"
+          className={`relative flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full transition-all ${
+            pathname.startsWith("/favoris") || pathname.startsWith("/favorites")
               ? "text-[#C5A880] font-semibold scale-105"
               : "text-white/70 hover:text-white"
           }`}
@@ -105,14 +78,14 @@ export function MobileBottomDock() {
               </span>
             )}
           </div>
-          <span className="text-[9px] tracking-wide">Favoris</span>
+          <span className="text-[8.5px] tracking-tight">{isArabic ? "المفضلة" : "Favoris"}</span>
         </Link>
 
-        {/* 4. Cart (opens cart drawer) */}
+        {/* 4. Cart / Commandes (opens cart drawer) */}
         <button
           type="button"
           onClick={openCart}
-          className="relative flex flex-col items-center justify-center gap-0.5 py-1 px-2.5 rounded-full text-white/70 hover:text-white transition-all cursor-pointer"
+          className="relative flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full text-white/70 hover:text-white transition-all cursor-pointer"
         >
           <div className="relative">
             <ShoppingBag className="h-4 w-4" />
@@ -122,7 +95,9 @@ export function MobileBottomDock() {
               </span>
             )}
           </div>
-          <span className="text-[9px] tracking-wide">Panier</span>
+          <span className="text-[8.5px] tracking-tight font-medium text-[#C5A880]">
+            {isArabic ? "طلبات" : "Commandes | طلبات"}
+          </span>
         </button>
 
         {/* 5. WhatsApp Advisor */}
@@ -130,13 +105,13 @@ export function MobileBottomDock() {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col items-center justify-center gap-0.5 py-1 px-2.5 rounded-full text-white/70 hover:text-[#C5A880] transition-all"
+          className="flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full text-white/70 hover:text-[#C5A880] transition-all"
         >
           <div className="relative">
             <MessageCircle className="h-4 w-4 text-emerald-400" />
             <span className="absolute -top-0.5 -right-1 h-1.5 w-1.5 rounded-full bg-emerald-400 ring-2 ring-[#111A16]" />
           </div>
-          <span className="text-[9px] tracking-wide">WhatsApp</span>
+          <span className="text-[8.5px] tracking-tight">WhatsApp</span>
         </a>
       </div>
     </nav>

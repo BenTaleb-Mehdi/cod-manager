@@ -5,9 +5,9 @@ import { getProducts, getCategories } from "@/lib/storefront-data";
 import { CollectionsView } from "@/components/storefront/collections-view";
 
 export const metadata = {
-  title: "Collections & Bijoux | Maison MÉRAF",
+  title: "Accessoires & Bijoux Inox | Maison MÉRAF",
   description:
-    "Explorez toutes nos collections joaillières en or 18k et acier chirurgical 316L inaltérable. Colliers, bagues, bracelets et boucles d'oreilles avec livraison gratuite et paiement à la livraison au Maroc.",
+    "Explorez toutes nos collections d'accessoires et bijoux en acier inoxydable 316L haute qualité pour femmes et filles. Colliers, bagues, bracelets et boucles d'oreilles inaltérables avec livraison gratuite et paiement à la livraison au Maroc.",
 };
 
 export default function CollectionsPage() {
@@ -39,7 +39,7 @@ export default function CollectionsPage() {
               </nav>
 
               <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] text-[#C5A880] uppercase block">
-                MAISON MÉRAF • HAUTE JOAILLERIE
+                MAISON MÉRAF • ACCESSOIRES HAUTE QUALITÉ
               </span>
 
               <h1 className="font-serif text-3xl sm:text-5xl font-normal text-[#0B2D23] tracking-tight leading-tight">
@@ -47,16 +47,16 @@ export default function CollectionsPage() {
               </h1>
 
               <p className="text-xs sm:text-sm text-[#18221D]/75 leading-relaxed font-sans">
-                Découvrez nos créations iconiques façonnées en <strong>acier chirurgical 316L certifié</strong> et parées d&apos;<strong>or 18 carats inaltérable</strong>. Commandez en toute sérénité avec le <strong>Paiement à la Livraison</strong> après inspection du colis.
+                Découvrez nos accessoires et bijoux façonnés en <strong>acier inoxydable 316L haute qualité</strong> avec <strong>finition dorée inaltérable</strong> (ne noircit pas, 100% résistant à l&apos;eau et aux parfums). Commandez en toute sérénité avec le <strong>Paiement à la Livraison</strong> après inspection du colis.
               </p>
 
               {/* 3 Value badges */}
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1 text-[11px] text-[#0B2D23] font-medium">
                 <span className="bg-[#FAF7F2] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
-                  ✦ Or 18K Inaltérable
+                  ✦ Inox 316L Inaltérable
                 </span>
                 <span className="bg-[#FAF7F2] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
-                  ✦ Livraison Gratuite 24/48h
+                  ✦ 100% Waterproof (Ne noircit pas)
                 </span>
                 <span className="bg-[#FAF7F2] border border-[#E8E2D8] px-3 py-1.5 rounded-full">
                   ✦ Inspection avant paiement
