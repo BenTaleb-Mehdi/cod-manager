@@ -124,7 +124,7 @@ export function StorefrontHeader() {
               </span>
               <span className="flex items-center gap-2">
                 <span className="text-[#C5A880]">✦</span>
-                <span>OR 18K & ACIER INOXYDABLE 316L</span>
+                <span>ACIER INOXYDABLE HAUTE QUALITÉ</span>
               </span>
               <span className="flex items-center gap-2">
                 <span className="text-[#C5A880]">✦</span>
@@ -148,7 +148,7 @@ export function StorefrontHeader() {
               </span>
               <span className="flex items-center gap-2">
                 <span className="text-[#C5A880]">✦</span>
-                <span>OR 18K & ACIER INOXYDABLE 316L</span>
+                <span>ACIER INOXYDABLE HAUTE QUALITÉ</span>
               </span>
               <span className="flex items-center gap-2">
                 <span className="text-[#C5A880]">✦</span>
@@ -203,8 +203,8 @@ export function StorefrontHeader() {
                     {/* Left: 4 Categories */}
                     <div className="col-span-7 space-y-2 border-r border-[#E8E2D8] pr-4">
                       <div className="text-[10px] font-bold uppercase tracking-widest text-[#9F8259] mb-1 flex items-center justify-between">
-                        <span>Nos Catégories Joaillières</span>
-                        <span className="text-[9px] text-[#0B2D23]/50">Or 18K • 316L</span>
+                        <span>Nos Catégories</span>
+                        <span className="text-[9px] text-[#0B2D23]/50">Inox 316L Haute Qualité</span>
                       </div>
 
                       {categories.map((cat) => {
@@ -472,8 +472,8 @@ export function StorefrontHeader() {
           {/* Categories Grid */}
           <div className="space-y-2">
             <div className="text-[10px] uppercase tracking-widest text-[#9F8259] font-bold flex items-center justify-between">
-              <span>Nos Bijoux</span>
-              <span className="text-[9px] text-[#0B2D23]/60 font-sans">Or 18K & Acier 316L</span>
+              <span>Nos Accessoires</span>
+              <span className="text-[9px] text-[#0B2D23]/60 font-sans">Inox 316L Haute Qualité</span>
             </div>
 
             <div className="grid grid-cols-1 gap-1.5">

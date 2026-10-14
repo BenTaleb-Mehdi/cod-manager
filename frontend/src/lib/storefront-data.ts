@@ -4,8 +4,8 @@ import { Product, MoroccoCity } from "@/types/storefront";
 
 export const BRAND_PHONE_WHATSAPP = "212718904631";
 export const BRAND_NAME = "MÉRAF";
-export const BRAND_SUBTITLE = "JEWELRY";
-export const BRAND_SLOGAN = "Exquisite designs, ethically crafted to celebrate every moment that matters.";
+export const BRAND_SUBTITLE = "ACCESSORIES";
+export const BRAND_SLOGAN = "Accessoires & bijoux en acier inoxydable haute qualité pour femmes et filles. Inaltérables, waterproof et ne noircissent jamais.";
 
 // Réseaux Sociaux & Coordonnées Storefront (Modifiables facilement)
 export const BRAND_INSTAGRAM = "https://www.instagram.com/meraf.ma";

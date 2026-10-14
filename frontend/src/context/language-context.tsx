@@ -14,8 +14,8 @@ interface LanguageContextType {
 
 const translations: Record<Language, Record<string, string>> = {
   fr: {
-    brand_subtitle: "HAUTE JOAILLERIE & CRÉATIONS INALTÉRABLES",
-    announcement: "LIVRAISON GRATUITE PARTOUT AU MAROC • PAIEMENT À LA LIVRAISON (COD)",
+    brand_subtitle: "ACCESSOIRES & BIJOUX EN ACIER INOXYDABLE HAUTE QUALITÉ",
+    announcement: "LIVRAISON GRATUITE PARTOUT AU MAROC • PAIEMENT À LA LIVRAISON",
     announcement_sub: "الدفع بعد معاينة وفتح الطرد",
     nav_collections: "COLLECTIONS",
     nav_journal: "LE JOURNAL",
@@ -29,8 +29,8 @@ const translations: Record<Language, Record<string, string>> = {
     action_add_cart: "Ajouter au Panier | إلى السلة",
     action_view_cart: "Voir mon panier",
     quick_checkout: "Commander en 1 Clic",
-    search_placeholder: "Rechercher un bijou (émeraude, bague solitaire, jonc, or 18k)...",
-    search_title: "Rechercher une création joaillière",
+    search_placeholder: "Rechercher un accessoire (collier émeraude, bague ajustable, jonc inox)...",
+    search_title: "Rechercher un accessoire ou bijou",
     search_popular: "Recherches populaires :",
     search_no_results: "Aucun bijou ne correspond à votre recherche.",
     wishlist_title: "Mes Favoris",
@@ -49,9 +49,9 @@ const translations: Record<Language, Record<string, string>> = {
     price_currency: "DH",
   },
   ar: {
-    brand_subtitle: "مجوهرات فاخرة وإبداعات لا يتغير لونها",
+    brand_subtitle: "إكسسوارات ومجوهرات إينوكس عالية الجودة للنساء والبنات",
     announcement: "توصيل مجاني لجميع مدن المغرب • الدفع عند الاستلام بعد معاينة الطرد",
-    announcement_sub: "افتحي الطرد وعايني مجوهراتك قبل الدفع للموزع",
+    announcement_sub: "افتحي الطرد وعايني إكسسواراتك قبل الدفع للموزع",
     nav_collections: "التشكيلات",
     nav_journal: "المجلة",
     nav_contact: "اتصل بنا",

@@ -74,7 +74,7 @@ export function TopSearchBar({ isOpen, onClose }: TopSearchBarProps) {
 
   const trendingTags = [
     { label: "Colliers Émeraude", ar: "قلائد زمرد" },
-    { label: "Bagues Or 18K", ar: "خواتم ذهب 18K" },
+    { label: "Bagues Ajustables", ar: "خواتم قابلة للتعديل" },
     { label: "Bracelets Jonc", ar: "أساور صلبة" },
     { label: "Boucles d'oreilles", ar: "أقراط" },
     { label: "Acier 316L", ar: "ستانلس ستيل 316L" },
