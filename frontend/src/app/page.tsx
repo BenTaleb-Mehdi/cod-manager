@@ -130,13 +130,13 @@ export default function StorefrontHomePage() {
                   className="w-[145px] shrink-0 snap-start group rounded-2xl border border-[#E8E4DC] bg-white overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col"
                 >
                   {/* Square Image container with soft neutral background */}
-                  <div className="relative aspect-square w-full bg-[#F6F5F2] p-2.5 flex items-center justify-center">
+                  <div className="relative aspect-square w-full bg-[#F6F5F2] overflow-hidden">
                     <Image
                       src={product.images[0]}
                       alt={product.title}
                       fill
                       sizes="150px"
-                      className="object-contain p-2 group-hover:scale-108 transition-transform duration-300"
+                      className="object-cover group-hover:scale-108 transition-transform duration-300"
                     />
                     <div className="absolute top-2 right-2 h-6 w-6 rounded-full bg-white/95 backdrop-blur-xs border border-[#E8E2D8] flex items-center justify-center text-[#18221D]/70 shadow-2xs">
                       <Heart className="h-3 w-3" />

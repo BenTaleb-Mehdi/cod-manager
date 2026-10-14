@@ -26,6 +26,9 @@ import {
 } from "lucide-react";
 import { BRAND_NAME, BRAND_SUBTITLE, buildWhatsAppOrderLink, BRAND_PHONE_WHATSAPP, BRAND_SOCIALS, BRAND_GMAIL } from "@/lib/storefront-data";
 import { useCart } from "@/context/cart-context";
+import { useWishlist } from "@/context/wishlist-context";
+import { useLanguage } from "@/context/language-context";
+import { TopSearchBar } from "./top-search-bar";
 
 function XLogo({ className = "h-3.5 w-3.5" }: { className?: string }) {
   return (
@@ -37,7 +40,10 @@ function XLogo({ className = "h-3.5 w-3.5" }: { className?: string }) {
 
 export function StorefrontHeader() {
   const { openCart, totalItems } = useCart();
+  const { wishlistCount, openWishlist } = useWishlist();
+  const { language, toggleLanguage, isArabic } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
 
   // Close mobile drawer on escape
@@ -99,29 +105,68 @@ export function StorefrontHeader() {
   return (
     <>
       <header className="sticky top-0 z-40 w-full bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#E8E2D8] transition-all">
-        {/* 1. Deep Emerald Green Announcement Bar */}
-        <div className="bg-[#0B2D23] text-[#FAF7F2] py-2 px-4 text-[11px] sm:text-xs tracking-wider text-center font-medium">
-          <div className="container mx-auto flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
-            <span className="text-[#C5A880]">✦</span>
-            <span className="uppercase tracking-widest text-[10px] sm:text-[11px]">
-              LIVRAISON GRATUITE PARTOUT AU MAROC • PAIEMENT À LA LIVRAISON (COD)
-            </span>
-            <span className="text-[#C5A880]">✦</span>
-            <span className="hidden md:inline text-[#DFCCA8]/70 text-[10px] font-sans">
-              (الدفع بعد معاينة وفتح الطرد)
-            </span>
+        {/* 1. Deep Emerald Green Announcement Bar with Smooth Marquee Swipe to Right */}
+        <div className="bg-[#0B2D23] text-[#FAF7F2] py-2 overflow-hidden border-b border-[#C5A880]/20 select-none">
+          <div className="animate-marquee-right flex items-center gap-6 sm:gap-8 text-[10.5px] sm:text-[11px] tracking-widest uppercase font-medium">
+            {/* Set 1 */}
+            <div className="flex items-center gap-6 sm:gap-8 shrink-0">
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>LIVRAISON GRATUITE PARTOUT AU MAROC</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>PAIEMENT À LA LIVRAISON</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span className="font-sans text-[11px] text-[#DFCCA8]">(الدفع بعد معاينة وفتح الطرد)</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>OR 18K & ACIER INOXYDABLE 316L</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>EXPÉDITION EXPRESS 24/48H</span>
+              </span>
+            </div>
+
+            {/* Set 2 (Identical duplicate for seamless 60fps infinite loop) */}
+            <div className="flex items-center gap-6 sm:gap-8 shrink-0" aria-hidden="true">
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>LIVRAISON GRATUITE PARTOUT AU MAROC</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>PAIEMENT À LA LIVRAISON</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span className="font-sans text-[11px] text-[#DFCCA8]">(الدفع بعد معاينة وفتح الطرد)</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>OR 18K & ACIER INOXYDABLE 316L</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>EXPÉDITION EXPRESS 24/48H</span>
+              </span>
+            </div>
           </div>
         </div>
 
         {/* 2. Main Luxury Header */}
-        <div className="container mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+        <div className="container mx-auto px-3 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between gap-1.5 sm:gap-4">
           {/* Left: Mobile hamburger & Desktop Navigation Links */}
-          <div className="flex items-center gap-4 lg:w-1/3">
+          <div className="flex items-center gap-2 sm:gap-4 lg:w-1/3 shrink-0">
             {/* Mobile Hamburger Button with Smooth Icon Animation */}
             <button
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Ouvrir le menu de navigation"
-              className="lg:hidden p-2 rounded-xl text-[#0B2D23] hover:bg-[#F3EFEA] active:scale-95 transition-all"
+              className="lg:hidden p-1.5 sm:p-2 rounded-xl text-[#0B2D23] hover:bg-[#F3EFEA] active:scale-95 transition-all"
             >
               <Menu className="h-5 w-5" />
             </button>
@@ -266,58 +311,80 @@ export function StorefrontHeader() {
           </div>
 
           {/* Center: Brand Logo "MÉRAF JEWELRY" */}
-          <div className="flex justify-center items-center lg:w-1/3 text-center">
+          <div className="flex justify-center items-center lg:w-1/3 text-center shrink-0">
             <Link href="/" className="flex flex-col items-center group py-0.5">
-              <span className="font-serif text-2xl sm:text-3xl tracking-[0.28em] uppercase text-[#0B2D23] font-normal leading-none group-hover:opacity-90 transition-opacity">
+              <span className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.24em] sm:tracking-[0.28em] uppercase text-[#0B2D23] font-normal leading-none group-hover:opacity-90 transition-opacity">
                 {BRAND_NAME}
               </span>
-              <span className="text-[9px] tracking-[0.35em] text-[#9F8259] font-medium uppercase mt-1">
+              <span className="text-[8px] sm:text-[9px] tracking-[0.3em] sm:tracking-[0.35em] text-[#9F8259] font-medium uppercase mt-0.5 sm:mt-1">
                 {BRAND_SUBTITLE}
               </span>
             </Link>
           </div>
 
           {/* Right: Search, Account, Wishlist, Cart Actions */}
-          <div className="flex items-center justify-end gap-3 sm:gap-5 lg:w-1/3 text-[#18221D]/80">
-            {/* Search Trigger */}
-            <Link
-              href="/collections"
-              className="hidden sm:flex items-center gap-1.5 text-[11px] font-semibold tracking-wider uppercase hover:text-[#0B2D23] transition-colors"
-              title="Rechercher un bijou"
+          <div className="flex items-center justify-end gap-1 sm:gap-3 lg:w-1/3 text-[#18221D]/80 shrink-0">
+            {/* Search Trigger (Smooth Top Search Bar) */}
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider uppercase hover:text-[#0B2D23] p-1.5 sm:px-2 rounded-lg hover:bg-black/5 transition-all cursor-pointer"
+              title="Rechercher un bijou / بحث"
+              aria-label="Rechercher un bijou"
             >
-              <Search className="h-3.5 w-3.5 text-[#18221D]" />
+              <Search className="h-4 w-4 sm:h-3.5 sm:w-3.5 text-[#18221D]" />
               <span className="hidden xl:inline">RECHERCHE</span>
-            </Link>
+            </button>
+
+            {/* Language Switcher (FR / AR) */}
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="flex items-center gap-1 px-2 py-0.5 sm:py-1 rounded-full border border-[#E8E2D8] hover:border-[#C5A880] bg-white text-[9.5px] sm:text-[10px] font-bold tracking-wider text-[#0B2D23] shadow-2xs hover:bg-[#FAF7F2] transition-all cursor-pointer shrink-0"
+              title="Changer la langue / تبديل اللغة"
+            >
+              <span className={language === "fr" ? "text-[#0B2D23]" : "text-[#18221D]/40"}>FR</span>
+              <span className="text-[#C5A880]">|</span>
+              <span className={language === "ar" ? "text-[#0B2D23] font-medium" : "text-[#18221D]/40"}>عربي</span>
+            </button>
 
             {/* WhatsApp Concierge */}
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-1.5 text-[11px] font-semibold tracking-wider uppercase hover:text-[#0B2D23] transition-colors"
+              className="hidden lg:flex items-center gap-1.5 text-[11px] font-semibold tracking-wider uppercase hover:text-[#0B2D23] transition-colors"
               title="Conseillère joaillère disponible sur WhatsApp"
             >
               <User className="h-3.5 w-3.5 text-[#18221D]" />
               <span className="hidden xl:inline">CONSEILLÈRE</span>
             </a>
 
-            {/* Quick Wishlist Link */}
-            <Link
-              href="/collections"
-              className="hidden sm:flex items-center gap-1 text-[11px] font-semibold tracking-wider uppercase hover:text-[#0B2D23] transition-colors"
-              title="Favoris"
+            {/* Quick Wishlist Drawer / Link Trigger (Desktop & Tablet only - Mobile already has it in the bottom dock) */}
+            <button
+              type="button"
+              onClick={openWishlist}
+              className="hidden sm:flex relative items-center gap-1 text-[11px] font-semibold tracking-wider uppercase hover:text-[#0B2D23] p-1.5 sm:px-2 rounded-lg hover:bg-black/5 transition-all cursor-pointer"
+              title="Mes Favoris | المفضلة"
+              aria-label="Mes Favoris"
             >
-              <Heart className="h-3.5 w-3.5 text-[#18221D]" />
-            </Link>
+              <Heart className="h-4 w-4 sm:h-3.5 sm:w-3.5 text-[#18221D]" />
+              <span className="hidden xl:inline">FAVORIS</span>
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-[#C5A880] text-[#0B2D23] text-[8.5px] font-bold flex items-center justify-center shadow-xs">
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
 
-            {/* Cart / Direct Checkout Trigger */}
+            {/* Cart / Direct Checkout Trigger (Hidden on mobile, visible on desktop/tablet) */}
             <button
               onClick={openCart}
               aria-label={`Ouvrir le panier (${totalItems} articles)`}
-              className="flex items-center gap-2 rounded-full bg-[#0B2D23] hover:bg-[#154738] text-[#FAF7F2] px-3.5 py-1.5 text-[11px] font-semibold tracking-wider uppercase transition-all shadow-sm active:scale-95 cursor-pointer relative"
+              className="hidden sm:flex items-center gap-1.5 sm:gap-2 rounded-full bg-[#0B2D23] hover:bg-[#154738] text-[#FAF7F2] px-2.5 sm:px-3.5 py-1.5 text-[10px] sm:text-[11px] font-semibold tracking-wider uppercase transition-all shadow-sm active:scale-95 cursor-pointer relative shrink-0"
             >
               <ShoppingBag className="h-3.5 w-3.5 text-[#C5A880]" />
-              <span className="hidden sm:inline">PANIER</span>
+              <span className="hidden sm:inline">PANIER | طلبات</span>
               <span className="text-[10px] bg-[#C5A880] text-[#0B2D23] px-1.5 py-0.2 rounded-full font-bold">
                 {totalItems}
               </span>
@@ -325,6 +392,9 @@ export function StorefrontHeader() {
           </div>
         </div>
       </header>
+
+      {/* Smooth Top Search Bar Dropdown */}
+      <TopSearchBar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       {/* 3. Modern Mobile Slide-in Drawer (Translating from LEFT) */}
       {/* Dark backdrop overlay */}
@@ -368,14 +438,23 @@ export function StorefrontHeader() {
         {/* Scrollable Navigation Body */}
         <div className="flex-1 overflow-y-auto p-5 space-y-5">
           {/* Main Primary Action & Cart Quick Access */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-1.5">
             <Link
               href="/collections"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-1.5 rounded-xl bg-[#0B2D23] text-[#FAF7F2] p-3 text-xs font-bold uppercase tracking-wider shadow-sm active:scale-98 transition-all text-center"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-[#0B2D23] text-[#FAF7F2] p-2.5 text-[10px] font-bold uppercase tracking-wider shadow-sm active:scale-98 transition-all text-center"
             >
               <Sparkles className="h-3.5 w-3.5 text-[#C5A880]" />
               <span>Boutique</span>
+            </Link>
+
+            <Link
+              href="/favoris"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex flex-col items-center justify-center gap-1 rounded-xl border border-[#E8E2D8] bg-white text-[#0B2D23] p-2.5 text-[10px] font-bold uppercase tracking-wider shadow-sm active:scale-98 transition-all text-center"
+            >
+              <Heart className="h-3.5 w-3.5 text-[#C5A880]" />
+              <span>Favoris ({wishlistCount})</span>
             </Link>
 
             <button
@@ -383,7 +462,7 @@ export function StorefrontHeader() {
                 setMobileMenuOpen(false);
                 openCart();
               }}
-              className="flex items-center justify-center gap-1.5 rounded-xl border border-[#0B2D23] bg-white text-[#0B2D23] p-3 text-xs font-bold uppercase tracking-wider shadow-sm active:scale-98 transition-all text-center cursor-pointer"
+              className="flex flex-col items-center justify-center gap-1 rounded-xl border border-[#0B2D23] bg-white text-[#0B2D23] p-2.5 text-[10px] font-bold uppercase tracking-wider shadow-sm active:scale-98 transition-all text-center cursor-pointer"
             >
               <ShoppingBag className="h-3.5 w-3.5 text-[#C5A880]" />
               <span>Panier ({totalItems})</span>

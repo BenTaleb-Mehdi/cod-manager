@@ -7,6 +7,8 @@ import { Star, Truck, Heart, ShoppingBag, Zap } from "lucide-react";
 import { Product } from "@/types/storefront";
 import { QuickCheckoutModal } from "./quick-checkout-modal";
 import { useCart } from "@/context/cart-context";
+import { useWishlist } from "@/context/wishlist-context";
+import { useLanguage } from "@/context/language-context";
 
 interface ProductCardProps {
   product: Product;
@@ -14,43 +16,16 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const { isArabic } = useLanguage();
   const [quickCheckoutOpen, setQuickCheckoutOpen] = useState(false);
 
-  // Sync wishlist state with localStorage
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("meraf_wishlist");
-      if (saved) {
-        const list = JSON.parse(saved);
-        if (Array.isArray(list) && list.includes(product.id)) {
-          setIsWishlisted(true);
-        }
-      }
-    } catch {
-      // ignore
-    }
-  }, [product.id]);
+  const isWishlisted = isInWishlist(product.id);
 
-  const toggleWishlist = (e: React.MouseEvent) => {
+  const handleToggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    try {
-      const saved = localStorage.getItem("meraf_wishlist");
-      let list: string[] = saved ? JSON.parse(saved) : [];
-      if (!Array.isArray(list)) list = [];
-      if (list.includes(product.id)) {
-        list = list.filter((id) => id !== product.id);
-        setIsWishlisted(false);
-      } else {
-        list.push(product.id);
-        setIsWishlisted(true);
-      }
-      localStorage.setItem("meraf_wishlist", JSON.stringify(list));
-      window.dispatchEvent(new Event("wishlist_updated"));
-    } catch {
-      // ignore
-    }
+    toggleWishlist(product.id);
   };
 
   const discountPercent = Math.round(
@@ -62,19 +37,19 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="group relative rounded-[20px] sm:rounded-2xl border border-[#E8E4DC] bg-white hover:bg-[#FAF7F2]/40 overflow-hidden shadow-xs hover:shadow-lg hover:border-[#C5A880]/60 transition-all duration-300 flex flex-col">
         {/* Zone Image */}
         <div className="relative aspect-square w-full overflow-hidden bg-[#F6F5F2]">
-          <Link href={`/product/${product.slug}`} className="relative block w-full h-full p-2.5 sm:p-3">
+          <Link href={`/product/${product.slug}`} className="relative block w-full h-full">
             <Image
               src={product.images[0]}
               alt={product.title}
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-contain p-2 sm:p-3 group-hover:scale-108 transition-transform duration-500"
+              className="object-cover group-hover:scale-108 transition-transform duration-500"
             />
           </Link>
 
           {/* Heart Wishlist Icon (Top Right - Matching Reference Mockup) */}
           <button
-            onClick={toggleWishlist}
+            onClick={handleToggleWishlist}
             aria-label="Ajouter aux favoris"
             className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-white/95 backdrop-blur-xs border border-[#E8E2D8] text-[#18221D] hover:text-[#0B2D23] active:scale-90 transition-all shadow-2xs flex items-center justify-center cursor-pointer"
           >
@@ -145,18 +120,18 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
 
           {/* Dual Action Buttons: Commander (1-Clic COD) + Ajouter au Panier */}
-          <div className="pt-1 flex items-center gap-1.5">
+          <div className="pt-1 flex items-center gap-1.5 w-full">
             <button
               type="button"
               onClick={(e) => {
                 e.preventDefault();
                 setQuickCheckoutOpen(true);
               }}
-              className="flex-1 flex items-center justify-center gap-1 rounded-xl bg-[#0B2D23] hover:bg-[#154738] text-[#FAF7F2] font-semibold text-[10px] sm:text-xs tracking-wider uppercase py-2 px-2 shadow-xs active:scale-95 transition-all cursor-pointer"
+              className="flex-1 min-w-0 flex items-center justify-center gap-1.5 rounded-xl bg-[#0B2D23] hover:bg-[#154738] text-[#FAF7F2] font-semibold text-[10.5px] sm:text-xs tracking-wider uppercase py-2 px-2 shadow-xs active:scale-95 transition-all cursor-pointer"
               title="Commander directement en 1-clic avec paiement à la livraison"
             >
-              <Zap className="h-3 w-3 text-[#C5A880]" />
-              <span>Commander</span>
+              <Zap className="h-3 w-3 text-[#C5A880] shrink-0" />
+              <span className="truncate">{isArabic ? "طلب الآن" : "Commander"}</span>
             </button>
 
             <button
@@ -165,8 +140,8 @@ export function ProductCard({ product }: ProductCardProps) {
                 e.preventDefault();
                 addToCart(product);
               }}
-              className="flex items-center justify-center rounded-xl border border-[#0B2D23]/30 bg-white hover:bg-[#FAF7F2] text-[#0B2D23] p-2 text-xs shadow-2xs active:scale-90 transition-all cursor-pointer shrink-0"
-              title="Ajouter au panier"
+              className="h-8 w-8 sm:h-8.5 sm:w-8.5 flex items-center justify-center rounded-xl border border-[#0B2D23]/30 bg-white hover:bg-[#FAF7F2] text-[#0B2D23] shadow-2xs active:scale-90 transition-all cursor-pointer shrink-0"
+              title={isArabic ? "أضف إلى السلة" : "Ajouter au panier"}
               aria-label="Ajouter au panier"
             >
               <ShoppingBag className="h-3.5 w-3.5 text-[#0B2D23]" />
