@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Grid, Heart, ShoppingBag, MessageCircle } from "lucide-react";
@@ -32,86 +32,86 @@ export function MobileBottomDock() {
   return (
     <nav
       aria-label="Navigation Mobile"
-      className="block md:hidden fixed bottom-4 inset-x-0 mx-auto w-[92%] max-w-[370px] z-40 pointer-events-auto"
+      className="block md:hidden fixed bottom-4 inset-x-0 mx-auto w-[90%] max-w-[360px] z-50 pointer-events-auto"
     >
-      <div className="relative rounded-full bg-[#111A16]/90 backdrop-blur-xl border border-white/20 shadow-2xl py-2 px-3 flex items-center justify-around text-white/70">
+      {/* 
+        White Frosted Glass (Effet Verre Dépoli Blanc):
+        1. bg-white/70 (Transparence blanche équilibrée)
+        2. backdrop-blur-2xl + backdrop-saturate-150 (Flou doux et lumineux)
+        3. border border-white/60 (Bordure éclatante effet verre taillé)
+        4. shadow-[0_8px_30px_rgba(0,0,0,0.08)] (Ombre douce naturelle)
+      */}
+      <div className="relative rounded-full bg-white/70 backdrop-blur-2xl backdrop-saturate-150 border border-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.08)] py-2.5 px-5 flex items-center justify-between text-[#18221D]/70">
+        
         {/* 1. Home */}
         <Link
           href="/"
-          className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full transition-all ${
+          aria-label="Accueil"
+          className={`p-1.5 rounded-full transition-all duration-300 ${
             pathname === "/"
-              ? "text-[#C5A880] font-semibold scale-105"
-              : "text-white/70 hover:text-white"
+              ? "text-[#0A261E] scale-110"
+              : "text-[#18221D]/60 hover:text-[#0A261E]"
           }`}
         >
-          <Home className="h-4 w-4" />
-          <span className="text-[8.5px] tracking-tight">{isArabic ? "الرئيسية" : "Accueil"}</span>
+          <Home className="h-5 w-5" />
         </Link>
 
         {/* 2. Collections / Categories */}
         <Link
           href="/collections"
-          className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full transition-all ${
+          aria-label="Catégories"
+          className={`p-1.5 rounded-full transition-all duration-300 ${
             pathname.startsWith("/collections")
-              ? "text-[#C5A880] font-semibold scale-105"
-              : "text-white/70 hover:text-white"
+              ? "text-[#0A261E] scale-110"
+              : "text-[#18221D]/60 hover:text-[#0A261E]"
           }`}
         >
-          <Grid className="h-4 w-4" />
-          <span className="text-[8.5px] tracking-tight">{isArabic ? "الأصناف" : "Catégories"}</span>
+          <Grid className="h-5 w-5" />
         </Link>
 
         {/* 3. Wishlist / Favoris */}
         <Link
           href="/favoris"
-          className={`relative flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full transition-all ${
+          aria-label="Favoris"
+          className={`relative p-1.5 rounded-full transition-all duration-300 ${
             pathname.startsWith("/favoris") || pathname.startsWith("/favorites")
-              ? "text-[#C5A880] font-semibold scale-105"
-              : "text-white/70 hover:text-white"
+              ? "text-[#0A261E] scale-110"
+              : "text-[#18221D]/60 hover:text-[#0A261E]"
           }`}
         >
-          <div className="relative">
-            <Heart className="h-4 w-4" />
-            {wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-2 h-3.5 w-3.5 rounded-full bg-[#C5A880] text-[#0B2D23] font-bold text-[8px] flex items-center justify-center shadow-xs">
-                {wishlistCount}
-              </span>
-            )}
-          </div>
-          <span className="text-[8.5px] tracking-tight">{isArabic ? "المفضلة" : "Favoris"}</span>
+          <Heart className="h-5 w-5" />
+          {wishlistCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-[#0A261E] text-white font-bold text-[8.5px] flex items-center justify-center shadow-xs">
+              {wishlistCount}
+            </span>
+          )}
         </Link>
 
-        {/* 4. Cart / Commandes (opens cart drawer) */}
+        {/* 4. Cart / Panier */}
         <button
           type="button"
           onClick={openCart}
-          className="relative flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full text-white/70 hover:text-white transition-all cursor-pointer"
+          aria-label="Panier"
+          className="relative p-1.5 rounded-full text-[#18221D]/60 hover:text-[#0A261E] transition-all duration-300 cursor-pointer"
         >
-          <div className="relative">
-            <ShoppingBag className="h-4 w-4" />
-            {totalItems > 0 && (
-              <span className="absolute -top-1 -right-2 h-3.5 w-3.5 rounded-full bg-emerald-400 text-[#0B2D23] font-bold text-[8px] flex items-center justify-center shadow-xs animate-pulse">
-                {totalItems}
-              </span>
-            )}
-          </div>
-          <span className="text-[8.5px] tracking-tight font-medium text-[#C5A880]">
-            {isArabic ? "طلبات" : "Commandes | طلبات"}
-          </span>
+          <ShoppingBag className="h-5 w-5" />
+          {totalItems > 0 && (
+            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-[#C5A880] text-[#0A261E] font-bold text-[9px] flex items-center justify-center shadow-xs">
+              {totalItems}
+            </span>
+          )}
         </button>
 
-        {/* 5. WhatsApp Advisor */}
+        {/* 5. WhatsApp Concierge */}
         <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-full text-white/70 hover:text-[#C5A880] transition-all"
+          aria-label="WhatsApp"
+          className="relative p-1.5 rounded-full text-[#0A261E] hover:text-[#25D366] transition-all duration-300"
         >
-          <div className="relative">
-            <MessageCircle className="h-4 w-4 text-emerald-400" />
-            <span className="absolute -top-0.5 -right-1 h-1.5 w-1.5 rounded-full bg-emerald-400 ring-2 ring-[#111A16]" />
-          </div>
-          <span className="text-[8.5px] tracking-tight">WhatsApp</span>
+          <MessageCircle className="h-5 w-5" />
+          <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-[#25D366] ring-2 ring-white" />
         </a>
       </div>
     </nav>
