@@ -48,17 +48,21 @@ export function ReviewsSection({
 }: ReviewsSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const items = (reviews && reviews.length > 0 ? reviews : DEFAULT_REVIEWS).map((rev, idx) => ({
-    id: rev.id || `rev-${idx}`,
-    author: rev.author,
-    city: rev.city || "Maroc",
-    comment: rev.comment,
-    rating: rev.rating || 5,
-    avatar:
-      (rev as { avatar?: string }).avatar ||
-      rev.image ||
-      DEFAULT_REVIEWS[idx % DEFAULT_REVIEWS.length].avatar,
-  }));
+  const items = (reviews && reviews.length > 0 ? reviews : DEFAULT_REVIEWS).map((rev, idx) => {
+    const avatar =
+      ("avatar" in rev && typeof rev.avatar === "string" && rev.avatar) ||
+      ("image" in rev && typeof rev.image === "string" && rev.image) ||
+      DEFAULT_REVIEWS[idx % DEFAULT_REVIEWS.length].avatar;
+
+    return {
+      id: rev.id || `rev-${idx}`,
+      author: rev.author,
+      city: rev.city || "Maroc",
+      comment: rev.comment,
+      rating: rev.rating || 5,
+      avatar,
+    };
+  });
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
