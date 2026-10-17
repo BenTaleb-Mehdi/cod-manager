@@ -7,23 +7,15 @@ import { useCart } from "@/context/cart-context";
 
 interface StickyMobileCtaProps {
   product: Product;
+  onOpenOrder?: () => void;
 }
 
-export function StickyMobileCta({ product }: StickyMobileCtaProps) {
+export function StickyMobileCta({ product, onOpenOrder }: StickyMobileCtaProps) {
   const { addToCart } = useCart();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const checkoutEl = document.getElementById("cod-checkout-section");
-      if (checkoutEl) {
-        const rect = checkoutEl.getBoundingClientRect();
-        // Si le formulaire COD est déjà visible à l'écran, masquer la barre sticky pour ne pas gêner
-        if (rect.top <= window.innerHeight * 0.8) {
-          setIsVisible(false);
-          return;
-        }
-      }
       // Afficher la barre sticky dès qu'on a scrollé plus de 300px
       const scrolled = window.scrollY > 300;
       setIsVisible(scrolled);
@@ -33,7 +25,11 @@ export function StickyMobileCta({ product }: StickyMobileCtaProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToCheckout = () => {
+  const handleOrder = () => {
+    if (onOpenOrder) {
+      onOpenOrder();
+      return;
+    }
     const el = document.getElementById("cod-checkout-section");
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -73,7 +69,7 @@ export function StickyMobileCta({ product }: StickyMobileCtaProps) {
           </button>
 
           <button
-            onClick={scrollToCheckout}
+            onClick={handleOrder}
             className="rounded-xl bg-[#0B2D23] hover:bg-[#154738] px-3 py-2 text-xs font-bold tracking-wider uppercase text-[#FAF7F2] shadow-md shadow-[#0B2D23]/20 active:scale-95 flex items-center gap-1 cursor-pointer"
           >
             <Zap className="h-3.5 w-3.5 text-[#C5A880]" />

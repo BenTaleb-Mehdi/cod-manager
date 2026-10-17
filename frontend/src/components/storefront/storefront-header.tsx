@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Sparkles,
   ShoppingBag,
@@ -34,6 +35,22 @@ function XLogo({ className = "h-3.5 w-3.5" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
+function TikTokLogo({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.48 6.3 6.3 0 0 0 1.95-4.57V8.78a8.28 8.28 0 0 0 4.82 1.52v-3.61z" />
+    </svg>
+  );
+}
+
+function WhatsAppLogo({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
     </svg>
   );
 }
@@ -396,10 +413,10 @@ export function StorefrontHeader() {
       {/* Smooth Top Search Bar Dropdown */}
       <TopSearchBar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
-      {/* 3. Modern Mobile Slide-in Drawer (Translating from LEFT) */}
+      {/* 3. Luxury Full-Height Mobile Navigation (Exact Screenshot Design) */}
       {/* Dark backdrop overlay */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-xs z-50 transition-opacity duration-300 lg:hidden ${
+        className={`fixed inset-0 bg-black/80 backdrop-blur-md z-50 transition-opacity duration-300 lg:hidden ${
           mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setMobileMenuOpen(false)}
@@ -407,197 +424,173 @@ export function StorefrontHeader() {
 
       {/* Drawer Container translating from LEFT */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-[85%] max-w-[340px] bg-[#FAF7F2] border-r border-[#E8E2D8] shadow-2xl flex flex-col transform transition-transform duration-300 ease-out lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 w-full max-w-[380px] sm:max-w-[420px] bg-[#071F18] text-[#FAF7F2] border-r border-[#C5A880]/20 shadow-2xl flex flex-col justify-between transform transition-transform duration-500 ease-out lg:hidden overflow-hidden ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Drawer Header */}
-        <div className="p-5 border-b border-[#E8E2D8] flex items-center justify-between bg-white shrink-0">
-          <Link
-            href="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex flex-col"
-          >
-            <span className="font-serif text-xl tracking-[0.25em] text-[#0B2D23] uppercase font-bold leading-tight">
-              {BRAND_NAME}
-            </span>
-            <span className="text-[8px] tracking-[0.3em] text-[#9F8259] uppercase font-semibold">
-              {BRAND_SUBTITLE}
-            </span>
-          </Link>
-
-          <button
-            onClick={() => setMobileMenuOpen(false)}
-            aria-label="Fermer le menu"
-            className="p-2 rounded-full text-[#18221D] hover:bg-[#FAF7F2] hover:text-[#0B2D23] active:scale-95 transition-all"
-          >
-            <X className="h-5 w-5" />
-          </button>
+        {/* Background Portrait Image with Deep Emerald Noir Overlay */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Image
+            src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=80"
+            alt="Maison MÉRAF Luxury Diamond Jewelry"
+            fill
+            sizes="420px"
+            className="object-cover object-center grayscale contrast-125 brightness-50"
+            priority
+          />
+          {/* Deep emerald green gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#071F18]/95 via-[#0B2D23]/88 to-[#04140F]/96" />
         </div>
 
-        {/* Scrollable Navigation Body */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5">
-          {/* Main Primary Action & Cart Quick Access */}
-          <div className="grid grid-cols-3 gap-1.5">
-            <Link
-              href="/collections"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl bg-[#0B2D23] text-[#FAF7F2] p-2.5 text-[10px] font-bold uppercase tracking-wider shadow-sm active:scale-98 transition-all text-center"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-[#C5A880]" />
-              <span>Boutique</span>
-            </Link>
+        {/* Floating Close Button */}
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Fermer le menu"
+          className="absolute top-5 right-5 z-20 h-10 w-10 rounded-full bg-white/10 hover:bg-[#C5A880] hover:text-[#0B2D23] backdrop-blur-md border border-white/20 flex items-center justify-center text-[#FAF7F2] active:scale-95 transition-all cursor-pointer shadow-md"
+        >
+          <X className="h-5 w-5" />
+        </button>
 
-            <Link
-              href="/favoris"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl border border-[#E8E2D8] bg-white text-[#0B2D23] p-2.5 text-[10px] font-bold uppercase tracking-wider shadow-sm active:scale-98 transition-all text-center"
-            >
-              <Heart className="h-3.5 w-3.5 text-[#C5A880]" />
-              <span>Favoris ({wishlistCount})</span>
-            </Link>
+        {/* Top Header: Brand Tagline */}
+        <div className="relative z-10 pt-12 sm:pt-14 px-6 text-center space-y-1 select-none">
+          <p className="text-[10px] tracking-[0.35em] text-[#C5A880] uppercase font-semibold">
+            JEWELRY ONLY
+          </p>
+          <h3 className="font-serif text-xs tracking-[0.3em] text-[#FAF7F2]/90 uppercase font-light">
+            UNIVERSE DIAMOND
+          </h3>
+        </div>
 
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                openCart();
-              }}
-              className="flex flex-col items-center justify-center gap-1 rounded-xl border border-[#0B2D23] bg-white text-[#0B2D23] p-2.5 text-[10px] font-bold uppercase tracking-wider shadow-sm active:scale-98 transition-all text-center cursor-pointer"
-            >
-              <ShoppingBag className="h-3.5 w-3.5 text-[#C5A880]" />
-              <span>Panier ({totalItems})</span>
-            </button>
-          </div>
+        {/* Center: Simple Navigation Links */}
+        <nav className="relative z-10 flex flex-col items-center justify-center space-y-7 sm:space-y-8 my-auto py-6 select-none">
+          <Link
+            href="/collections?category=khowatem"
+            onClick={() => setMobileMenuOpen(false)}
+            className="font-serif text-2xl sm:text-3xl tracking-[0.22em] uppercase text-[#FAF7F2] hover:text-[#C5A880] transition-all hover:scale-105 active:scale-95"
+          >
+            RINGS
+          </Link>
 
-          {/* Categories Grid */}
-          <div className="space-y-2">
-            <div className="text-[10px] uppercase tracking-widest text-[#9F8259] font-bold flex items-center justify-between">
-              <span>Nos Accessoires</span>
-              <span className="text-[9px] text-[#0B2D23]/60 font-sans">Inox 316L Haute Qualité</span>
-            </div>
+          <Link
+            href="/collections?category=slasel"
+            onClick={() => setMobileMenuOpen(false)}
+            className="font-serif text-2xl sm:text-3xl tracking-[0.22em] uppercase text-[#FAF7F2] hover:text-[#C5A880] transition-all hover:scale-105 active:scale-95"
+          >
+            NECKLACES
+          </Link>
 
-            <div className="grid grid-cols-1 gap-1.5">
-              {categories.map((cat) => {
-                const Icon = cat.icon;
-                return (
-                  <Link
-                    key={cat.slug}
-                    href={`/collections?category=${cat.slug}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between p-3 rounded-xl bg-white border border-[#E8E2D8] hover:border-[#0B2D23] active:bg-[#FAF7F2] transition-all"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="h-7 w-7 rounded-full bg-[#FAF7F2] border border-[#E8E2D8] flex items-center justify-center text-[#0B2D23]">
-                        <Icon className="h-3.5 w-3.5" />
-                      </div>
-                      <span className="text-xs font-semibold text-[#0B2D23]">
-                        {cat.moroccanLabel}
-                      </span>
-                    </div>
-                    <ArrowRight className="h-3.5 w-3.5 text-[#C5A880]" />
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
+          <Link
+            href="/collections?category=khwarsi"
+            onClick={() => setMobileMenuOpen(false)}
+            className="font-serif text-2xl sm:text-3xl tracking-[0.22em] uppercase text-[#FAF7F2] hover:text-[#C5A880] transition-all hover:scale-105 active:scale-95"
+          >
+            EARRINGS
+          </Link>
 
-          {/* Main Pages */}
-          <div className="space-y-1 pt-2 border-t border-[#E8E2D8]">
-            <div className="text-[10px] uppercase tracking-widest text-[#9F8259] font-bold mb-2">
-              Navigation
-            </div>
+          <Link
+            href="/collections?category=dmalj"
+            onClick={() => setMobileMenuOpen(false)}
+            className="font-serif text-2xl sm:text-3xl tracking-[0.22em] uppercase text-[#FAF7F2] hover:text-[#C5A880] transition-all hover:scale-105 active:scale-95"
+          >
+            BRACELETS
+          </Link>
 
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between p-2.5 rounded-lg text-xs font-medium text-[#18221D] hover:bg-white hover:text-[#0B2D23] transition-colors"
-            >
-              <span>Accueil</span>
-            </Link>
+          <Link
+            href="/collections"
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-[11px] font-sans font-medium tracking-[0.3em] uppercase text-[#C5A880]/70 hover:text-[#C5A880] transition-colors pt-2"
+          >
+            ✦ TOUTES LES CRÉATIONS ✦
+          </Link>
+        </nav>
 
-            <Link
-              href="/blog"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between p-2.5 rounded-lg text-xs font-medium text-[#18221D] hover:bg-white hover:text-[#0B2D23] transition-colors"
-            >
-              <span>Le Journal Joaillier</span>
-            </Link>
-
-            <Link
-              href="/contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between p-2.5 rounded-lg text-xs font-medium text-[#18221D] hover:bg-white hover:text-[#0B2D23] transition-colors"
-            >
-              <span>Contact & Support</span>
-            </Link>
-          </div>
-
-          {/* Direct WhatsApp Concierge Button */}
-          <div className="pt-3 border-t border-[#E8E2D8] space-y-3">
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#0B2D23] py-3 px-4 text-xs font-semibold text-[#FAF7F2] shadow-sm tracking-wider uppercase active:scale-98 transition-all"
-            >
-              <MessageCircle className="h-4 w-4 text-[#C5A880]" />
-              <span>Conseillère WhatsApp en Direct</span>
-            </a>
-
-            {/* Reassurances */}
-            <div className="grid grid-cols-2 gap-2 text-[10px] text-[#18221D]/75 bg-white p-3 rounded-xl border border-[#E8E2D8]">
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="h-3.5 w-3.5 text-[#0B2D23] shrink-0" />
-                <span>Ouvrez avant de payer</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Truck className="h-3.5 w-3.5 text-[#0B2D23] shrink-0" />
-                <span>Livraison 24h/48h</span>
-              </div>
-            </div>
-
-            {/* Réseaux Sociaux MÉRAF */}
-            <div className="pt-2 flex items-center justify-center gap-2.5">
+        {/* Bottom Section: All Social Links + Get Started Button */}
+        <div className="relative z-10 p-6 space-y-4">
+          {/* All Social Links in Emerald & Gold */}
+          <div className="space-y-2 text-center">
+            <span className="text-[9px] uppercase tracking-[0.25em] text-[#DFCCA8]/70 font-medium">
+              Suivez-nous • Social
+            </span>
+            <div className="flex items-center justify-center gap-2.5">
               <a
                 href={BRAND_SOCIALS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Instagram @meraf.jewelry"
+                aria-label="Instagram"
                 title="Instagram"
-                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-white flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] transition-colors"
+                className="h-9 w-9 rounded-full bg-[#0B2D23]/80 hover:bg-[#C5A880] hover:text-[#0B2D23] border border-[#C5A880]/30 backdrop-blur-md flex items-center justify-center text-[#FAF7F2] transition-all active:scale-90"
               >
-                <Instagram className="h-3.5 w-3.5" />
+                <Instagram className="h-4 w-4" />
               </a>
+
               <a
                 href={BRAND_SOCIALS.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Facebook Maison MÉRAF"
+                aria-label="Facebook"
                 title="Facebook"
-                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-white flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] transition-colors"
+                className="h-9 w-9 rounded-full bg-[#0B2D23]/80 hover:bg-[#C5A880] hover:text-[#0B2D23] border border-[#C5A880]/30 backdrop-blur-md flex items-center justify-center text-[#FAF7F2] transition-all active:scale-90"
               >
-                <Facebook className="h-3.5 w-3.5" />
+                <Facebook className="h-4 w-4" />
               </a>
+
+              <a
+                href={BRAND_GMAIL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                title="TikTok"
+                className="h-9 w-9 rounded-full bg-[#0B2D23]/80 hover:bg-[#C5A880] hover:text-[#0B2D23] border border-[#C5A880]/30 backdrop-blur-md flex items-center justify-center text-[#FAF7F2] transition-all active:scale-90"
+              >
+                <TikTokLogo className="h-4 w-4" />
+              </a>
+
+              <a
+                href={BRAND_SOCIALS.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+                title="WhatsApp"
+                className="h-9 w-9 rounded-full bg-[#0B2D23]/80 hover:bg-[#C5A880] hover:text-[#0B2D23] border border-[#C5A880]/30 backdrop-blur-md flex items-center justify-center text-[#FAF7F2] transition-all active:scale-90"
+              >
+                <WhatsAppLogo className="h-4 w-4" />
+              </a>
+
               <a
                 href={BRAND_SOCIALS.x}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="X (Twitter) @meraf_jewelry"
+                aria-label="X (Twitter)"
                 title="X"
-                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-white flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] transition-colors"
+                className="h-9 w-9 rounded-full bg-[#0B2D23]/80 hover:bg-[#C5A880] hover:text-[#0B2D23] border border-[#C5A880]/30 backdrop-blur-md flex items-center justify-center text-[#FAF7F2] transition-all active:scale-90"
               >
-                <XLogo className="h-3 w-3" />
+                <XLogo className="h-3.5 w-3.5" />
               </a>
+
               <a
                 href={BRAND_SOCIALS.gmail}
-                aria-label={`Gmail (${BRAND_GMAIL})`}
-                title="Gmail"
-                className="h-8 w-8 rounded-full border border-[#E8E2D8] bg-white flex items-center justify-center text-[#0B2D23] hover:text-[#C5A880] transition-colors"
+                aria-label="Email"
+                title="Email"
+                className="h-9 w-9 rounded-full bg-[#0B2D23]/80 hover:bg-[#C5A880] hover:text-[#0B2D23] border border-[#C5A880]/30 backdrop-blur-md flex items-center justify-center text-[#FAF7F2] transition-all active:scale-90"
               >
-                <Mail className="h-3.5 w-3.5" />
+                <Mail className="h-4 w-4" />
               </a>
             </div>
           </div>
+
+          {/* Bottom Pill "Get Started" Button in Emerald & Gold */}
+          <Link
+            href="/collections"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full relative flex items-center justify-center rounded-full bg-[#0B2D23] hover:bg-[#14493a] border border-[#C5A880] text-[#FAF7F2] py-3.5 px-5 font-semibold text-sm tracking-wide shadow-lg active:scale-98 transition-all group overflow-hidden"
+          >
+            {/* Gold circle with » double arrow icon on the left */}
+            <span className="absolute left-2.5 h-8 w-8 rounded-full bg-[#C5A880] group-hover:bg-[#dfcca8] text-[#0B2D23] flex items-center justify-center text-xs font-bold shadow-xs transition-colors">
+              »
+            </span>
+            <span>Get Started</span>
+          </Link>
         </div>
       </aside>
     </>

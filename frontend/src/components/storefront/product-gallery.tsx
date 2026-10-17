@@ -2,16 +2,24 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Sparkles, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight, Heart, ShoppingBag } from "lucide-react";
+import { useWishlist } from "@/context/wishlist-context";
+import { useCart } from "@/context/cart-context";
 
 interface ProductGalleryProps {
   images: string[];
   title: string;
   badge?: string;
+  productId?: string;
 }
 
-export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
+export function ProductGallery({ images, title, badge, productId }: ProductGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const { openCart, totalItems } = useCart();
+
+  const isWishlisted = productId ? isInWishlist(productId) : false;
 
   const prevImage = () => {
     setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -23,8 +31,8 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
 
   return (
     <div className="space-y-3">
-      {/* Image Principale avec Navigation Swipeable */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-[#E8E2D8] bg-[#FAF7F2] shadow-sm">
+      {/* Zone Image Principale Portrait (Identique au mockup Screen 2) */}
+      <div className="relative aspect-[4/5] sm:aspect-[3/4] w-full overflow-hidden rounded-[26px] sm:rounded-3xl border border-[#EBE6DF] bg-[#FAF8F5] shadow-xs">
         <Image
           src={images[selectedIndex] || images[0]}
           alt={`${title} - Photo ${selectedIndex + 1}`}
@@ -34,81 +42,115 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
           className="object-cover object-center transition-all duration-300"
         />
 
-        {/* Badges Flottants */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
-          {badge && (
-            <span className="rounded-full bg-[#0B2D23]/95 backdrop-blur-sm px-3 py-1 text-xs font-bold tracking-wider uppercase text-white shadow-md">
+        {/* Barre de navigation supérieure flottante (Back arrow + Wishlist + Cart) */}
+        <div className="absolute top-3.5 inset-x-3.5 flex items-center justify-between z-10 pointer-events-none">
+          <Link
+            href="/collections"
+            aria-label="Retour aux collections"
+            className="h-9 w-9 rounded-full bg-white/80 hover:bg-white backdrop-blur-md text-[#18221D] shadow-xs flex items-center justify-center transition-all active:scale-90 pointer-events-auto cursor-pointer"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Link>
+
+          <div className="flex items-center gap-2 pointer-events-auto">
+            {productId && (
+              <button
+                type="button"
+                onClick={() => toggleWishlist(productId)}
+                aria-label="Ajouter aux favoris"
+                className="h-9 w-9 rounded-full bg-white/80 hover:bg-white backdrop-blur-md text-[#18221D] shadow-xs flex items-center justify-center transition-all active:scale-90 cursor-pointer"
+              >
+                <Heart
+                  className={`h-4 w-4 ${
+                    isWishlisted ? "fill-[#18221D] text-[#18221D]" : "text-[#18221D]/75"
+                  }`}
+                />
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={openCart}
+              aria-label="Ouvrir le panier"
+              className="relative h-9 w-9 rounded-full bg-white/80 hover:bg-white backdrop-blur-md text-[#18221D] shadow-xs flex items-center justify-center transition-all active:scale-90 cursor-pointer"
+            >
+              <ShoppingBag className="h-4 w-4 text-[#18221D]/85" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-[#18221D] text-white text-[9px] font-bold flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Badge optionnel */}
+        {badge && (
+          <div className="absolute bottom-4 left-4 z-10 pointer-events-none">
+            <span className="rounded-full bg-[#18221D]/80 backdrop-blur-xs px-2.5 py-1 text-[10px] font-semibold text-[#FAF7F2] uppercase tracking-wider">
               {badge}
             </span>
-          )}
-          <span className="rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-0.5 text-[10px] font-bold text-[#C5A880] flex items-center gap-1 shadow-sm">
-            <Sparkles className="h-3 w-3" /> Acier Inoxydable 316L
-          </span>
-        </div>
+          </div>
+        )}
 
-        {/* Badge Garantie Anti-Rouille */}
-        <div className="absolute bottom-3 left-3 z-10">
-          <span className="rounded-lg bg-[#FAF7F2]/95 backdrop-blur-sm border border-[#E8E2D8] px-2.5 py-1 text-[11px] font-semibold text-[#0B2D23] flex items-center gap-1 shadow-sm">
-            <ShieldCheck className="h-3.5 w-3.5 text-[#0B2D23]" /> Garantie Inaltérable
-          </span>
-        </div>
-
-        {/* Boutons de navigation Flèches Mobile / Desktop */}
+        {/* Boutons flèches discrets */}
         {images.length > 1 && (
           <>
             <button
               onClick={prevImage}
-              aria-label="Image précédente"
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 rounded-full bg-white/70 hover:bg-white text-[#0B2D23] p-2 backdrop-blur-sm transition-colors shadow-md z-10"
+              aria-label="Photo précédente"
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 rounded-full bg-white/60 hover:bg-white text-[#18221D] p-1.5 backdrop-blur-xs transition-all shadow-xs z-10 active:scale-90 cursor-pointer"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={nextImage}
-              aria-label="Image suivante"
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full bg-white/70 hover:bg-white text-[#0B2D23] p-2 backdrop-blur-sm transition-colors shadow-md z-10"
+              aria-label="Photo suivante"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full bg-white/60 hover:bg-white text-[#18221D] p-1.5 backdrop-blur-xs transition-all shadow-xs z-10 active:scale-90 cursor-pointer"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
           </>
         )}
 
-        {/* Indicateurs de pagination (Dots) */}
+        {/* Pagination Dots centrés en bas (Identique au mockup Screen 2) */}
         {images.length > 1 && (
-          <div className="absolute bottom-3 right-3 flex items-center gap-1.5 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-full z-10">
+          <div className="absolute bottom-3.5 left-1/2 -translate-y-0 -translate-x-1/2 flex items-center gap-1.5 z-10 bg-white/70 backdrop-blur-xs px-2.5 py-1.5 rounded-full shadow-2xs">
             {images.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => setSelectedIndex(idx)}
-                className={`h-1.5 rounded-full transition-all ${
-                  selectedIndex === idx ? "w-4 bg-[#C5A880]" : "w-1.5 bg-white/60"
+                className={`transition-all rounded-full ${
+                  selectedIndex === idx
+                    ? "w-4 h-1.5 bg-[#18221D]"
+                    : "w-1.5 h-1.5 bg-[#18221D]/30 hover:bg-[#18221D]/50"
                 }`}
-                aria-label={`Aller à la photo ${idx + 1}`}
+                aria-label={`Photo ${idx + 1}`}
               />
             ))}
           </div>
         )}
       </div>
 
-      {/* Miniatures cliquables */}
+      {/* Miniatures horizontales */}
       {images.length > 1 && (
-        <div className="grid grid-cols-4 gap-2.5">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
           {images.map((img, idx) => (
             <button
               key={idx}
               onClick={() => setSelectedIndex(idx)}
-              className={`relative aspect-square overflow-hidden rounded-xl border-2 transition-all ${
+              className={`relative h-14 w-14 rounded-xl overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
                 selectedIndex === idx
-                  ? "border-[#0B2D23] ring-2 ring-[#0B2D23]/20 shadow-md scale-102"
-                  : "border-[#E8E2D8] opacity-70 hover:opacity-100"
+                  ? "border-[#18221D] scale-102 shadow-xs"
+                  : "border-transparent opacity-65 hover:opacity-100"
               }`}
             >
               <Image
                 src={img}
-                alt={`${title} miniature ${idx + 1}`}
+                alt={`${title} vignette ${idx + 1}`}
                 fill
-                sizes="100px"
-                className="object-cover object-center"
+                sizes="56px"
+                className="object-cover"
               />
             </button>
           ))}
