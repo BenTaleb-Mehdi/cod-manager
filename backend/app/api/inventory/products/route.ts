@@ -96,12 +96,25 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 4. Enregistrement en base de données MySQL
+    // 4. Encodage des métadonnées (statut actif et seuil de stock)
+    let finalDescription: string | null = validated.description || null;
+    const thresholdToSave = validated.lowStockThreshold ?? 5;
+    const isActiveToSave = validated.isActive !== false;
+
+    if (validated.lowStockThreshold !== undefined || validated.isActive !== undefined) {
+      finalDescription = JSON.stringify({
+        text: validated.description || "",
+        isActive: isActiveToSave,
+        lowStockThreshold: thresholdToSave,
+      });
+    }
+
+    // 5. Enregistrement en base de données MySQL
     const createdProduct = await db.product.create({
       data: {
         sku: validated.sku,
         name: validated.name,
-        description: validated.description || null,
+        description: finalDescription,
         costPrice: validated.costPrice,
         salePrice: validated.salePrice,
         stock: validated.stock,
@@ -125,7 +138,9 @@ export async function POST(request: NextRequest) {
           id: createdProduct.id,
           sku: createdProduct.sku,
           name: createdProduct.name,
-          description: createdProduct.description,
+          description: validated.description || "",
+          isActive: isActiveToSave,
+          lowStockThreshold: thresholdToSave,
           costPrice: cost,
           salePrice: sale,
           stock: createdProduct.stock,

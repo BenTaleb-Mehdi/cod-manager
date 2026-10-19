@@ -23,12 +23,12 @@ import {
   Sparkles,
   Navigation,
   FileText,
-  MapPin,
+  Clock,
+  UserCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { generateWhatsAppLink } from "@/lib/moroccan-data";
 import { formatMoroccanPhone } from "@/lib/utils";
-import { AddTrackingDialog } from "./AddTrackingDialog";
 import { OrderTrackingModal } from "./OrderTrackingModal";
 
 interface OrderQuickActionsProps {
@@ -83,140 +83,153 @@ export function OrderQuickActions({
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground">
-            Contact Client
-          </DropdownMenuLabel>
 
-          {/* 1. WhatsApp direct avec modèle 212 */}
-          <DropdownMenuItem asChild className="cursor-pointer text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/40">
-            <a
-              href={waLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center w-full"
-            >
-              <MessageSquare className="mr-2 h-4 w-4 text-emerald-600" />
-              <div className="flex flex-col">
-                <span className="font-medium text-xs">WhatsApp Rapide</span>
-                <span className="text-[10px] text-muted-foreground">Modèle de confirmation</span>
-              </div>
-            </a>
-          </DropdownMenuItem>
+        <DropdownMenuContent
+          align="end"
+          className="w-72 p-2 shadow-xl border bg-popover rounded-xl"
+        >
+          {/* Section 1 : Contact Client */}
+          <div className="flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            <UserCheck className="h-3 w-3 text-primary" />
+            <span>Contact Client</span>
+          </div>
 
-          {/* 2. Appel Téléphonique */}
-          <DropdownMenuItem asChild className="cursor-pointer text-blue-600 focus:text-blue-700 focus:bg-blue-50 dark:focus:bg-blue-950/40">
-            <a
-              href={`tel:${order.phone.replace(/\s+/g, "")}`}
-              className="flex items-center w-full"
-            >
-              <Phone className="mr-2 h-4 w-4 text-blue-600" />
-              <div className="flex flex-col">
-                <span className="font-medium text-xs">Appeler {formatMoroccanPhone(order.phone)}</span>
-                <span className="text-[10px] text-muted-foreground">Softphone / Ligne directe</span>
-              </div>
-            </a>
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground">
-            Suivi & Expédition
-          </DropdownMenuLabel>
-
-          {/* 3. Voir Suivi & Carte GPS */}
-          <DropdownMenuItem
-            onClick={() => setTrackingModalOpen(true)}
-            className="cursor-pointer text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/40"
-          >
-            <Navigation className="mr-2 h-4 w-4 text-emerald-600" />
-            <div className="flex flex-col">
-              <span className="font-medium text-xs">Carte GPS & Suivi Colis</span>
-              <span className="text-[10px] text-muted-foreground">Localisation temps réel (Modal)</span>
-            </div>
-          </DropdownMenuItem>
-
-          {/* 4. Voir / Imprimer Facture */}
-          <DropdownMenuItem asChild className="cursor-pointer text-slate-700 dark:text-slate-300">
-            <Link href={`/orders/${order.id}/invoice`} className="flex items-center w-full">
-              <FileText className="mr-2 h-4 w-4 text-slate-600" />
-              <div className="flex flex-col">
-                <span className="font-medium text-xs">Facture A4 & Ticket</span>
-                <span className="text-[10px] text-muted-foreground">Mentions ICE / IF</span>
-              </div>
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground">
-            Changer le Statut
-          </DropdownMenuLabel>
-
-
-          {/* Pas de réponse */}
-          <DropdownMenuItem
-            onClick={handleNoAnswer}
-            className="cursor-pointer text-amber-600 focus:text-amber-700 focus:bg-amber-50 dark:focus:bg-amber-950/40"
-          >
-            <PhoneMissed className="mr-2 h-4 w-4 text-amber-600" />
-            <span>Pas de réponse (+1 relance)</span>
-          </DropdownMenuItem>
-
-          {/* Confirmer */}
-          {order.status !== "CONFIRMED" && (
+          <div className="grid grid-cols-2 gap-1.5 mb-1">
+            {/* WhatsApp Direct */}
             <DropdownMenuItem
-              onClick={() => onStatusChange?.(order.id, "CONFIRMED")}
-              className="cursor-pointer text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/40"
+              asChild
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/40 bg-muted/30 hover:bg-emerald-50/70"
             >
-              <CheckCircle2 className="mr-2 h-4 w-4 text-emerald-600" />
-              <span>Confirmer la commande</span>
+              <a
+                href={waLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center"
+              >
+                <MessageSquare className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                <span className="truncate">WhatsApp</span>
+              </a>
             </DropdownMenuItem>
-          )}
 
-          {/* Expédier */}
-          {order.status !== "SHIPPED" && (
+            {/* Appel Téléphonique */}
             <DropdownMenuItem
-              onClick={() => onStatusChange?.(order.id, "SHIPPED")}
-              className="cursor-pointer text-sky-600 focus:text-sky-700 focus:bg-sky-50 dark:focus:bg-sky-950/40"
+              asChild
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-blue-600 focus:text-blue-700 focus:bg-blue-50 dark:focus:bg-blue-950/40 bg-muted/30 hover:bg-blue-50/70"
             >
-              <Truck className="mr-2 h-4 w-4 text-sky-600" />
-              <span>Marquer Expédiée</span>
+              <a
+                href={`tel:${order.phone.replace(/\s+/g, "")}`}
+                className="flex items-center"
+                title={`Appeler ${formatMoroccanPhone(order.phone)}`}
+              >
+                <Phone className="h-3.5 w-3.5 text-blue-600 shrink-0" />
+                <span className="truncate">Appeler</span>
+              </a>
             </DropdownMenuItem>
-          )}
+          </div>
 
-          {/* Livrer */}
-          {order.status !== "DELIVERED" && (
+          <DropdownMenuSeparator className="my-1" />
+
+          {/* Section 2 : Suivi & Expédition */}
+          <div className="flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            <Truck className="h-3 w-3 text-primary" />
+            <span>Suivi & Expédition</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-1.5 mb-1">
+            {/* Voir Suivi & Carte GPS */}
             <DropdownMenuItem
-              onClick={() => onStatusChange?.(order.id, "DELIVERED")}
-              className="cursor-pointer text-teal-600 focus:text-teal-700 focus:bg-teal-50 dark:focus:bg-teal-950/40"
+              onClick={() => setTrackingModalOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/40 bg-muted/30 hover:bg-emerald-50/70"
             >
-              <Sparkles className="mr-2 h-4 w-4 text-teal-600" />
-              <span>Marquer Livrée & Encaissée</span>
+              <Navigation className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+              <span className="truncate">Carte GPS</span>
             </DropdownMenuItem>
-          )}
 
-          {/* Retour */}
-          {order.status !== "RETURNED" && (
+            {/* Facture A4 & Ticket */}
             <DropdownMenuItem
-              onClick={() => onStatusChange?.(order.id, "RETURNED")}
-              className="cursor-pointer text-red-600 focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/40"
+              asChild
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-300 focus:bg-muted bg-muted/30 hover:bg-muted/70"
             >
-              <RotateCcw className="mr-2 h-4 w-4 text-red-600" />
-              <span>Marquer Retournée</span>
+              <Link href={`/orders/${order.id}/invoice`} className="flex items-center">
+                <FileText className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                <span className="truncate">Facture A4</span>
+              </Link>
             </DropdownMenuItem>
-          )}
+          </div>
 
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="my-1" />
 
-          {/* Annuler */}
-          {order.status !== "CANCELLED" && (
+          {/* Section 3 : Changer le Statut */}
+          <div className="flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            <Clock className="h-3 w-3 text-primary" />
+            <span>Changer le Statut</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-1.5">
+            {/* Pas de réponse */}
             <DropdownMenuItem
-              onClick={() => onStatusChange?.(order.id, "CANCELLED")}
-              className="cursor-pointer text-rose-600 focus:text-rose-700 focus:bg-rose-50 dark:focus:bg-rose-950/40"
+              onClick={handleNoAnswer}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-amber-600 focus:text-amber-700 focus:bg-amber-50 dark:focus:bg-amber-950/40 bg-muted/30 hover:bg-amber-50/70"
             >
-              <XCircle className="mr-2 h-4 w-4 text-rose-600" />
-              <span>Annuler la commande</span>
+              <PhoneMissed className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+              <span className="truncate">Non Répondu</span>
             </DropdownMenuItem>
-          )}
+
+            {/* Confirmer */}
+            {order.status !== "CONFIRMED" && (
+              <DropdownMenuItem
+                onClick={() => onStatusChange?.(order.id, "CONFIRMED")}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/40 bg-muted/30 hover:bg-emerald-50/70"
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                <span className="truncate">Confirmer</span>
+              </DropdownMenuItem>
+            )}
+
+            {/* Expédier */}
+            {order.status !== "SHIPPED" && (
+              <DropdownMenuItem
+                onClick={() => onStatusChange?.(order.id, "SHIPPED")}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-sky-600 focus:text-sky-700 focus:bg-sky-50 dark:focus:bg-sky-950/40 bg-muted/30 hover:bg-sky-50/70"
+              >
+                <Truck className="h-3.5 w-3.5 text-sky-600 shrink-0" />
+                <span className="truncate">Expédier</span>
+              </DropdownMenuItem>
+            )}
+
+            {/* Livrer */}
+            {order.status !== "DELIVERED" && (
+              <DropdownMenuItem
+                onClick={() => onStatusChange?.(order.id, "DELIVERED")}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-teal-600 focus:text-teal-700 focus:bg-teal-50 dark:focus:bg-teal-950/40 bg-muted/30 hover:bg-teal-50/70"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-teal-600 shrink-0" />
+                <span className="truncate">Livrée</span>
+              </DropdownMenuItem>
+            )}
+
+            {/* Retour */}
+            {order.status !== "RETURNED" && (
+              <DropdownMenuItem
+                onClick={() => onStatusChange?.(order.id, "RETURNED")}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-red-600 focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/40 bg-muted/30 hover:bg-red-50/70"
+              >
+                <RotateCcw className="h-3.5 w-3.5 text-red-600 shrink-0" />
+                <span className="truncate">Retournée</span>
+              </DropdownMenuItem>
+            )}
+
+            {/* Annuler */}
+            {order.status !== "CANCELLED" && (
+              <DropdownMenuItem
+                onClick={() => onStatusChange?.(order.id, "CANCELLED")}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer text-rose-600 focus:text-rose-700 focus:bg-rose-50 dark:focus:bg-rose-950/40 bg-muted/30 hover:bg-rose-50/70"
+              >
+                <XCircle className="h-3.5 w-3.5 text-rose-600 shrink-0" />
+                <span className="truncate">Annuler</span>
+              </DropdownMenuItem>
+            )}
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
 

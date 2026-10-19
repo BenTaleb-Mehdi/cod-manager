@@ -57,16 +57,40 @@ export async function GET(_request: NextRequest) {
       });
     }
 
+    const parseProductMeta = (rawDescription: string | null | undefined) => {
+      let text = rawDescription || "";
+      let isActive = true;
+      let lowStockThreshold = 5;
+
+      if (rawDescription && rawDescription.trim().startsWith("{") && rawDescription.trim().endsWith("}")) {
+        try {
+          const parsed = JSON.parse(rawDescription);
+          if (typeof parsed === "object" && parsed !== null) {
+            text = parsed.text ?? "";
+            if (typeof parsed.isActive === "boolean") isActive = parsed.isActive;
+            if (typeof parsed.lowStockThreshold === "number" && !isNaN(parsed.lowStockThreshold)) {
+              lowStockThreshold = parsed.lowStockThreshold;
+            }
+          }
+        } catch {}
+      }
+
+      return { text, isActive, lowStockThreshold };
+    };
+
     const formattedProducts = products.map((p) => {
       const cost = Number(p.costPrice);
       const sale = Number(p.salePrice);
       const margin = sale > 0 ? ((sale - cost) / sale) * 100 : 0;
+      const meta = parseProductMeta(p.description);
 
       return {
         id: p.id,
         sku: p.sku,
         name: p.name,
-        description: p.description,
+        description: meta.text,
+        isActive: meta.isActive,
+        lowStockThreshold: meta.lowStockThreshold,
         costPrice: cost,
         salePrice: sale,
         stock: p.stock,
@@ -91,8 +115,15 @@ export async function GET(_request: NextRequest) {
 
     // Stats d'inventaire globales
     const totalStockUnits = formattedProducts.reduce((sum, p) => sum + p.stock, 0);
-    const lowStockCount = formattedProducts.filter((p) => p.stock <= 5).length;
+    const lowStockCount = formattedProducts.filter(
+      (p) => p.isActive && p.stock <= (p.lowStockThreshold ?? 5)
+    ).length;
     const totalInventoryCost = formattedProducts.reduce(
+      (sum, p) => sum + p.costPrice * p.stock,
+      0
+    );
+    const activeProducts = formattedProducts.filter((p) => p.isActive);
+    const activeInventoryCost = activeProducts.reduce(
       (sum, p) => sum + p.costPrice * p.stock,
       0
     );
@@ -107,6 +138,7 @@ export async function GET(_request: NextRequest) {
           totalStockUnits,
           lowStockCount,
           totalInventoryCost,
+          activeInventoryCost,
         },
       },
     });
