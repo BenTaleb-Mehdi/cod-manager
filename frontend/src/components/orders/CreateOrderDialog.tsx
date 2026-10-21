@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -32,6 +32,10 @@ import {
   CheckCircle2,
   AlertCircle,
   FileText,
+  Search,
+  X,
+  Minus,
+  ChevronDown,
 } from "lucide-react";
 import { createOrderAction } from "@/actions/orders";
 import { getInventoryAction } from "@/actions/inventory";
@@ -70,6 +74,65 @@ export function CreateOrderDialog({ onSuccess, trigger }: CreateOrderDialogProps
   const [items, setItems] = useState<OrderItemRow[]>([
     { productId: "", quantity: 1, price: 0 },
   ]);
+
+  // États pour la barre de recherche rapide d'articles
+  const [globalSearch, setGlobalSearch] = useState("");
+  const [isGlobalSearchOpen, setIsGlobalSearchOpen] = useState(false);
+  const [rowSearchOpen, setRowSearchOpen] = useState<number | null>(null);
+  const [rowSearchText, setRowSearchText] = useState("");
+  const globalSearchRef = useRef<HTMLDivElement>(null);
+
+  // Fermer la recherche lorsqu'on clique en dehors
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        globalSearchRef.current &&
+        !globalSearchRef.current.contains(event.target as Node)
+      ) {
+        setIsGlobalSearchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Produits filtrés pour la barre de recherche globale
+  const matchingGlobalProducts = useMemo(() => {
+    if (!globalSearch.trim()) return [];
+    const q = globalSearch.toLowerCase().trim();
+    return products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.sku.toLowerCase().includes(q) ||
+        (p.category?.name && p.category.name.toLowerCase().includes(q))
+    );
+  }, [globalSearch, products]);
+
+  // Ajout rapide depuis la barre de recherche
+  const handleQuickAddProduct = (p: Product) => {
+    setItems((prev) => {
+      if (prev.length === 1 && (!prev[0].productId || prev[0].productId === "")) {
+        return [{ productId: p.id, quantity: 1, price: Number(p.salePrice) }];
+      }
+      const existingIdx = prev.findIndex((i) => i.productId === p.id);
+      if (existingIdx >= 0) {
+        const next = [...prev];
+        next[existingIdx] = {
+          ...next[existingIdx],
+          quantity: next[existingIdx].quantity + 1,
+        };
+        return next;
+      }
+      return [
+        ...prev,
+        { productId: p.id, quantity: 1, price: Number(p.salePrice) },
+      ];
+    });
+    setGlobalSearch("");
+    setIsGlobalSearchOpen(false);
+  };
 
   // Charger les produits de l'inventaire quand le dialog s'ouvre
   useEffect(() => {
@@ -180,6 +243,10 @@ export function CreateOrderDialog({ onSuccess, trigger }: CreateOrderDialogProps
     setAddress("");
     setShippingNote("");
     setItems([{ productId: products[0]?.id || "", quantity: 1, price: Number(products[0]?.salePrice || 0) }]);
+    setGlobalSearch("");
+    setIsGlobalSearchOpen(false);
+    setRowSearchOpen(null);
+    setRowSearchText("");
     setError(null);
   };
 
@@ -369,12 +436,17 @@ export function CreateOrderDialog({ onSuccess, trigger }: CreateOrderDialogProps
             </div>
 
             {/* Section 2 : Sélection des Articles & Panier */}
-            <div className="rounded-xl border bg-card p-4 space-y-3">
+            <div className="rounded-xl border bg-card p-4 space-y-3.5">
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-foreground flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted-foreground">
-                  <Package className="h-3.5 w-3.5 text-emerald-600" />
-                  Articles Commandés
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-foreground flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted-foreground">
+                    <Package className="h-3.5 w-3.5 text-emerald-600" />
+                    Articles Commandés
+                  </h3>
+                  <span className="text-[11px] font-mono font-bold bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+                    {items.length} article{items.length > 1 ? "s" : ""}
+                  </span>
+                </div>
 
                 <Button
                   type="button"
@@ -384,8 +456,89 @@ export function CreateOrderDialog({ onSuccess, trigger }: CreateOrderDialogProps
                   className="h-7 text-xs gap-1 text-emerald-600 border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
                 >
                   <Plus className="h-3 w-3" />
-                  <span>Ajouter un Article</span>
+                  <span>Ajouter une ligne</span>
                 </Button>
+              </div>
+
+              {/* Barre de Recherche Rapide de Produits */}
+              <div ref={globalSearchRef} className="relative">
+                <div className="relative">
+                  <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="🔍 Rechercher un produit à ajouter par nom ou SKU..."
+                    value={globalSearch}
+                    onFocus={() => setIsGlobalSearchOpen(true)}
+                    onChange={(e) => {
+                      setGlobalSearch(e.target.value);
+                      setIsGlobalSearchOpen(true);
+                    }}
+                    className="pl-9 pr-8 h-9 text-xs bg-background shadow-xs focus-visible:ring-emerald-500"
+                  />
+                  {globalSearch && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setGlobalSearch("");
+                        setIsGlobalSearchOpen(false);
+                      }}
+                      className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Résultats de recherche déroulants */}
+                {isGlobalSearchOpen && globalSearch.trim().length > 0 && (
+                  <div className="absolute left-0 right-0 top-full mt-1.5 z-50 rounded-lg border bg-popover text-popover-foreground shadow-xl max-h-64 overflow-y-auto divide-y divide-border">
+                    {matchingGlobalProducts.length === 0 ? (
+                      <div className="p-3 text-center text-xs text-muted-foreground">
+                        Aucun produit trouvé pour &laquo; {globalSearch} &raquo;
+                      </div>
+                    ) : (
+                      matchingGlobalProducts.map((p) => (
+                        <div
+                          key={p.id}
+                          onClick={() => handleQuickAddProduct(p)}
+                          className="p-2.5 flex items-center justify-between gap-3 hover:bg-muted/70 cursor-pointer transition-colors"
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            {p.imageUrl ? (
+                              <img
+                                src={p.imageUrl}
+                                alt={p.name}
+                                className="h-10 w-10 rounded-md object-cover border bg-muted/20 shrink-0"
+                              />
+                            ) : (
+                              <div className="h-10 w-10 rounded-md bg-muted/40 border flex items-center justify-center text-muted-foreground shrink-0">
+                                <Package className="h-5 w-5" />
+                              </div>
+                            )}
+                            <div className="min-w-0">
+                              <p className="font-semibold text-xs text-foreground truncate">
+                                {p.name}
+                              </p>
+                              <p className="text-[10px] text-muted-foreground font-mono">
+                                SKU: <strong className="text-foreground">{p.sku}</strong> • Stock :{" "}
+                                <span className={p.stock <= 5 ? "text-amber-600 font-bold" : "text-emerald-600 font-bold"}>
+                                  {p.stock} unités
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <span className="font-mono font-bold text-xs text-foreground block">
+                              {formatPriceMAD(p.salePrice)}
+                            </span>
+                            <span className="text-[10px] text-emerald-600 font-semibold flex items-center justify-end gap-0.5">
+                              <Plus className="h-2.5 w-2.5" /> Ajouter
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
               </div>
 
               {isLoadingProducts ? (
@@ -406,72 +559,197 @@ export function CreateOrderDialog({ onSuccess, trigger }: CreateOrderDialogProps
                     return (
                       <div
                         key={index}
-                        className="p-3 rounded-lg border bg-muted/20 flex flex-col sm:flex-row items-start sm:items-center gap-3"
+                        className="p-3 rounded-lg border bg-card/60 hover:bg-card transition-all flex flex-col sm:flex-row items-start sm:items-center gap-3 relative shadow-xs"
                       >
-                        {/* Produit */}
-                        <div className="flex-1 w-full space-y-1">
-                          <Label className="text-[11px] text-muted-foreground">
-                            Produit #{index + 1}
-                          </Label>
-                          <Select
-                            value={item.productId}
-                            onValueChange={(val) => handleProductSelect(index, val)}
-                          >
-                            <SelectTrigger className="h-9">
-                              <SelectValue placeholder="Sélectionner un produit" />
-                            </SelectTrigger>
-                            <SelectContent className="max-h-56">
-                              {products.map((p) => (
-                                <SelectItem key={p.id} value={p.id}>
-                                  <div className="flex items-center justify-between w-full gap-2">
-                                    <span className="font-medium truncate max-w-[200px]">
-                                      {p.name}
-                                    </span>
-                                    <span className="font-mono text-muted-foreground text-[11px]">
-                                      ({p.stock} en stock) • {formatPriceMAD(p.salePrice)}
-                                    </span>
-                                  </div>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                        {/* 1. Image du Produit avec fallback */}
+                        <div className="relative shrink-0">
+                          {selectedProd?.imageUrl ? (
+                            <img
+                              src={selectedProd.imageUrl}
+                              alt={selectedProd.name}
+                              className="h-12 w-12 rounded-lg object-cover border bg-muted/20 shadow-xs"
+                            />
+                          ) : (
+                            <div className="h-12 w-12 rounded-lg bg-muted/40 border flex items-center justify-center text-muted-foreground shadow-xs">
+                              <Package className="h-5 w-5" />
+                            </div>
+                          )}
+                          {selectedProd && selectedProd.stock <= 5 && (
+                            <span
+                              className="absolute -top-1.5 -right-1.5 bg-amber-500 text-white text-[8px] font-black px-1 rounded-full shadow-xs"
+                              title="Stock faible"
+                            >
+                              !
+                            </span>
+                          )}
+                        </div>
+
+                        {/* 2. Nom du Produit et Sélecteur Recherchable */}
+                        <div className="flex-1 w-full min-w-0 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                              Article #{index + 1}
+                            </span>
+                            {selectedProd && (
+                              <span className="text-[10px] text-muted-foreground font-mono">
+                                SKU : <strong className="text-foreground">{selectedProd.sku}</strong>
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Sélecteur de produit avec recherche intégrée */}
+                          <div className="relative">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setRowSearchOpen(rowSearchOpen === index ? null : index);
+                                setRowSearchText("");
+                              }}
+                              className="w-full justify-between h-9 text-xs font-semibold px-2.5 text-left border-input hover:bg-muted/50"
+                            >
+                              <span className="truncate">
+                                {selectedProd ? selectedProd.name : "Sélectionner un produit..."}
+                              </span>
+                              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground shrink-0 ml-1.5" />
+                            </Button>
+
+                            {/* Dropdown de recherche par ligne */}
+                            {rowSearchOpen === index && (
+                              <div className="absolute left-0 right-0 top-full mt-1.5 z-40 rounded-lg border bg-popover text-popover-foreground shadow-xl p-2 space-y-2">
+                                <div className="relative">
+                                  <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+                                  <Input
+                                    autoFocus
+                                    placeholder="Chercher par nom, SKU..."
+                                    value={rowSearchText}
+                                    onChange={(e) => setRowSearchText(e.target.value)}
+                                    className="pl-8 h-8 text-xs"
+                                  />
+                                  {rowSearchText && (
+                                    <button
+                                      type="button"
+                                      onClick={() => setRowSearchText("")}
+                                      className="absolute right-2 top-2 text-muted-foreground hover:text-foreground"
+                                    >
+                                      <X className="h-3.5 w-3.5" />
+                                    </button>
+                                  )}
+                                </div>
+
+                                <div className="max-h-48 overflow-y-auto divide-y divide-border rounded border">
+                                  {products
+                                    .filter(
+                                      (p) =>
+                                        p.name.toLowerCase().includes(rowSearchText.toLowerCase()) ||
+                                        p.sku.toLowerCase().includes(rowSearchText.toLowerCase())
+                                    )
+                                    .map((p) => (
+                                      <button
+                                        key={p.id}
+                                        type="button"
+                                        onClick={() => {
+                                          handleProductSelect(index, p.id);
+                                          setRowSearchOpen(null);
+                                          setRowSearchText("");
+                                        }}
+                                        className={`w-full p-2 flex items-center justify-between gap-2 hover:bg-muted/70 text-left transition-colors ${
+                                          p.id === item.productId ? "bg-muted font-bold" : ""
+                                        }`}
+                                      >
+                                        <div className="flex items-center gap-2 min-w-0">
+                                          {p.imageUrl ? (
+                                            <img
+                                              src={p.imageUrl}
+                                              alt={p.name}
+                                              className="h-7 w-7 rounded object-cover border bg-muted/20 shrink-0"
+                                            />
+                                          ) : (
+                                            <div className="h-7 w-7 rounded bg-muted/40 border flex items-center justify-center text-muted-foreground shrink-0">
+                                              <Package className="h-3.5 w-3.5" />
+                                            </div>
+                                          )}
+                                          <div className="min-w-0">
+                                            <p className="text-xs truncate">{p.name}</p>
+                                            <p className="text-[10px] text-muted-foreground font-mono">
+                                              SKU: {p.sku} • Stock: {p.stock}
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <span className="font-mono text-xs font-semibold shrink-0">
+                                          {formatPriceMAD(p.salePrice)}
+                                        </span>
+                                      </button>
+                                    ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
                           {selectedProd && (
-                            <span className="text-[10px] text-muted-foreground">
-                              SKU : <strong className="font-mono">{selectedProd.sku}</strong> • Stock restant :{" "}
-                              <strong className={selectedProd.stock <= 5 ? "text-amber-600" : "text-emerald-600"}>
+                            <span className="text-[10px] text-muted-foreground block pt-0.5">
+                              Stock disponible :{" "}
+                              <strong
+                                className={
+                                  selectedProd.stock <= 5 ? "text-amber-600" : "text-emerald-600"
+                                }
+                              >
                                 {selectedProd.stock} unités
                               </strong>
                             </span>
                           )}
                         </div>
 
-                        {/* Quantité */}
-                        <div className="w-24 space-y-1">
-                          <Label className="text-[11px] text-muted-foreground">Qté</Label>
-                          <Input
-                            type="number"
-                            min="1"
-                            max={selectedProd?.stock || 99}
-                            value={item.quantity}
-                            onChange={(e) => handleQuantityChange(index, parseInt(e.target.value, 10) || 1)}
-                            className="h-9 font-mono text-center"
-                          />
+                        {/* 3. Quantité avec contrôles +/- */}
+                        <div className="w-full sm:w-28 space-y-1">
+                          <Label className="text-[11px] text-muted-foreground">Quantité</Label>
+                          <div className="flex items-center border rounded-md bg-background overflow-hidden h-9">
+                            <button
+                              type="button"
+                              onClick={() => handleQuantityChange(index, item.quantity - 1)}
+                              disabled={item.quantity <= 1}
+                              className="px-2.5 h-full hover:bg-muted text-muted-foreground hover:text-foreground disabled:opacity-40 transition-colors"
+                            >
+                              <Minus className="h-3 w-3" />
+                            </button>
+                            <input
+                              type="number"
+                              min="1"
+                              max={selectedProd?.stock || 999}
+                              value={item.quantity}
+                              onChange={(e) =>
+                                handleQuantityChange(index, parseInt(e.target.value, 10) || 1)
+                              }
+                              className="w-full text-center font-mono font-bold text-xs bg-transparent focus:outline-none"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleQuantityChange(index, item.quantity + 1)}
+                              disabled={selectedProd ? item.quantity >= selectedProd.stock : false}
+                              className="px-2.5 h-full hover:bg-muted text-muted-foreground hover:text-foreground disabled:opacity-40 transition-colors"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </button>
+                          </div>
                         </div>
 
-                        {/* Prix Unitaire MAD */}
-                        <div className="w-28 space-y-1">
+                        {/* 4. Prix Unitaire MAD */}
+                        <div className="w-full sm:w-28 space-y-1">
                           <Label className="text-[11px] text-muted-foreground">Prix Unitaire (DH)</Label>
                           <Input
                             type="number"
                             step="0.01"
                             min="0"
                             value={item.price}
-                            onChange={(e) => handlePriceChange(index, parseFloat(e.target.value) || 0)}
-                            className="h-9 font-mono text-right"
+                            onChange={(e) =>
+                              handlePriceChange(index, parseFloat(e.target.value) || 0)
+                            }
+                            className="h-9 font-mono text-right text-xs"
                           />
                         </div>
 
-                        {/* Total Ligne & Bouton Supprimer */}
+                        {/* 5. Total Ligne & Bouton Supprimer */}
                         <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto pt-2 sm:pt-4">
                           <div className="text-right">
                             <span className="text-[10px] text-muted-foreground block">Sous-total</span>
@@ -486,8 +764,8 @@ export function CreateOrderDialog({ onSuccess, trigger }: CreateOrderDialogProps
                               variant="ghost"
                               size="icon-sm"
                               onClick={() => handleRemoveItem(index)}
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8"
-                              title="Supprimer la ligne"
+                              className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8 ml-1"
+                              title="Supprimer cet article"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>

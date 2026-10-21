@@ -51,6 +51,9 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
   const shortOrderId =
     order.id.length > 8 ? order.id.slice(0, 8).toUpperCase() : order.id.toUpperCase();
 
+  const addressQuery = [order.address, order.city, "Maroc"].filter(Boolean).join(", ");
+  const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(addressQuery)}`;
+
   const handlePrint = () => {
     window.print();
   };
@@ -92,7 +95,7 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
               onClick={() => setDocType("label")}
               className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded transition-all ${
                 docType === "label"
-                  ? "bg-white text-black shadow-xs"
+                  ? "bg-black text-white shadow-xs"
                   : "text-neutral-600 hover:text-black"
               }`}
             >
@@ -104,7 +107,7 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
               onClick={() => setDocType("invoice")}
               className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded transition-all ${
                 docType === "invoice"
-                  ? "bg-white text-black shadow-xs"
+                  ? "bg-black text-white shadow-xs"
                   : "text-neutral-600 hover:text-black"
               }`}
             >
@@ -116,7 +119,7 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
           <Button
             size="sm"
             onClick={handlePrint}
-            className="h-8 gap-1.5 text-xs bg-black text-white hover:bg-neutral-800"
+            className="h-8 gap-1.5 text-xs text-white bg-black hover:bg-neutral-800"
           >
             <Printer className="h-3.5 w-3.5" />
             Imprimer {docType === "label" ? "l'étiquette" : "la facture"}
@@ -136,7 +139,7 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
                 <span className="text-[8px] font-bold uppercase tracking-wider text-neutral-500 block">
                   EXPÉDITEUR
                 </span>
-                <div className="font-black text-sm uppercase tracking-tight text-neutral-900">
+                <div className="font-black text-sm uppercase tracking-tight text-black">
                   {store.storeName}
                 </div>
                 <p className="text-[9px] text-neutral-600 line-clamp-1">{store.address}</p>
@@ -144,13 +147,13 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
               </div>
 
               <div className="w-[38%] bg-black text-white p-2 flex flex-col items-center justify-center text-center">
-                <span className="text-[8px] font-semibold uppercase tracking-wider text-neutral-300">
+                <span className="text-[8px] font-semibold uppercase tracking-wider text-neutral-400">
                   VILLE
                 </span>
                 <span className="text-base font-black uppercase tracking-tight leading-tight">
                   {order.city}
                 </span>
-                <span className="text-[8px] font-mono text-neutral-300 mt-0.5">
+                <span className="text-[8px] font-mono text-neutral-400 mt-0.5">
                   #{shortOrderId}
                 </span>
               </div>
@@ -159,7 +162,7 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
             {/* Destinataire */}
             <div className="border-2 border-black rounded p-2 bg-neutral-50 space-y-1">
               <div className="flex items-center justify-between border-b border-neutral-300 pb-1">
-                <span className="text-[8px] font-black uppercase tracking-wider text-neutral-600 flex items-center gap-1">
+                <span className="text-[8px] font-black uppercase tracking-wider text-black flex items-center gap-1">
                   <MapPin className="h-3 w-3" /> DESTINATAIRE (LIVRAISON)
                 </span>
                 <span className="text-[8px] font-mono font-bold text-neutral-500">
@@ -182,8 +185,8 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
             </div>
 
             {/* Articles */}
-            <div className="border border-black rounded overflow-hidden">
-              <div className="bg-neutral-900 text-white px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider flex justify-between">
+            <div className="border-2 border-black rounded overflow-hidden">
+              <div className="bg-black text-white px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider flex justify-between">
                 <span className="flex items-center gap-1">
                   <PackageCheck className="h-2.5 w-2.5" /> CONTENU DU COLIS
                 </span>
@@ -197,7 +200,7 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
                       <span className="font-bold text-neutral-900 block truncate">{item.name}</span>
                       <span className="text-[8px] font-mono text-neutral-500">REF: {item.sku}</span>
                     </div>
-                    <span className="font-mono font-black text-xs bg-neutral-100 px-1.5 py-0.5 rounded border border-neutral-300 shrink-0">
+                    <span className="font-mono font-black text-xs bg-neutral-100 text-black px-1.5 py-0.5 rounded border border-neutral-300 shrink-0">
                       x{item.quantity}
                     </span>
                   </div>
@@ -218,8 +221,40 @@ export function InvoiceView({ invoice, order, store }: InvoiceViewProps) {
               </span>
             </div>
 
-          
-           
+            {/* Localisation GPS / Google Maps pour le Livreur */}
+            <div className="border-2 border-black rounded p-2 flex items-center justify-between gap-3 bg-neutral-50">
+              <div className="flex-1 space-y-1">
+                <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-black">
+                  <MapPin className="h-3.5 w-3.5 text-black shrink-0" />
+                  <span>LOCALISATION GPS (GOOGLE MAPS)</span>
+                </div>
+                <p className="text-[9px] text-neutral-600 leading-tight">
+                  Scannez avec la caméra du téléphone pour ouvrir l'itinéraire sur <strong>Google Maps</strong>.
+                </p>
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[9px] font-mono font-bold text-black hover:underline truncate max-w-[210px] pt-0.5"
+                  title="Ouvrir l'adresse dans Google Maps"
+                >
+                  📍 {order.address}, {order.city}
+                </a>
+              </div>
+
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Cliquer pour tester ou ouvrir dans Google Maps"
+                className="flex flex-col items-center bg-white p-1 rounded border-2 border-black shrink-0 hover:bg-neutral-50 transition-colors"
+              >
+                <QRCodeImage value={mapsUrl} size={76} quietZone={3} />
+                <span className="text-[6.5px] font-mono font-black uppercase text-black mt-1">
+                  GOOGLE MAPS ↗
+                </span>
+              </a>
+            </div>
           </div>
         </div>
       )}
