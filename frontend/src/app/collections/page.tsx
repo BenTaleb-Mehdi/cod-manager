@@ -47,7 +47,7 @@ export default function CollectionsPage() {
               </p>
 
               {/* Spécifications Minimalistes sous forme de ligne d'atelier */}
-              <div className="pt-4 border-t border-[#EBE8E1] flex flex-wrap items-center gap-6 sm:gap-8 text-[11px] text-stone-700 font-mono tracking-wider uppercase">
+              <div className="pt-4 border-t border-[#EBE8E1] flex flex-wrap items-center gap-6 sm:gap-8 text-[11px] text-stone-700 font-sans font-medium tracking-wider uppercase">
                 <div>
                   <span className="text-stone-400 block text-[9px]">Matière</span>
                   <span>Acier Inox 316L</span>
@@ -94,7 +94,7 @@ export default function CollectionsPage() {
           fallback={
             <div className="flex flex-col items-center justify-center py-24 space-y-3">
               <div className="h-8 w-8 border-2 border-[#0A261E] border-t-transparent rounded-full animate-spin" />
-              <p className="text-[11px] text-stone-500 uppercase tracking-widest font-mono">
+              <p className="text-[11px] text-stone-500 uppercase tracking-widest font-sans font-medium">
                 Ouverture du catalogue...
               </p>
             </div>
