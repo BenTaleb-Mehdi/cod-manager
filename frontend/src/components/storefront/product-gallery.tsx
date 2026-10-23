@@ -30,15 +30,15 @@ export function ProductGallery({ images, title, badge, productId }: ProductGalle
   };
 
   return (
-    <div className="space-y-3">
-      {/* Zone Image Principale Portrait (Identique au mockup Screen 2) */}
-      <div className="relative aspect-[4/5] sm:aspect-[3/4] w-full overflow-hidden rounded-[26px] sm:rounded-3xl border border-[#EBE6DF] bg-[#FAF8F5] shadow-xs">
+    <div className="space-y-3 max-w-[460px] mx-auto lg:max-w-none">
+      {/* Zone Image Principale Balancée (Format Carré Élégant) */}
+      <div className="relative aspect-square w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-[#EBE6DF] bg-[#FAF8F5] shadow-xs">
         <Image
           src={images[selectedIndex] || images[0]}
           alt={`${title} - Photo ${selectedIndex + 1}`}
           fill
           priority
-          sizes="(max-width: 768px) 100vw, 50vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 440px"
           className="object-cover object-center transition-all duration-300"
         />
 

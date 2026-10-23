@@ -45,3 +45,56 @@ export async function receiveSupplyOrderAction(input: {
     }
   );
 }
+
+/**
+ * Récupère le détail d'un fournisseur avec ses produits et son historique de réceptions
+ */
+export async function getSupplierDetailAction(id: string): Promise<ApiResponse<any>> {
+  return apiFetch<any>(`/api/suppliers/${id}`);
+}
+
+/**
+ * Met à jour un fournisseur existant
+ */
+export async function updateSupplierAction(
+  id: string,
+  input: {
+    name?: string;
+    phone?: string;
+    city?: string;
+    address?: string | null;
+  }
+): Promise<ApiResponse<Supplier>> {
+  return apiFetch<Supplier>(`/api/suppliers/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(input),
+  });
+}
+
+/**
+ * Supprime un fournisseur
+ */
+export async function deleteSupplierAction(
+  id: string
+): Promise<ApiResponse<{ id: string; message: string }>> {
+  return apiFetch<{ id: string; message: string }>(`/api/suppliers/${id}`, {
+    method: "DELETE",
+  });
+}
+
+/**
+ * Enregistre un règlement / paiement de dette envers un fournisseur
+ */
+export async function paySupplierAction(
+  id: string,
+  input: {
+    amount: number;
+    note?: string;
+  }
+): Promise<ApiResponse<Supplier>> {
+  return apiFetch<Supplier>(`/api/suppliers/${id}/pay`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+

@@ -33,6 +33,8 @@ export const ProductBaseSchema = z.object({
     .min(1, "Veuillez sélectionner une catégorie."),
   imageUrl: z.string().optional().nullable(),
   supplierId: z.string().optional().nullable(),
+  lowStockThreshold: z.coerce.number().int().min(0).optional().nullable(),
+  isActive: z.boolean().optional(),
 });
 
 export const CreateProductSchema = ProductBaseSchema.refine(

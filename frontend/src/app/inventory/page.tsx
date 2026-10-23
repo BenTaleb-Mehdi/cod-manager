@@ -5,11 +5,13 @@ import React, { useState, useEffect } from "react";
 import { ProductDataTable } from "@/components/inventory/ProductDataTable";
 import { AddProductDialog } from "@/components/inventory/AddProductDialog";
 import { AddCategoryDialog } from "@/components/inventory/AddCategoryDialog";
+import { ExportProductsButton } from "@/components/inventory/ExportProductsButton";
+import { DownloadPdfCatalogButton } from "@/components/inventory/DownloadPdfCatalogButton";
 import { Product, Category } from "@/types";
 import { getInventoryAction } from "@/actions/inventory";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPriceMAD } from "@/lib/utils";
-import { Boxes, AlertTriangle, TrendingUp, DollarSign } from "lucide-react";
+import { Boxes, AlertTriangle, TrendingUp, DollarSign, Coins } from "lucide-react";
 
 export default function InventoryPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -37,14 +39,29 @@ export default function InventoryPage() {
     setProducts((prev) => [newProduct, ...prev]);
   };
 
+  const handleProductUpdated = (updatedProduct: Product) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
+    );
+  };
+
+  const handleProductDeleted = (deletedProductId: string) => {
+    setProducts((prev) => prev.filter((p) => p.id !== deletedProductId));
+  };
+
   const handleCategoryCreated = (newCategory: Category) => {
     setCategories((prev) => [newCategory, ...prev]);
   };
 
   // Statistiques d'inventaire
   const totalStockUnits = products.reduce((acc, p) => acc + p.stock, 0);
-  const lowStockCount = products.filter((p) => p.stock <= 5).length;
+  const activeProducts = products.filter((p) => p.isActive !== false);
+  const activeStockUnits = activeProducts.reduce((acc, p) => acc + p.stock, 0);
+  const activeCostValue = activeProducts.reduce((acc, p) => acc + p.costPrice * p.stock, 0);
   const totalCostValue = products.reduce((acc, p) => acc + p.costPrice * p.stock, 0);
+  const lowStockCount = products.filter(
+    (p) => p.isActive !== false && p.stock <= (p.lowStockThreshold ?? 5)
+  ).length;
   const averageMarginPct =
     products.length > 0
       ? (
@@ -68,7 +85,13 @@ export default function InventoryPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Bouton Télécharger Catalogue PDF (Produits Actifs) */}
+          <DownloadPdfCatalogButton products={products} />
+
+          {/* Bouton Exporter Excel / CSV */}
+          <ExportProductsButton products={products} />
+
           {/* Modal Ajouter Catégorie */}
           <AddCategoryDialog onCategoryCreated={handleCategoryCreated} />
 
@@ -80,8 +103,9 @@ export default function InventoryPage() {
         </div>
       </div>
 
-      {/* Mini Cartes de Synthèse de Stock */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Mini Cartes de Synthèse de Stock (5 KPIs) */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+        {/* Total Produits */}
         <Card className="shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -91,52 +115,74 @@ export default function InventoryPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tracking-tight text-foreground">
-              {products.length} références
+              {products.length} réf.
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              {totalStockUnits} unités physiques en stock
+              {activeProducts.length} actifs • {totalStockUnits} unités
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border-red-200 dark:border-red-900/50">
+        {/* Valeur du Stock (Achat) Actif */}
+        <Card className="shadow-sm border-emerald-500/30 bg-emerald-500/[0.03]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400">
-              Alerte Rupture (&le; 5 unités)
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Valeur Stock Actif (Achat)
             </CardTitle>
-            <AlertTriangle className="h-4 w-4 text-red-500" />
+            <Coins className="h-4 w-4 text-emerald-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-red-600 dark:text-red-400">
-              {lowStockCount} produits
+            <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 font-mono">
+              {formatPriceMAD(activeCostValue)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Réapprovisionnement urgent requis
+              {activeStockUnits} unités prêtes à la vente
             </p>
           </CardContent>
         </Card>
 
+        {/* Valeur du Stock (Achat) Total */}
         <Card className="shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Valeur du Stock (Achat)
+              Valeur Stock Total (Achat)
             </CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-foreground">
+            <div className="text-2xl font-bold tracking-tight text-foreground font-mono">
               {formatPriceMAD(totalCostValue)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Capital immobilisé en entrepôt
+              Capital total immobilisé
             </p>
           </CardContent>
         </Card>
 
+        {/* Alerte Rupture / Seuil */}
+        <Card className="shadow-sm border-amber-200 dark:border-amber-900/50">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+              Alerte Stock Faible
+            </CardTitle>
+            <AlertTriangle className="h-4 w-4 text-amber-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold tracking-tight text-amber-700 dark:text-amber-300">
+              {lowStockCount} produits
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Stock &le; seuil configuré
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Marge Moyenne */}
         <Card className="shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Marge Moyenne Catalogue
+              Marge Moyenne
             </CardTitle>
             <TrendingUp className="h-4 w-4 text-emerald-600" />
           </CardHeader>
@@ -145,14 +191,19 @@ export default function InventoryPage() {
               {averageMarginPct}%
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Calculé sur le prix de vente conseillé
+              Sur prix catalogue
             </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Tableau Haute Performance de l'Inventaire avec alertes stock */}
-      <ProductDataTable products={products} />
+      {/* Tableau Haute Performance de l'Inventaire avec gestion complète des produits */}
+      <ProductDataTable
+        products={products}
+        categories={categories}
+        onProductUpdated={handleProductUpdated}
+        onProductDeleted={handleProductDeleted}
+      />
     </div>
   );
 }

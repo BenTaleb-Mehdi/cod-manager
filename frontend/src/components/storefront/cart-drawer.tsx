@@ -414,7 +414,7 @@ export function CartDrawer() {
                       value={phone}
                       onChange={handlePhoneInput}
                       placeholder="06 XX XX XX XX"
-                      className="w-full rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] pl-18 pr-3 py-2 text-xs text-[#18221D] font-mono focus:border-[#0B2D23] focus:bg-white focus:outline-none transition-all"
+                      className="w-full rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] pl-18 pr-3 py-2 text-xs text-[#18221D] font-sans font-medium tracking-wide focus:border-[#0B2D23] focus:bg-white focus:outline-none transition-all"
                     />
                   </div>
                 </div>

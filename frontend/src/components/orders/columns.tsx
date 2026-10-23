@@ -52,7 +52,7 @@ export const getOrderColumns = ({
   },
   {
     accessorKey: "id",
-    size: 95,
+    size: 85,
     header: "ID & Date",
     cell: ({ row }) => {
       const order = row.original;
@@ -62,13 +62,14 @@ export const getOrderColumns = ({
         hour: "2-digit",
         minute: "2-digit",
       });
+      const shortId = order.id.length > 8 ? order.id.slice(0, 8).toUpperCase() : order.id;
 
       return (
-        <div className="flex flex-col whitespace-nowrap">
-          <span className="font-mono text-xs font-bold text-foreground tracking-tight whitespace-nowrap">
-            #{order.id}
+        <div className="flex flex-col whitespace-nowrap" title={`ID complet: #${order.id}`}>
+          <span className="font-mono text-xs font-bold text-foreground tracking-tight">
+            #{shortId}
           </span>
-          <span className="text-[11px] text-muted-foreground whitespace-nowrap">
+          <span className="text-[11px] text-muted-foreground">
             {dateFormatted}
           </span>
         </div>
@@ -77,12 +78,12 @@ export const getOrderColumns = ({
   },
   {
     accessorKey: "customerName",
-    size: 190,
+    size: 160,
     header: ({ column }) => (
       <Button
         variant="ghost"
         size="sm"
-        className="-ml-3 h-8 text-xs font-semibold whitespace-nowrap"
+        className="-ml-2 h-8 text-xs font-semibold whitespace-nowrap px-1.5"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Client & Tél
@@ -92,7 +93,7 @@ export const getOrderColumns = ({
     cell: ({ row }) => {
       const order = row.original;
       return (
-        <div className="flex flex-col min-w-0 pr-2">
+        <div className="flex flex-col min-w-0 pr-1">
           <span className="font-semibold text-foreground text-xs truncate" title={order.customerName}>
             {order.customerName}
           </span>
@@ -111,29 +112,29 @@ export const getOrderColumns = ({
   },
   {
     accessorKey: "city",
-    size: 95,
+    size: 85,
     header: "Ville",
     cell: ({ row }) => {
       const city = row.getValue("city") as string;
       return (
         <div className="flex items-center gap-1 text-xs font-medium whitespace-nowrap">
           <MapPin className="h-3 w-3 text-muted-foreground shrink-0" />
-          <span>{city}</span>
+          <span className="truncate" title={city}>{city}</span>
         </div>
       );
     },
   },
   {
     accessorKey: "items",
-    size: 160,
+    size: 200,
     header: "Articles",
     cell: ({ row }) => {
       const items = row.original.items;
       if (!items || items.length === 0) return <span className="text-muted-foreground">-</span>;
 
       return (
-        <div className="flex flex-col text-xs min-w-0 pr-2">
-          <span className="truncate font-medium" title={items[0].productName}>
+        <div className="flex flex-col text-xs min-w-0 pr-1">
+          <span className="truncate font-medium block" title={items[0].productName}>
             {items[0].quantity}x {items[0].productName}
           </span>
           {items.length > 1 && (
@@ -147,12 +148,12 @@ export const getOrderColumns = ({
   },
   {
     accessorKey: "totalAmount",
-    size: 90,
+    size: 85,
     header: ({ column }) => (
       <Button
         variant="ghost"
         size="sm"
-        className="-ml-3 h-8 text-xs font-semibold whitespace-nowrap"
+        className="-ml-2 h-8 text-xs font-semibold whitespace-nowrap px-1.5"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Total
@@ -170,7 +171,7 @@ export const getOrderColumns = ({
   },
   {
     accessorKey: "status",
-    size: 120,
+    size: 110,
     header: "Statut",
     cell: ({ row }) => {
       const status = row.getValue("status") as OrderStatus;
@@ -183,7 +184,7 @@ export const getOrderColumns = ({
   },
   {
     accessorKey: "attemptsCount",
-    size: 65,
+    size: 60,
     header: "Appels",
     cell: ({ row }) => {
       const attempts = row.getValue("attemptsCount") as number;
@@ -214,27 +215,27 @@ export const getOrderColumns = ({
   },
   {
     id: "assignments",
-    size: 130,
+    size: 125,
     header: "Livreur & Suivi",
     cell: ({ row }) => {
       const order = row.original;
       return (
-        <div className="flex items-center justify-between gap-1 text-[11px] whitespace-nowrap">
-          <div className="flex flex-col gap-0.5 min-w-0">
+        <div className="flex items-center justify-between gap-1 text-[11px] whitespace-nowrap min-w-0">
+          <div className="flex flex-col gap-0.5 min-w-0 overflow-hidden">
             {order.courier ? (
               <div className="flex items-center gap-1 text-sky-700 dark:text-sky-400 font-medium">
                 <Truck className="h-3 w-3 shrink-0" />
-                <span className="truncate max-w-[90px]">{order.courier.name}</span>
+                <span className="truncate" title={order.courier.name}>{order.courier.name}</span>
               </div>
             ) : (
               <span className="text-muted-foreground italic text-[10px]">Non assigné</span>
             )}
             {order.trackingNumber ? (
-              <span className="font-mono text-[10px] text-muted-foreground truncate max-w-[90px]">
+              <span className="font-mono text-[10px] text-muted-foreground truncate" title={order.trackingNumber}>
                 {order.trackingNumber}
               </span>
             ) : order.assignedTo ? (
-              <span className="text-muted-foreground truncate max-w-[90px] text-[10px]">
+              <span className="text-muted-foreground truncate text-[10px]" title={order.assignedTo.name}>
                 {order.assignedTo.name.split(" ")[0]}
               </span>
             ) : null}
@@ -256,11 +257,10 @@ export const getOrderColumns = ({
         </div>
       );
     },
-
   },
   {
     id: "actions",
-    size: 48,
+    size: 44,
     header: "",
     cell: ({ row }) => {
       const order = row.original;

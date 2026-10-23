@@ -64,6 +64,12 @@ const AddProductSchema = z
       .number({ invalid_type_error: "Stock invalide." })
       .int("Le stock doit être un entier.")
       .min(0, "Le stock initial ne peut pas être négatif."),
+    lowStockThreshold: z
+      .coerce
+      .number({ invalid_type_error: "Seuil invalide." })
+      .int("Le seuil doit être un entier.")
+      .min(0, "Le seuil ne peut pas être négatif.")
+      .default(5),
     imageUrl: z
       .string()
       .refine(
@@ -126,6 +132,7 @@ export function AddProductDialog({
       costPrice: 0,
       salePrice: 0,
       stock: 10,
+      lowStockThreshold: 5,
       imageUrl: "",
       description: "",
     },
@@ -237,6 +244,8 @@ export function AddProductDialog({
         stock: values.stock,
         categoryId: values.categoryId,
         imageUrl: values.imageUrl || undefined,
+        lowStockThreshold: values.lowStockThreshold,
+        isActive: true,
       });
 
       if (!res.success || !res.data) {
@@ -385,8 +394,8 @@ export function AddProductDialog({
             </div>
           </div>
 
-          {/* Prix d'Achat, Prix de Vente et Stock Initial */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {/* Prix d'Achat, Prix de Vente, Stock Initial et Seuil d'Alerte */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="prod-cost">Prix Achat (DH)</Label>
               <Input
@@ -426,6 +435,21 @@ export function AddProductDialog({
               />
               {errors.stock && (
                 <p className="text-xs text-destructive font-medium">{errors.stock.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="prod-threshold">Seuil Alerte Stock</Label>
+              <Input
+                id="prod-threshold"
+                type="number"
+                step="1"
+                min="0"
+                placeholder="ex: 5"
+                {...register("lowStockThreshold")}
+              />
+              {errors.lowStockThreshold && (
+                <p className="text-xs text-destructive font-medium">{errors.lowStockThreshold.message}</p>
               )}
             </div>
           </div>

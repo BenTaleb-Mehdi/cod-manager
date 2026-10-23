@@ -8,6 +8,8 @@
 *.tsbuildinfo
 /.next
 
+/storage/pdf
+/public/uploads/products
 /generated/prisma
 pnpm-lock.yaml
 package-lock.json

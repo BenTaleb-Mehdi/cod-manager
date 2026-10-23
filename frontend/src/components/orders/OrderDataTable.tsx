@@ -57,9 +57,7 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
   const urlStatus = searchParams?.get("status");
 
   const [data, setData] = useState<Order[]>(initialOrders);
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: "customerName", desc: false },
-  ]);
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -286,7 +284,7 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
 
           {/* Filtre par Statut */}
           <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger className="w-[170px] h-9">
+            <SelectTrigger className="w-[185px] h-9">
               <SlidersHorizontal className="mr-2 h-3.5 w-3.5 text-muted-foreground" />
               <SelectValue placeholder="Tous les statuts" />
             </SelectTrigger>
@@ -346,13 +344,14 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
 
       {/* Table TanStack */}
       <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
-        <Table className="w-full">
+        <Table className="w-full table-fixed min-w-[960px]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
+                    className="px-2.5 py-3 text-xs"
                     style={{
                       width: header.getSize() ? `${header.getSize()}px` : undefined,
                     }}
@@ -379,6 +378,7 @@ export function OrderDataTable({ initialOrders }: OrderDataTableProps) {
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
+                      className="px-2.5 py-2.5 text-xs"
                       style={{
                         width: cell.column.getSize() ? `${cell.column.getSize()}px` : undefined,
                       }}

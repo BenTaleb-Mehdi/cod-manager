@@ -68,7 +68,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   ).slice(0, 4);
 
   return (
-    <div className="container mx-auto px-4 py-4 sm:py-8 pb-24 sm:pb-12 space-y-10 sm:space-y-14">
+    <div className="container mx-auto px-4 py-4 sm:py-8 pb-24 sm:pb-12 space-y-10 sm:space-y-14 max-w-6xl">
       {/* Fil d'Ariane (Breadcrumbs) */}
       <nav className="flex items-center gap-1.5 text-xs text-[#18221D]/60 overflow-x-auto whitespace-nowrap pb-1">
         <Link href="/" className="hover:text-[#0B2D23] transition-colors">
@@ -89,8 +89,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
       {/* Zone Principale : Galerie Photo + Détails Commande */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-        {/* Colonne Gauche : Galerie Photo Portrait Style Mockup */}
-        <div className="lg:col-span-6 lg:sticky lg:top-24">
+        {/* Colonne Gauche : Galerie Photo */}
+        <div className="lg:col-span-5 lg:sticky lg:top-24">
           <ProductGallery
             images={product.images}
             title={product.title}
@@ -100,7 +100,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </div>
 
         {/* Colonne Droite : Titre -> Description courte -> Prix (before & after) -> Stars -> [- 1 +] & Commander -> Ajouter au Panier -> Contact WhatsApp */}
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-7">
           <ProductOrderSection product={product} />
         </div>
       </div>

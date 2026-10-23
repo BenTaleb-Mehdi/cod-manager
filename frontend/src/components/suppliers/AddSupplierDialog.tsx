@@ -35,9 +35,12 @@ const AddSupplierSchema = z.object({
   address: z.string().optional(),
 });
 
-type AddSupplierFormValues = z.infer<typeof AddSupplierSchema>;
+interface AddSupplierDialogProps {
+  onSupplierCreated?: (newSupplier: any) => void;
+  trigger?: React.ReactNode;
+}
 
-export function AddSupplierDialog() {
+export function AddSupplierDialog({ onSupplierCreated, trigger }: AddSupplierDialogProps = {}) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -62,7 +65,10 @@ export function AddSupplierDialog() {
     setIsSubmitting(true);
     try {
       const res = await createSupplierAction(values);
-      if (res.success) {
+      if (res.success && res.data) {
+        if (onSupplierCreated) {
+          onSupplierCreated(res.data);
+        }
         reset();
         setOpen(false);
         router.refresh();
