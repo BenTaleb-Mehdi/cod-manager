@@ -35,6 +35,8 @@ const AddSupplierSchema = z.object({
   address: z.string().optional(),
 });
 
+type AddSupplierFormValues = z.infer<typeof AddSupplierSchema>;
+
 interface AddSupplierDialogProps {
   onSupplierCreated?: (newSupplier: any) => void;
   trigger?: React.ReactNode;
