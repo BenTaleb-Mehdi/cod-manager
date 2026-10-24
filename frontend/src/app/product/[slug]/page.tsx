@@ -42,11 +42,16 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   };
 }
 
+export const dynamicParams = true;
+
 export function generateStaticParams() {
   const products = getProducts();
-  return products.map((p) => ({
-    slug: p.slug,
-  }));
+  const params: { slug: string }[] = [];
+  products.forEach((p) => {
+    if (p.slug) params.push({ slug: p.slug });
+    if (p.id && p.id !== p.slug) params.push({ slug: p.id });
+  });
+  return params;
 }
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
@@ -130,7 +135,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-3.5 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5">
             {relatedProducts.map((rel) => (
               <ProductCard key={rel.id} product={rel} />
             ))}

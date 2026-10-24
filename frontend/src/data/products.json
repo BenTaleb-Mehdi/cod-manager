@@ -1,92 +1,372 @@
 [
-  {
-    "id": "meraf-slasel-01",
-    "slug": "collier-medaillon-soleil-or",
-    "title": "Emerald Halo Pendant - Inox Doré Inaltérable",
-    "category": "Bagues",
-    "categoryLabel": "Bagues",
-    "priceMAD": 199,
-    "compareAtPriceMAD": 349,
-    "stock": 8,
-    "badge": "Top Vente ✦",
-    "rating": 4.9,
-    "reviewsCount": 128,
-    "shortDescription": "Pendentif raffiné en acier inoxydable haute qualité orné d'une émeraude éclatante sertie de cristaux étincelants. Finition dorée inaltérable qui ne noircit jamais.",
-    "images": [
-      "/images/products/Bagues/pro1-3.jpeg",
-      "/images/products/Bagues/pro1-2.png"
-    ],
-    "highlights": [
-      "Acier Inoxydable 316L haute qualité garanti inaltérable",
-      "Finition dorée éclatante haute tenue (ne noircit pas, ne rouille pas)",
-      "100% Résistant à l'eau, à la douche, sueur et parfums (Waterproof)",
-      "Hypoallergénique (Garanti sans nickel ni plomb, idéal peaux sensibles)",
-      "Longueur réglable 40 cm + 5 cm d'extension",
-      "Garantie éclat & anti-rouille MÉRAF"
-    ],
-    "offers": [
-      {
-        "id": "pack-1",
-        "title": "1 Pièce (Offre Standard)",
-        "quantity": 1,
-        "priceMAD": 199,
-        "compareAtPriceMAD": 349,
-        "savingsMAD": 150,
-        "badge": "Standard",
-        "isPopular": false
-      },
-      {
-        "id": "pack-2",
-        "title": "2 Pièces (Duo Glamour)",
-        "quantity": 2,
-        "priceMAD": 299,
-        "compareAtPriceMAD": 698,
-        "savingsMAD": 399,
-        "badge": "⭐ Le Plus Choisi",
-        "isPopular": true
-      },
-      {
-        "id": "pack-gift",
-        "title": "Pack Cadeau Luxe MÉRAF",
-        "quantity": 1,
-        "priceMAD": 349,
-        "compareAtPriceMAD": 499,
-        "savingsMAD": 150,
-        "badge": "🎁 Coffret Cadeau Luxe",
-        "isPopular": false,
-        "includes": ["Collier Solaire Chams", "Coffret Écrin Velours MÉRAF", "Sac Cadeau Doré", "Carte de Vœux"]
-      }
-    ],
-    "reviews": [
-      {
-        "id": "rev-1",
-        "author": "Fatima-Zahra B.",
-        "city": "Casablanca",
-        "rating": 5,
-        "date": "Il y a 2 jours",
-        "comment": "Wallahila qualité wa3ra bzaf ! Khelit la chaine tahet lma w parfum w ma tbedlatch ga3 la couleur dialha. Merci MÉRAF pour le professionnalisme !",
-        "verifiedBuyer": true,
-        "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
-      },
-      {
-        "id": "rev-2",
-        "author": "Salma M.",
-        "city": "Rabat",
-        "rating": 5,
-        "date": "Il y a 4 jours",
-        "comment": "Livraison express en 24h à Rabat ! L'emballage kay7emmel bhal chi cadeau luxe men la France. J'adore !",
-        "verifiedBuyer": true,
-        "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
-      },
-      {
-        "id": "rev-3",
-        "author": "Oumaima K.",
-        "city": "Marrakech",
-        "rating": 5,
-        "date": "Il y a 1 semaine",
-        "comment": "Super contente, l'opératrice kanet gentille w l'livreur khellani nchouf l'colis w nhellou 3ad nkhless. Service 10/10.",
-        "verifiedBuyer": true
-      }
-    ]
-  }
+{
+  "id": "pro-01",
+  "slug": "collier-medaillon-soleil-or",
+  "title": "Emerald Halo Pendant - Inox Doré Inaltérable",
+  "category": "Colliers",
+  "categoryLabel": "Colliers",
+  "priceMAD": 199,
+  "compareAtPriceMAD": 349,
+  "stock": 8,
+  "badge": "Top Vente ✦",
+  "rating": 4.9,
+  "reviewsCount": 128,
+  "shortDescription": "Pendentif raffiné en acier inoxydable haute qualité orné d'une émeraude éclatante sertie de cristaux étincelants. Finition dorée inaltérable qui ne noircit jamais.",
+  "images": [
+    "/images/products/collier/image-02.jpg"
+  ],
+  "highlights": [
+    "Acier Inoxydable 316L haute qualité garanti inaltérable",
+    "Finition dorée éclatante haute tenue (ne noircit pas, ne rouille pas)",
+    "100% Résistant à l'eau, à la douche, sueur et parfums (Waterproof)",
+    "Hypoallergénique (Garanti sans nickel ni plomb, idéal peaux sensibles)",
+    "Longueur réglable 40 cm + 5 cm d'extension",
+    "Garantie éclat & anti-rouille MÉRAF"
+  ],
+  "offers": [
+    {
+      "id": "pack-1",
+      "title": "1 Pièce (Offre Standard)",
+      "quantity": 1,
+      "priceMAD": 199,
+      "compareAtPriceMAD": 349,
+      "savingsMAD": 150,
+      "badge": "Standard",
+      "isPopular": false
+    },
+    {
+      "id": "pack-2",
+      "title": "2 Pièces (Duo Glamour)",
+      "quantity": 2,
+      "priceMAD": 299,
+      "compareAtPriceMAD": 698,
+      "savingsMAD": 399,
+      "badge": "⭐ Le Plus Choisi",
+      "isPopular": true
+    },
+    {
+      "id": "pack-gift",
+      "title": "Pack Cadeau Luxe MÉRAF",
+      "quantity": 1,
+      "priceMAD": 349,
+      "compareAtPriceMAD": 499,
+      "savingsMAD": 150,
+      "badge": "🎁 Coffret Cadeau Luxe",
+      "isPopular": false,
+      "includes": [
+        "Collier Solaire Chams",
+        "Coffret Écrin Velours MÉRAF",
+        "Sac Cadeau Doré",
+        "Carte de Vœux"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev-1",
+      "author": "Fatima-Zahra B.",
+      "city": "Casablanca",
+      "rating": 5,
+      "date": "Il y a 2 jours",
+      "comment": "Wallahila qualité wa3ra bzaf ! Khelit la chaine tahet lma w parfum w ma tbedlatch ga3 la couleur dialha. Merci MÉRAF pour le professionnalisme !",
+      "verifiedBuyer": true,
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+      "id": "rev-2",
+      "author": "Salma M.",
+      "city": "Rabat",
+      "rating": 5,
+      "date": "Il y a 4 jours",
+      "comment": "Livraison express en 24h à Rabat ! L'emballage kay7emmel bhal chi cadeau luxe men la France. J'adore !",
+      "verifiedBuyer": true,
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+      "id": "rev-3",
+      "author": "Oumaima K.",
+      "city": "Marrakech",
+      "rating": 5,
+      "date": "Il y a 1 semaine",
+      "comment": "Super contente, l'opératrice kanet gentille w l'livreur khellani nchouf l'colis w nhellou 3ad nkhless. Service 10/10.",
+      "verifiedBuyer": true
+    }
+  ]
+},
+{
+  "id": "pro-02",
+  "slug": "parure-etoile-brillante-or",
+  "title": "Parure Étoile Scintillante - Inox Doré Inaltérable",
+  "category": "Parures",
+  "categoryLabel": "Parures & Sets",
+  "priceMAD": 249,
+  "compareAtPriceMAD": 449,
+  "stock": 10,
+  "badge": "Nouveauté ✦",
+  "rating": 4.9,
+  "reviewsCount": 85,
+  "shortDescription": "Sublime parure 4 pièces en forme d'étoile ornée de cristaux étincelants comprenant un collier, un bracelet rigide, une bague et une paire d'oreilles. Conçue en acier inoxydable doré inaltérable.",
+  "images": [
+    "/images/products/collier/image-03.jpg"
+  ],
+  "highlights": [
+    "Parure complète 4 Pièces : Collier + Bracelet + Bague + Boucles d'oreilles",
+    "Motif Étoile de Luxe serti de cristaux étincelants haute réfraction",
+    "Acier Inoxydable 316L garanti inaltérable (ne rouille pas, ne noircit pas)",
+    "100% Waterproof : Résiste à l'eau, aux parfums et à la sueur",
+    "Hypoallergénique (Sans nickel ni plomb, sans danger pour les peaux sensibles)",
+    "Garantie éclat & anti-oxydation MÉRAF"
+  ],
+  "offers": [
+    {
+      "id": "pack-1",
+      "title": "1 Parure Complète (4 Pièces)",
+      "quantity": 1,
+      "priceMAD": 249,
+      "compareAtPriceMAD": 449,
+      "savingsMAD": 200,
+      "badge": "Offre Standard",
+      "isPopular": false
+    },
+    {
+      "id": "pack-2",
+      "title": "2 Parures Étoile (Duo Prestige)",
+      "quantity": 2,
+      "priceMAD": 399,
+      "compareAtPriceMAD": 898,
+      "savingsMAD": 499,
+      "badge": "⭐ Meilleure Offre",
+      "isPopular": true
+    },
+    {
+      "id": "pack-gift",
+      "title": "Coffret Cadeau Luxe MÉRAF",
+      "quantity": 1,
+      "priceMAD": 399,
+      "compareAtPriceMAD": 599,
+      "savingsMAD": 200,
+      "badge": "🎁 Coffret Cadeau Écrin",
+      "isPopular": false,
+      "includes": [
+        "Parure Étoile Scintillante 4 Pièces",
+        "Grand Écrin Luxe en Velours Rouge MÉRAF",
+        "Sac Cadeau Doré MÉRAF",
+        "Carte de Vœux Personnalisée"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev-1",
+      "author": "Sanae R.",
+      "city": "Tanger",
+      "rating": 5,
+      "date": "Il y a 1 jour",
+      "comment": "La parure étoile hiya la meilleure chose li chrit men 3andkoum! Cristaux kay briw bzaf w l'emballage f'l velours rouge bhal chi bijou d'or rasmi.",
+      "verifiedBuyer": true
+    },
+    {
+      "id": "rev-2",
+      "author": "Meryem K.",
+      "city": "Agadir",
+      "rating": 5,
+      "date": "Il y a 3 jours",
+      "comment": "Superbe qualité! Dert biha l'douche w dert parfum w ma tbedlatx ga3. Merci MÉRAF 💖",
+      "verifiedBuyer": true
+    },
+    {
+      "id": "rev-3",
+      "author": "Khadija T.",
+      "city": "Fès",
+      "rating": 5,
+      "date": "Il y a 5 jours",
+      "comment": "Khdit pack cadeau l khti f 3id milad_ha, 3jbat_ha bzaaf w livriwom lia f 24h. Service au top!",
+      "verifiedBuyer": true
+    }
+  ]
+},
+{
+  "id": "pro-03",
+  "slug": "parure-cygne-halo-or",
+  "title": "Parure Cygne Halo Prestige - Inox Doré Inaltérable",
+  "category": "Parures",
+  "categoryLabel": "Parures & Sets",
+  "priceMAD": 249,
+  "compareAtPriceMAD": 449,
+  "stock": 12,
+  "badge": "Best-Seller ✦",
+  "rating": 4.9,
+  "reviewsCount": 94,
+  "shortDescription": "Élégante parure 4 pièces arborant le motif iconique du cygne entouré d'un halo de cristaux étincelants. Comprend un collier, un bracelet rigide, une bague et une paire d'oreilles en acier inoxydable doré inaltérable.",
+  "images": [
+    "/images/products/collier/image-04.jpg"
+  ],
+  "highlights": [
+    "Parure raffinée 4 Pièces : Collier + Bracelet + Bague + Boucles d'oreilles",
+    "Motif Cygne Éléganter entouré d'un halo de cristaux scintillants",
+    "Acier Inoxydable 316L haute qualité garanti inaltérable (ne rouille pas, ne noircit pas)",
+    "100% Résistant à l'eau, aux douches, parfums et à la sueur (Waterproof)",
+    "Hypoallergénique (Garanti sans nickel ni plomb, parfait pour peaux sensibles)",
+    "Garantie éclat & anti-oxydation MÉRAF"
+  ],
+  "offers": [
+    {
+      "id": "pack-1",
+      "title": "1 Parure Complète (4 Pièces)",
+      "quantity": 1,
+      "priceMAD": 249,
+      "compareAtPriceMAD": 449,
+      "savingsMAD": 200,
+      "badge": "Offre Standard",
+      "isPopular": false
+    },
+    {
+      "id": "pack-2",
+      "title": "2 Parures Cygne (Duo Prestige)",
+      "quantity": 2,
+      "priceMAD": 399,
+      "compareAtPriceMAD": 898,
+      "savingsMAD": 499,
+      "badge": "⭐ Le Plus Vendu",
+      "isPopular": true
+    },
+    {
+      "id": "pack-gift",
+      "title": "Pack Coffret Cadeau Luxe MÉRAF",
+      "quantity": 1,
+      "priceMAD": 399,
+      "compareAtPriceMAD": 599,
+      "savingsMAD": 200,
+      "badge": "🎁 Coffret Cadeau Écrin",
+      "isPopular": false,
+      "includes": [
+        "Parure Cygne Halo Prestige 4 Pièces",
+        "Grand Écrin Luxe en Velours Rouge MÉRAF",
+        "Sac Cadeau Doré MÉRAF",
+        "Carte de Vœux Personnalisée"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev-1",
+      "author": "Nouzha B.",
+      "city": "Rabat",
+      "rating": 5,
+      "date": "Il y a 1 jour",
+      "comment": "La parure cygne hbalatni! Design classy w finitions wa3rin bzaf. L'écrin f velours rouge kay3ti un look luxe fhal dahab.",
+      "verifiedBuyer": true
+    },
+    {
+      "id": "rev-2",
+      "author": "Ibtissam M.",
+      "city": "Casablanca",
+      "rating": 5,
+      "date": "Il y a 3 jours",
+      "comment": "Tbarkellah 3likom, la qualité top! Ma katan9asx la couleur dialha m3a lma w la sueur. N3awad nchri men 3andkom akid.",
+      "verifiedBuyer": true
+    },
+    {
+      "id": "rev-3",
+      "author": "Hajar E.",
+      "city": "Marrakech",
+      "rating": 5,
+      "date": "Il y a 6 jours",
+      "comment": "Commandé hier w وصلاتني اليوم! Service rapide w produits 100% conformes aux photos.",
+      "verifiedBuyer": true
+    }
+  ]
+},
+{
+  "id": "pro-04",
+  "slug": "collier-choker-perles-medaille-piece",
+  "title": "Collier Choker Perles & Médaille Pièce Antique - Inox Doré",
+  "category": "Colliers",
+  "categoryLabel": "Colliers & Chokers",
+  "priceMAD": 199,
+  "compareAtPriceMAD": 349,
+  "stock": 9,
+  "badge": "Coup de Cœur ✦",
+  "rating": 4.9,
+  "reviewsCount": 112,
+  "shortDescription": "Collier ras de cou (choker) composé de perles d'eau douce synthétiques, orné d'un pendentif médaille pièce vintage et de pampilles chaînettes à perles suspendues. Finition dorée inaltérable.",
+  "images": [
+    "/images/products/collier/image-05.jpg"
+  ],
+  "highlights": [
+    "Design vintage chic : Perles nacrées & Médaille gravée style pièce antique",
+    "Pampilles pendantes élégantes avec perles suspendues sur de fines chaînettes",
+    "Acier Inoxydable 316L haute qualité garanti inaltérable",
+    "Finition dorée brillante (ne noircit pas, ne rouille pas)",
+    "100% Résistant à l'eau, aux douches, parfums et à la sueur (Waterproof)",
+    "Hypoallergénique (Sans nickel ni plomb, idéal pour les peaux sensibles)"
+  ],
+  "offers": [
+    {
+      "id": "pack-1",
+      "title": "1 Collier Choker Perles",
+      "quantity": 1,
+      "priceMAD": 199,
+      "compareAtPriceMAD": 349,
+      "savingsMAD": 150,
+      "badge": "Offre Standard",
+      "isPopular": false
+    },
+    {
+      "id": "pack-2",
+      "title": "2 Colliers Perles (Duo Vintage)",
+      "quantity": 2,
+      "priceMAD": 299,
+      "compareAtPriceMAD": 698,
+      "savingsMAD": 399,
+      "badge": "⭐ Le Plus Recommandé",
+      "isPopular": true
+    },
+    {
+      "id": "pack-gift",
+      "title": "Pack Cadeau Luxe MÉRAF",
+      "quantity": 1,
+      "priceMAD": 349,
+      "compareAtPriceMAD": 499,
+      "savingsMAD": 150,
+      "badge": "🎁 Coffret Cadeau Luxe",
+      "isPopular": false,
+      "includes": [
+        "Collier Choker Perles & Médaille Antique",
+        "Écrin Luxe en Velours MÉRAF",
+        "Sac Cadeau Doré MÉRAF",
+        "Carte de Vœux Personnalisée"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev-1",
+      "author": "Lina B.",
+      "city": "Casablanca",
+      "rating": 5,
+      "date": "Il y a 1 jour",
+      "comment": "Choker magnifique ! Les perles w la médaille vintage kay3tiw un style wesh-chic bzaf. Qualité top kima dima men MÉRAF.",
+      "verifiedBuyer": true
+    },
+    {
+      "id": "rev-2",
+      "author": "Amal K.",
+      "city": "Rabat",
+      "rating": 5,
+      "date": "Il y a 3 jours",
+      "comment": "J'adore le détail des perles pendantes sur le côté ! Kijik hamel f la tenue w ma kaytbedelch l'éclat dialo m3a l'eau.",
+      "verifiedBuyer": true
+    },
+    {
+      "id": "rev-3",
+      "author": "Yasmina T.",
+      "city": "Tanger",
+      "rating": 5,
+      "date": "Il y a 5 jours",
+      "comment": "Livraison f 24h f Tanger, collier fhal la photo exactement. Merci pour le service impeccable !",
+      "verifiedBuyer": true
+    }
+  ]
+}
 ]
