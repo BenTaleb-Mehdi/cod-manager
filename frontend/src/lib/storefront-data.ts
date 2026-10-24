@@ -7,7 +7,7 @@ export const BRAND_NAME = "MÉRAF";
 export const BRAND_SUBTITLE = "ACCESSORIES";
 export const BRAND_SLOGAN = "Accessoires & bijoux en acier inoxydable haute qualité pour femmes et filles. Inaltérables, waterproof et ne noircissent jamais.";
 
-// Réseaux Sociaux & Coordonnées Storefront (Modifiables facilement)
+// Réseaux Sociaux & Coordonnées Storefront
 export const BRAND_INSTAGRAM = "https://www.instagram.com/meraf.ma";
 export const BRAND_FACEBOOK = "https://web.facebook.com/profile.php?id=61595194649596";
 export const BRAND_X = "https://x.com/MerafJewels";
@@ -30,10 +30,10 @@ export function matchesCategory(productCategory: string, categoryIdOrSlug: strin
   if (p === c) return true;
 
   const aliases: Record<string, string[]> = {
-    slasel: ["slasel", "collier", "colliers", "pendentif", "pendentifs", "necklace", "necklaces"],
-    khowatem: ["khowatem", "bague", "bagues", "solitaire", "solitaires", "ring", "rings"],
-    dmalj: ["dmalj", "bracelet", "bracelets", "jonc", "joncs"],
-    khwarsi: ["khwarsi", "boucle", "boucles", "boucles d'oreilles", "creoles", "créoles", "earrings", "earring"],
+    colliers: ["slasel", "collier", "colliers", "pendentif", "pendentifs", "necklace", "necklaces"],
+    bagues: ["khowatem", "bague", "bagues", "solitaire", "solitaires", "ring", "rings"],
+    bracelets: ["dmalj", "bracelet", "bracelets", "jonc", "joncs"],
+    boucles: ["khwarsi", "boucle", "boucles", "boucles d'oreilles", "creoles", "créoles", "earrings", "earring"],
   };
 
   const matchedKey = Object.keys(aliases).find(
@@ -51,7 +51,6 @@ export function getProducts(): Product[] {
   const seenSlugs = new Set<string>();
 
   return (productsData as Product[]).map((raw, index) => {
-    // Garantir un slug unique même si l'utilisateur l'oublie ou le duplique
     let slug = raw.slug || raw.id || `product-${index + 1}`;
     if (seenSlugs.has(slug)) {
       slug = `${slug}-${raw.id || index + 1}`;
@@ -65,7 +64,7 @@ export function getProducts(): Product[] {
       ...raw,
       slug,
       title: raw.title || "Bijou MÉRAF Tanger",
-      category: raw.category || "Slasel",
+      category: raw.category || "colliers",
       categoryLabel: raw.categoryLabel || raw.category || "Joaillerie",
       priceMAD: price,
       compareAtPriceMAD: comparePrice,
@@ -112,15 +111,12 @@ export function getProductBySlug(slugOrId: string): Product | undefined {
   const products = getProducts();
   const target = decodeURIComponent(slugOrId).toLowerCase().trim();
 
-  // 1. Recherche par slug exact
   const bySlug = products.find((p) => p.slug.toLowerCase() === target);
   if (bySlug) return bySlug;
 
-  // 2. Recherche par ID (ex: meraf-slasel-02)
   const byId = products.find((p) => p.id.toLowerCase() === target);
   if (byId) return byId;
 
-  // 3. Fallback partiel si slug suffixé automatiquement
   return products.find(
     (p) => p.slug.toLowerCase().startsWith(target) || target.startsWith(p.slug.toLowerCase())
   );
@@ -130,102 +126,66 @@ export function getCities(): MoroccoCity[] {
   return citiesData as MoroccoCity[];
 }
 
-// Metadata enrichment table — add an entry here to customize icon/image/label
-// for any category value used in products.json.
-// Keys are the exact category strings (case-insensitive match).
-const CATEGORY_META: Record<
-  string,
+// Liste fixe et directe des catégories avec leurs images locales
+const DIRECT_CATEGORIES = [
   {
-    name: string;
-    moroccanLabel: string;
-    subtitle: string;
-    slug: string;
-    icon: string;
-    image: string;
-  }
-> = {
-  // ── Colliers ────────────────────────────────────────────────────────────
-  colliers: {
+    id: "colliers",
+    slug: "colliers",
     name: "Colliers",
     moroccanLabel: "Colliers & Pendentifs",
     subtitle: "Colliers & Pendentifs",
-    slug: "colliers",
     icon: "Sparkles",
     image: "/images/products/categories/cat1.jpeg",
   },
-
-  // ── Bagues ──────────────────────────────────────────────────────────────
-  bagues: {
+  {
+    id: "bagues",
+    slug: "bagues",
     name: "Bagues",
     moroccanLabel: "Bagues Ajustables & Solitaires",
     subtitle: "Bagues Ajustables & Solitaires",
-    slug: "bagues",
     icon: "Gem",
-    image: "/images/products/categories/cat2.jpg",
+    image: "/images/products/categories/cat2.jpeg",
   },
- 
-  // ── Bracelets ───────────────────────────────────────────────────────────
-  bracelets: {
+  {
+    id: "bracelets",
+    slug: "bracelets",
     name: "Bracelets",
     moroccanLabel: "Bracelets & Joncs",
     subtitle: "Bracelets & Joncs",
-    slug: "bracelets",
     icon: "CircleDot",
     image: "/images/products/categories/cat3.jpeg",
   },
- 
-  // ── Boucles d'oreilles ──────────────────────────────────────────────────
-  boucles: {
+  {
+    id: "boucles",
+    slug: "boucles",
     name: "Boucles d'oreilles",
     moroccanLabel: "Créoles & Boucles d'oreilles",
     subtitle: "Créoles & Boucles d'oreilles",
-    slug: "boucles",
     icon: "Heart",
     image: "/images/products/categories/cat4.jpeg",
   },
- 
-};
+];
 
 /**
- * Reads categories dynamically from products.json.
- * Adding a new "category" value in any product is enough —
- * no other file needs to be changed.
+ * Retourne directement la liste des catégories avec le nombre d'articles associés.
  */
 export function getCategories() {
   const products = getProducts();
 
-  // Collect unique category values from the products (preserve insertion order)
-  const seen = new Map<string, string>(); // lowercase key → original value
-  for (const p of products) {
-    const raw = (p.categoryLabel || p.category || "").trim();
-    if (raw) seen.set(raw.toLowerCase(), raw);
-  }
-
-  return Array.from(seen.entries()).map(([key, originalLabel]) => {
-    const meta = CATEGORY_META[key];
+  return DIRECT_CATEGORIES.map((cat) => {
+    const count = products.filter((p) =>
+      matchesCategory(p.category || p.categoryLabel || "", cat.slug)
+    ).length;
 
     return {
-      // id / slug use the exact category string from the product (lowercased slug)
-      id: originalLabel,
-      slug: meta?.slug ?? key.replace(/\s+/g, "-"),
-      name: meta?.name ?? originalLabel,
-      moroccanLabel: meta?.moroccanLabel ?? originalLabel,
-      subtitle: meta?.subtitle ?? originalLabel,
-      icon: meta?.icon ?? "Gem",
-      image:
-        meta?.image ??
-        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80",
-      count: products.filter(
-        (p) =>
-          (p.categoryLabel || p.category || "").toLowerCase() === key ||
-          (p.category || "").toLowerCase() === key
-      ).length,
+      ...cat,
+      count,
     };
   });
 }
 
 /**
- * Génère le lien WhatsApp pré-rempli pour la commande ou le support client avec tous les détails
+ * Génère le lien WhatsApp pré-rempli pour la commande ou le support client
  */
 export function buildWhatsAppOrderLink(params: {
   orderId?: string;
@@ -282,4 +242,3 @@ export function buildWhatsAppOrderLink(params: {
 
   return `https://wa.me/${BRAND_PHONE_WHATSAPP}?text=${encodeURIComponent(message)}`;
 }
-
