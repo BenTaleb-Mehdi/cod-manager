@@ -23,39 +23,6 @@ export default function StorefrontHomePage() {
   const allReviews = products.flatMap((p) => p.reviews);
   const whatsappUrl = buildWhatsAppOrderLink({});
 
-  // Categories d MÉRAF avec thumbnails haute joaillerie
-  const categoryCircles = [
-    {
-      id: "slasel",
-      label: "Colliers & Pendentifs",
-      slug: "slasel",
-      image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=300&q=80",
-    },
-    {
-      id: "khowatem",
-      label: "Bagues Ajustables",
-      slug: "khowatem",
-      image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=300&q=80",
-    },
-    {
-      id: "dmalj",
-      label: "Bracelets & Joncs",
-      slug: "dmalj",
-      image: "https://images.unsplash.com/photo-1611591475155-42e61633527b?auto=format&fit=crop&w=300&q=80",
-    },
-    {
-      id: "khwarsi",
-      label: "Boucles d'Oreilles",
-      slug: "khwarsi",
-      image: "https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=300&q=80",
-    },
-    {
-      id: "coffrets",
-      label: "Parures & Coffrets",
-      slug: "slasel",
-      image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=300&q=80",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#11241E] selection:bg-[#C5A880]/30 selection:text-[#0B2D23] pb-20 relative">
@@ -157,7 +124,7 @@ export default function StorefrontHomePage() {
 
         {/* Scrollable Circles with snap and smooth border */}
         <div className="flex items-center gap-4 sm:gap-7 overflow-x-auto pb-3 pt-1 scrollbar-none snap-x">
-          {categoryCircles.map((cat) => (
+          {categories.map((cat) => (
             <Link
               key={cat.id}
               href={`/collections?category=${cat.slug}`}
@@ -166,14 +133,14 @@ export default function StorefrontHomePage() {
               <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-full overflow-hidden bg-[#EAE5DC] border-2 border-[#D9D1C5] group-hover:border-[#C5A880] group-hover:scale-105 transition-all shadow-2xs">
                 <Image
                   src={cat.image}
-                  alt={cat.label}
+                  alt={cat.name}
                   fill
                   sizes="80px"
                   className="object-cover object-center group-hover:scale-110 transition-transform duration-500"
                 />
               </div>
               <span className="text-[11px] sm:text-xs font-medium text-[#0B2A21] group-hover:text-[#C5A880] transition-colors max-w-[85px] truncate">
-                {cat.label}
+                {cat.name}
               </span>
             </Link>
           ))}
