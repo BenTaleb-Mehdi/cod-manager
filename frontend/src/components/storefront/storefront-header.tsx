@@ -353,17 +353,7 @@ export function StorefrontHeader() {
               <span className="hidden xl:inline">RECHERCHE</span>
             </button>
 
-            {/* Language Switcher (FR / AR) */}
-            <button
-              type="button"
-              onClick={toggleLanguage}
-              className="flex items-center gap-1 px-2 py-0.5 sm:py-1 rounded-full border border-[#E8E2D8] hover:border-[#C5A880] bg-white text-[9.5px] sm:text-[10px] font-bold tracking-wider text-[#0B2D23] shadow-2xs hover:bg-[#FAF7F2] transition-all cursor-pointer shrink-0"
-              title="Changer la langue / تبديل اللغة"
-            >
-              <span className={language === "fr" ? "text-[#0B2D23]" : "text-[#18221D]/40"}>FR</span>
-              <span className="text-[#C5A880]">|</span>
-              <span className={language === "ar" ? "text-[#0B2D23] font-medium" : "text-[#18221D]/40"}>عربي</span>
-            </button>
+         
 
             {/* WhatsApp Concierge */}
             <a
