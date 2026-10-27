@@ -18,6 +18,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: "MÉRAF | Accessoires & Bijoux Acier Inoxydable Haute Qualité Maroc",
   description:
     "Maison MÉRAF. Accessoires & bijoux tendance pour femmes et jeunes filles en Acier Inoxydable 316L haute qualité. Finition dorée inaltérable, résistant à l'eau, ne noircit jamais. Livraison gratuite partout au Maroc et paiement à la livraison après inspection.",
@@ -55,7 +56,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className="scroll-smooth" suppressHydrationWarning>
+    <html
+      lang="fr"
+      className="scroll-smooth"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body
         suppressHydrationWarning
         className={`${playfair.variable} ${montserrat.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
